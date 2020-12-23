@@ -1,32 +1,46 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+  <div class="app" id="app">
+
+    <div class="header">
+      <div class="header__wrap">
+        <div class="header__logo">logo</div>
+        <ul class="header__menu">
+          <li>
+            <router-link :to="{name: 'ad-category'}">Добавить</router-link>
+          </li>
+        </ul>
+      </div>
     </div>
-    <router-view/>
+
+    <div class="content">
+      <router-view/>
+    </div>
+
   </div>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+  body {
+    margin: 0;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-#nav {
-  padding: 30px;
+  .app {
+    min-height: 100vh;
+    background: #eff2f3;
+  }
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+  .header {
+    background: #fff;
+    margin-bottom: 24px;
+    &__wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
     }
   }
-}
 </style>

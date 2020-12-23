@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Categories from '../views/Advert/Create/Categories'
+import Form from '../views/Advert/Create/Form'
 
 Vue.use(VueRouter)
 
@@ -9,6 +11,16 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/advert/add',
+    name: 'ad-category',
+    component: Categories
+  },
+  {
+    path: '/advert/add/:slug',
+    name: 'ad-form',
+    component: Form
   },
   {
     path: '/about',
