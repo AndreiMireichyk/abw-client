@@ -76,12 +76,14 @@ export default {
 
 .categories {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
   border-top: 1px solid #ebebeb;
   min-height: 400px;
 
   &__groups {
     width: 300px;
+    min-width: 300px;
     border-right: 1px solid #ebebeb;
   }
 
@@ -103,6 +105,7 @@ export default {
 
   &__list {
     display: flex;
+    align-items: flex-start;
     flex-wrap: wrap;
     flex-grow: 1;
     padding: 16px 24px;
@@ -110,7 +113,9 @@ export default {
 
   &__item {
     flex-grow: 1;
+    width: 25%;
     max-width: 25%;
+    margin-bottom: 16px;
   }
 
   &__item-link {

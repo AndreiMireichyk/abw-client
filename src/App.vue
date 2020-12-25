@@ -30,6 +30,7 @@ body {
   --primary-color: #3699FF;
   --white-color: #ffffff;
   --gray-color: #808080;
+  --red-color: #f51958;
 }
 
 .app {

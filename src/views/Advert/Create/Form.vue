@@ -5,11 +5,21 @@
       <div class="page__content">
         <div class="page__body">
           <div v-for="attribute in form" :key="attribute.id">
-            <component v-bind:is="getComponent(attribute.type)" :attribute="attribute" v-model="attribute.value"></component>
+            <component v-bind:is="getComponent(attribute.type)" :attribute="attribute" v-model="attribute.value"/>
+          </div>
+          <div>
+            <component v-bind:is="getComponent('contacts')" v-model="contacts" :contacts="contacts"/>
+          </div>
+          <div>
+            <component v-bind:is="getComponent('desc-price')"/>
+          </div>
+          <div>
+            <component v-bind:is="getComponent('photo')"/>
           </div>
         </div>
         <div class="page__aside">
           <pre>{{ parameters }}</pre>
+          <pre>{{ contacts }}</pre>
         </div>
       </div>
     </div>
@@ -23,6 +33,9 @@ import SelectControl from '@/components/Advert/Form/SelectControl'
 import SwitchControl from '@/components/Advert/Form/SwitchControl'
 import CheckboxControl from '@/components/Advert/Form/CheckboxControl'
 import InputControl from '@/components/Advert/Form/InputControl'
+import ContactControl from '@/components/Advert/Form/ContactControl'
+import DescAndPriceControl from '@/components/Advert/Form/DescAndPriceControl'
+import PhotoControl from '@/components/Advert/Form/PhotoControl'
 
 export default {
   name: 'Form',
@@ -31,12 +44,23 @@ export default {
     SelectControl,
     SwitchControl,
     CheckboxControl,
-    InputControl
+    InputControl,
+    ContactControl,
+    DescAndPriceControl,
+    PhotoControl
   },
   data () {
     return {
       form: [],
-      watch: true
+      watch: true,
+      contacts: {
+        country_id: null,
+        region_id: null,
+        city_id: null,
+        phones: [],
+        name: null,
+        email: null
+      }
 
     }
   },
@@ -68,6 +92,12 @@ export default {
           return 'ListControl'
         case 'checkbox':
           return 'CheckboxControl'
+        case 'contacts':
+          return 'ContactControl'
+        case 'desc-price' :
+          return 'DescAndPriceControl'
+        case 'photo' :
+          return 'PhotoControl'
       }
     },
     reloadOptions (data) {
@@ -103,35 +133,36 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.page {
-  padding: 25px;
-  max-width: 1200px;
-  margin: 0 auto;
+  .page {
+    padding: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
 
-  min-height: 80vh;
+    min-height: 80vh;
 
-  &__title {
-    font-size: 44px;
-    font-weight: bold;
-    line-height: 1;
-    margin: 0 0 40px 0;
+    &__title {
+      font-size: 44px;
+      font-weight: bold;
+      line-height: 1;
+      margin: 0 0 40px 0;
+    }
+
+    &__content {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &__body {
+      border-radius: 8px;
+      background: #ffffff;
+      flex-grow: 1;
+    }
+
+    &__aside {
+      background: #ffffff;
+      width: 400px;
+      min-width: 400px;
+      margin-left: 24px;
+    }
   }
-
-  &__content {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  &__body {
-    border-radius: 8px;
-    background: #ffffff;
-    flex-grow: 1;
-  }
-
-  &__aside {
-    background: #ffffff;
-    width: 300px;
-    margin-left: 24px;
-  }
-}
 </style>
