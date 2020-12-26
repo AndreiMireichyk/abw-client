@@ -79,7 +79,7 @@ export default {
 
 <style scoped lang="scss">
   .control {
-    padding: 25px 24px 0 24px;
+    padding: 25px 24px 16px 24px;
     background: #eff2f3;
 
     &__title {

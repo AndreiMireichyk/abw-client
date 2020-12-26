@@ -7,12 +7,6 @@
       </div>
       <div class="control__body">
         <div class="control__section">
-          <div class="textarea">
-            <label class="textarea__label">Дополнительное описание</label>
-            <textarea class="textarea__input" v-model="text"/>
-          </div>
-        </div>
-        <div class="control__section">
           <div class="control__section-group">
             <div class="input">
               <label class="input__label">Цена ({{price}} {{currency.toUpperCase()}})</label>
@@ -31,6 +25,13 @@
             </div>
           </div>
         </div>
+        <div class="control__section">
+          <div class="textarea">
+            <label class="textarea__label">Дополнительное описание</label>
+            <textarea class="textarea__input" v-model="text"/>
+          </div>
+        </div>
+
       </div>
       <div class="control__footer" v-if="showFooter">
         <a @click="showFooter = !showFooter" class="control__btn">Далее</a>
@@ -60,10 +61,11 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
   .control {
     display: flex;
     flex-direction: column;
+    margin-top: 18px;
 
     background: #ffff;
     border-bottom: 1px solid #ebebeb;
@@ -273,4 +275,4 @@ export default {
 
     }
   }
-</style>
+</styles>

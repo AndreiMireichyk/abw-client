@@ -7,14 +7,14 @@
           <div v-for="attribute in form" :key="attribute.id">
             <component v-bind:is="getComponent(attribute.type)" :attribute="attribute" v-model="attribute.value"/>
           </div>
-          <div>
-            <component v-bind:is="getComponent('contacts')" v-model="contacts" :contacts="contacts"/>
+          <div v-show="parameters.length === form.length">
+            <component v-bind:is="getComponent('contacts')" v-model="contacts" :contacts="contacts" @next="showOther=true"/>
           </div>
-          <div>
-            <component v-bind:is="getComponent('desc-price')"/>
-          </div>
-          <div>
+          <div v-show="parameters.length === form.length && showOther">
             <component v-bind:is="getComponent('photo')"/>
+          </div>
+          <div v-show="parameters.length === form.length && showOther">
+            <component v-bind:is="getComponent('desc-price')"/>
           </div>
         </div>
         <div class="page__aside">
@@ -53,6 +53,8 @@ export default {
     return {
       form: [],
       watch: true,
+      showOther: false,
+      notUpdate: false,
       contacts: {
         country_id: null,
         region_id: null,
@@ -100,12 +102,28 @@ export default {
           return 'PhotoControl'
       }
     },
-    reloadOptions (data) {
-      data.map((item, key) => {
+    async reloadOptions (data) {
+      this.notUpdate = true
+
+      await data.map((item, key) => {
         this.form[key].options = item.options
+        this.form[key].value = item.value
+
+        const i = item.options.filter(option => {
+          if (item.value) {
+            return option.id === item.value.id
+          }
+          return false
+        })
+
+        if (!i.length) this.form[key].value = null
       })
+
+      this.notUpdate = false
     },
     update () {
+      if (this.notUpdate) return false
+
       this.$http.post(`${this.$config.host}/api/adverts/${this.$route.params.slug}/form`, {
         params: this.parameters
       })
@@ -133,36 +151,36 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .page {
-    padding: 25px;
-    max-width: 1200px;
-    margin: 0 auto;
+.page {
+  padding: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
 
-    min-height: 80vh;
+  min-height: 80vh;
 
-    &__title {
-      font-size: 44px;
-      font-weight: bold;
-      line-height: 1;
-      margin: 0 0 40px 0;
-    }
-
-    &__content {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    &__body {
-      border-radius: 8px;
-      background: #ffffff;
-      flex-grow: 1;
-    }
-
-    &__aside {
-      background: #ffffff;
-      width: 400px;
-      min-width: 400px;
-      margin-left: 24px;
-    }
+  &__title {
+    font-size: 44px;
+    font-weight: bold;
+    line-height: 1;
+    margin: 0 0 40px 0;
   }
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__body {
+    border-radius: 8px;
+    background: #ffffff;
+    flex-grow: 1;
+  }
+
+  &__aside {
+
+    width: 400px;
+    min-width: 400px;
+    margin-left: 24px;
+  }
+}
 </style>

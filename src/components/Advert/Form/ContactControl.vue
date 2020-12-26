@@ -64,7 +64,7 @@
         </div>
       </div>
       <div class="control__footer" v-if="showFooter">
-        <a @click="showFooter = !showFooter" class="control__btn">Далее</a>
+        <a @click="validate" class="control__btn">Далее</a>
       </div>
     </div>
   </div>
@@ -109,6 +109,10 @@ export default {
     }
   },
   methods: {
+    validate () {
+      this.showFooter = false
+      this.$emit('next')
+    },
     addPhone () {
       this.contacts.phones.push({ value: null })
     },
@@ -143,7 +147,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style  lang="scss">
   .control {
     display: flex;
     flex-direction: column;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="control">
+    <div class="control" v-if="attribute.options.length">
       <div class="control__head">
         <div class="control__title">{{ attribute.label }}</div>
         <div class="control__value" v-if="attribute.value" @click="clearValue">{{ attribute.value.title }}</div>
@@ -17,9 +17,8 @@
         <div class="control__not-result" v-else>
           <div class="control__not-result-title">Изиените, нет подходящих парамтров :(</div>
           <div class="control__not-result-desc">
-            <a class="control__not-result-link" href="">Напишите</a> или позвоните <a class="control__not-result-link"
-                                                                                      href="">749-78-97</a> <br>в Центр
-            поддержки пользователей
+            <a class="control__not-result-link" href="">Напишите</a> или позвоните
+            <a class="control__not-result-link" href="">749-78-97</a> <br>в Центр поддержки пользователей
           </div>
         </div>
 
