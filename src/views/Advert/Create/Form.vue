@@ -4,11 +4,14 @@
       <h2 class="page__title">Добавить объявление</h2>
       <div class="page__content">
         <div class="page__body">
-          <div v-for="attribute in form" :key="attribute.id">
-            <component v-bind:is="getComponent(attribute.type)" :attribute="attribute" v-model="attribute.value"/>
+
+          <div v-for="(step, index) in dynamicSteps" :key="index">
+            <step-section :step="step"/>
           </div>
+
           <div v-show="parameters.length === form.length">
-            <component v-bind:is="getComponent('contacts')" v-model="contacts" :contacts="contacts" @next="showOther=true"/>
+            <component v-bind:is="getComponent('contacts')" v-model="contacts" :contacts="contacts"
+                       @next="showOther=true"/>
           </div>
           <div v-show="parameters.length === form.length && showOther">
             <component v-bind:is="getComponent('photo')"/>
@@ -18,8 +21,7 @@
           </div>
         </div>
         <div class="page__aside">
-          <pre>{{ parameters }}</pre>
-          <pre>{{ contacts }}</pre>
+
         </div>
       </div>
     </div>
@@ -28,26 +30,18 @@
 
 <script>
 
-import ListControl from '@/components/Advert/Form/ListControl'
-import SelectControl from '@/components/Advert/Form/SelectControl'
-import SwitchControl from '@/components/Advert/Form/SwitchControl'
-import CheckboxControl from '@/components/Advert/Form/CheckboxControl'
-import InputControl from '@/components/Advert/Form/InputControl'
 import ContactControl from '@/components/Advert/Form/ContactControl'
 import DescAndPriceControl from '@/components/Advert/Form/DescAndPriceControl'
 import PhotoControl from '@/components/Advert/Form/PhotoControl'
+import StepSection from '@/components/Advert/Form/Section'
 
 export default {
   name: 'Form',
   components: {
-    ListControl,
-    SelectControl,
-    SwitchControl,
-    CheckboxControl,
-    InputControl,
     ContactControl,
     DescAndPriceControl,
-    PhotoControl
+    PhotoControl,
+    StepSection
   },
   data () {
     return {
@@ -67,11 +61,18 @@ export default {
     }
   },
   watch: {
+
     parameters () {
       this.update()
     }
   },
   computed: {
+    dynamicSteps () {
+      return this.form.reduce(function (rv, x) {
+        (rv[x.step] = rv[x[x.step]] || []).push(x)
+        return rv
+      }, {})
+    },
     parameters () {
       return this.form
         .filter(item => item.value)
@@ -151,36 +152,36 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.page {
-  padding: 25px;
-  max-width: 1200px;
-  margin: 0 auto;
+  .page {
+    padding: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
 
-  min-height: 80vh;
+    min-height: 80vh;
 
-  &__title {
-    font-size: 44px;
-    font-weight: bold;
-    line-height: 1;
-    margin: 0 0 40px 0;
+    &__title {
+      font-size: 44px;
+      font-weight: bold;
+      line-height: 1;
+      margin: 0 0 40px 0;
+    }
+
+    &__content {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &__body {
+      border-radius: 8px;
+      background: #ffffff;
+      flex-grow: 1;
+    }
+
+    &__aside {
+
+      width: 400px;
+      min-width: 400px;
+      margin-left: 24px;
+    }
   }
-
-  &__content {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  &__body {
-    border-radius: 8px;
-    background: #ffffff;
-    flex-grow: 1;
-  }
-
-  &__aside {
-
-    width: 400px;
-    min-width: 400px;
-    margin-left: 24px;
-  }
-}
 </style>
