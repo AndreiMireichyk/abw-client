@@ -5,7 +5,7 @@
       <div class="page__content">
         <div class="page__body">
 
-          <div v-for="(step, index) in dynamicSteps" :key="index">
+          <div v-for="(step, index) in steps" :key="index">
             <step-section :step="step"/>
           </div>
 
@@ -21,7 +21,12 @@
           </div>
         </div>
         <div class="page__aside">
-
+          <pre>
+            {{stepsState}}
+          </pre>
+          <pre>
+            {{parameters}}
+          </pre>
         </div>
       </div>
     </div>
@@ -46,7 +51,7 @@ export default {
   data () {
     return {
       form: [],
-      watch: true,
+      stepsState: {},
       showOther: false,
       notUpdate: false,
       contacts: {
@@ -57,19 +62,17 @@ export default {
         name: null,
         email: null
       }
-
     }
   },
   watch: {
-
     parameters () {
       this.update()
     }
   },
   computed: {
-    dynamicSteps () {
+    steps () {
       return this.form.reduce(function (rv, x) {
-        (rv[x.step] = rv[x[x.step]] || []).push(x)
+        (rv[x.step] = rv[x.step] || []).push(x)
         return rv
       }, {})
     },
@@ -85,6 +88,12 @@ export default {
     }
   },
   methods: {
+    updateStepState (step) {
+      console.log(this.stepsState[step.index])
+      this.stepsState[step.index] = step.valid
+      console.log(this.stepsState[step.index])
+      console.log(this.stepsState)
+    },
     getComponent (type) {
       switch (type) {
         case 'select':
@@ -107,21 +116,23 @@ export default {
       this.notUpdate = true
 
       await data.map((item, key) => {
-        this.form[key].options = item.options
-        this.form[key].value = item.value
+        if (item.options) {
+          this.form[key].value = item.value
+          this.form[key].options = item.options
 
-        const i = item.options.filter(option => {
-          if (item.value) {
-            return option.id === item.value.id
-          }
-          return false
-        })
-
-        if (!i.length) this.form[key].value = null
+          const i = item.options.filter(option => {
+            if (item.value) {
+              return option.id === item.value.id
+            }
+            return false
+          })
+          if (!i.length) this.form[key].value = null
+        }
       })
 
       this.notUpdate = false
     },
+
     update () {
       if (this.notUpdate) return false
 

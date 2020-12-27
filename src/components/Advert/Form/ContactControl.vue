@@ -1,14 +1,14 @@
 <template>
   <div>
-    <div class="control">
-      <div class="control__head">
-        <div class="control__title">Контакты</div>
-        <div class="control__value"></div>
+    <div class="control-phone">
+      <div class="control-phone__head">
+        <div class="control-phone__title">Контакты</div>
+        <div class="control-phone__value"></div>
       </div>
-      <div class="control__body">
+      <div class="control-phone__body">
 
-        <div class="control__section">
-          <div class="control__section-group">
+        <div class="control-phone__section">
+          <div class="control-phone__section-group">
             <div class="select">
               <label class="select__label">Страна</label>
 
@@ -34,19 +34,19 @@
 
           </div>
         </div>
-        <div class="control__section">
+        <div class="control-phone__section">
           <div class="input">
             <label class="input__label" for="">Имя</label>
             <input class="input__input" v-model="contacts.name" placeholder="Ваше имя"/>
           </div>
         </div>
-        <div class="control__section">
+        <div class="control-phone__section">
           <div class="input">
             <label class="input__label" for="">Email</label>
             <input class="input__input" v-model="contacts.email" placeholder="Ваш email"/>
           </div>
         </div>
-        <div class="control__section">
+        <div class="control-phone__section">
           <div class="phones">
             <label class="phones__label">Телефон</label>
             <div class="phones__list">
@@ -63,8 +63,8 @@
           </div>
         </div>
       </div>
-      <div class="control__footer" v-if="showFooter">
-        <a @click="validate" class="control__btn">Далее</a>
+      <div class="control-phone__footer" v-if="showFooter">
+        <a @click="validate" class="control-phone__btn">Далее</a>
       </div>
     </div>
   </div>
@@ -79,7 +79,7 @@ export default {
     VueTelInput
   },
   props: ['contacts'],
-  name: 'ContactControl',
+  name: 'Contactcontrol-phone',
   data () {
     return {
       countries: [],
@@ -148,7 +148,7 @@ export default {
 </script>
 
 <style  lang="scss">
-  .control {
+  .control-phone {
     display: flex;
     flex-direction: column;
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="control">
-      <label class="control__title">{{attribute.label}}</label>
+      <label class="control__title">{{attribute.label}}:</label>
       <div class="control__group">
         <div class="control__item" v-for="option in attribute.options" :key="option.id">
           <label class="control__label" :class="{active: attribute.value && attribute.value.id === option.id}">
@@ -27,13 +27,14 @@ export default {
     flex-direction: row;
     align-items: center;
     flex-wrap: nowrap;
-    padding: 16px 24px;
+    margin-bottom: 24px;
 
     &__title {
       font-size: 14px;
       font-weight: 500;
       color: var(--font-color);
       margin-right: 24px;
+      width: 70px;
     }
 
     &__group {
@@ -51,7 +52,7 @@ export default {
       cursor: pointer;
 
       display: block;
-      padding: 6px 12px;
+      padding: 8px 12px;
       transition: all .3s;
 
       &:hover, &.active {

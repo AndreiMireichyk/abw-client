@@ -4,6 +4,9 @@
       <div class="control__head">
         <div class="control__title">{{ attribute.label }}</div>
         <div class="control__value" v-if="attribute.value" @click="clearValue">{{ attribute.value.title }}</div>
+        <div class="control__error" v-if="vee.errors.length">
+          {{vee.errors[0]}}
+        </div>
       </div>
       <div v-if="!attribute.value">
         <ul class="control__list" v-if="filteredOptions.length">
@@ -38,7 +41,7 @@
 
 <script>
 export default {
-  props: ['attribute'],
+  props: ['attribute', 'vee'],
   name: 'ListInput',
   data () {
     return {
@@ -67,6 +70,7 @@ export default {
       this.$emit('input', option)
     },
     clearValue () {
+      this.$emit('input', null)
       this.attribute.value = null
     }
   }
@@ -79,12 +83,10 @@ export default {
     flex-direction: column;
 
     background: #ffff;
-    border-bottom: 1px solid #ebebeb;
 
     &__head {
       display: flex;
       align-items: center;
-      padding: 12px 24px;
     }
 
     &__title {
@@ -109,12 +111,19 @@ export default {
       }
     }
 
+    &__error {
+      font-size: 12px;
+      color: var(--red-color);
+      text-align: right;
+      flex-grow: 1;
+    }
+
     &__not-result {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 12px 24px;
+
       min-height: 250px;
 
       &-title {
@@ -140,7 +149,7 @@ export default {
       display: flex;
       flex-wrap: wrap;
       align-items: flex-start;
-      padding: 12px 24px;
+      margin-top: 24px;
       min-height: 250px;
 
     }
@@ -174,10 +183,11 @@ export default {
       background: #ffffff;
       position: sticky;
       bottom: 0;
-      padding: 0 12px 16px 24px;
+      padding: 0 12px 0 0;
 
       &.open {
-        padding: 16px 24px;
+        margin: 0 -24px;
+        padding: 16px 24px 0;
         border-top: 1px solid #ebebeb;
       }
     }
