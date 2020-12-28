@@ -4,15 +4,15 @@
       <div class="control__head">
         <div class="control__title">{{ attribute.label }}</div>
         <div class="control__value" v-if="attribute.value" @click="clearValue">{{ attribute.value.title }}</div>
-        <div class="control__error" v-if="vee.errors.length">
-          {{vee.errors[0]}}
-        </div>
+        <!-- <div class="control__error" v-if="vee.errors.length">
+           {{ vee.errors[0] }}
+         </div>-->
       </div>
       <div v-if="!attribute.value">
         <ul class="control__list" v-if="filteredOptions.length">
           <li class="control__item" v-for="option in filteredOptions" :key="option.id">
             <label class="control__label">
-              <input class="control__input" type="radio" :value="option" @input="update(option)">
+              <input class="control__input" type="radio" :value="option" @change="update(option)">
               {{ option.title }}
             </label>
           </li>
@@ -25,7 +25,7 @@
           </div>
         </div>
 
-        <div class="control__collapse" :class="{open : !collapse}">
+        <div class="control__collapse" :class="{open : !collapse}" v-if="showCollapseBlock">
           <div>
             <a @click="collapse = !collapse" v-if="collapse" class="control__show-all">Показать все</a>
             <a @click="collapse = !collapse" v-else class="control__show-all">Свернуть все</a>
@@ -46,11 +46,13 @@ export default {
   data () {
     return {
       search: null,
-      collapse: true,
-      listState: true
+      collapse: true
     }
   },
   computed: {
+    showCollapseBlock () {
+      return this.attribute.options.length > 25
+    },
     filteredOptions () {
       if (this.collapse) {
         return this.attribute.options.slice(0, 25)
@@ -78,145 +80,147 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .control {
+.control {
+  display: flex;
+  flex-direction: column;
+
+  background: #ffff;
+
+  &__head {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+  }
 
-    background: #ffff;
+  &__title {
+    font-weight: 500;
+    font-size: 18px;
 
-    &__head {
-      display: flex;
-      align-items: center;
-    }
-
-    &__title {
-      font-weight: 500;
-      font-size: 18px;
-
-      &:after {
-        content: ":";
-      }
-    }
-
-    &__value {
-      cursor: pointer;
-      text-transform: uppercase;
-      font-weight: 500;
-      padding-left: 10px;
-      font-size: 18px;
-      color: var(--primary-color);
-
-      &:hover {
-        color: var(--primary-color);
-      }
-    }
-
-    &__error {
-      font-size: 12px;
-      color: var(--red-color);
-      text-align: right;
-      flex-grow: 1;
-    }
-
-    &__not-result {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      min-height: 250px;
-
-      &-title {
-        font-size: 18px;
-        font-weight: 500;
-        color: var(--gray-color);
-        margin-bottom: 12px;
-      }
-
-      &-desc {
-        line-height: 1.4;
-        color: var(--gray-color);
-      }
-
-      &-link {
-        text-decoration: none;
-        font-weight: 500;
-        color: var(--primary-color);
-      }
-    }
-
-    &__list {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      margin-top: 24px;
-      min-height: 250px;
-
-    }
-
-    &__item {
-      width: 20%;
-      margin-bottom: 24px;
-    }
-
-    &__label {
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 15px;
-      color: var(--primary-color);
-      text-transform: capitalize;
-      transition: all .2s;
-
-      &:hover {
-        color: var(--font-color);
-      }
-    }
-
-    &__input {
-      display: none
-    }
-
-    &__collapse {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #ffffff;
-      position: sticky;
-      bottom: 0;
-      padding: 0 12px 0 0;
-
-      &.open {
-        margin: 0 -24px;
-        padding: 16px 24px 0;
-        border-top: 1px solid #ebebeb;
-      }
-    }
-
-    &__show-all {
-      display: inline-block;
-      cursor: pointer;
-      box-shadow: 0 0 0 1px var(--primary-color) inset, 0 1px 0 rgba(24, 26, 27, 0.08);
-      background: var(--primary-color);
-      color: #ffffff;
-      padding: 8px 12px;
-      border-radius: 4px;
-      transition: all .3s;
-
-      &:hover {
-        background: transparent;
-        box-shadow: 0 0 0 1px #d3d9df inset, 0 1px 0 rgba(24, 26, 27, 0.08);
-        color: var(--font-color);
-      }
-    }
-
-    &__search-input {
-      box-shadow: 0 0 0 1px #d3d9df inset, 0 1px 0 rgba(24, 26, 27, 0.08);
-      padding: 6px 12px;
-      border-radius: 4px;
-      border: none;
-      outline: none;
-      appearance: none;
-      color: var(--gray-color);
+    &:after {
+      content: ":";
     }
   }
+
+  &__value {
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding-left: 10px;
+    font-size: 18px;
+    color: var(--primary-color);
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+
+  &__error {
+    font-size: 12px;
+    color: var(--red-color);
+    text-align: right;
+    flex-grow: 1;
+  }
+
+  &__not-result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 250px;
+
+    &-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--gray-color);
+      margin-bottom: 12px;
+    }
+
+    &-desc {
+      line-height: 1.4;
+      color: var(--gray-color);
+    }
+
+    &-link {
+      text-decoration: none;
+      font-weight: 500;
+      color: var(--primary-color);
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-top: 24px;
+    min-height: 250px;
+
+  }
+
+  &__item {
+    box-sizing: border-box;
+    width: 20%;
+    margin-bottom: 24px;
+    padding: 6px;
+  }
+
+  &__label {
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--primary-color);
+    text-transform: capitalize;
+    transition: all .2s;
+
+    &:hover {
+      color: var(--font-color);
+    }
+  }
+
+  &__input {
+    display: none
+  }
+
+  &__collapse {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    position: sticky;
+    bottom: 0;
+    padding: 0 12px 0 0;
+
+    &.open {
+      margin: 0 -24px;
+      padding: 16px 24px 16px;
+      border-top: 1px solid #ebebeb;
+    }
+  }
+
+  &__show-all {
+    display: inline-block;
+    cursor: pointer;
+    box-shadow: 0 0 0 1px var(--primary-color) inset, 0 1px 0 rgba(24, 26, 27, 0.08);
+    background: var(--primary-color);
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all .3s;
+
+    &:hover {
+      background: transparent;
+      box-shadow: 0 0 0 1px #d3d9df inset, 0 1px 0 rgba(24, 26, 27, 0.08);
+      color: var(--font-color);
+    }
+  }
+
+  &__search-input {
+    box-shadow: 0 0 0 1px #d3d9df inset, 0 1px 0 rgba(24, 26, 27, 0.08);
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+    appearance: none;
+    color: var(--gray-color);
+  }
+}
 </style>
