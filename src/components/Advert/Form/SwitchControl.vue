@@ -4,9 +4,9 @@
       <label class="control__title">{{attribute.label}}:</label>
       <div class="control__group">
         <div class="control__item" v-for="option in attribute.options" :key="option.id">
-          <label class="control__label" :class="{active: attribute.value && attribute.value.id === option.id}">
+          <label class="control__label" :class="{active: attribute.value && attribute.value === option.id}">
             {{option.title}}
-            <input class="control__input" type="radio" v-model="attribute.value" :value="option">
+            <input class="control__input" type="radio" v-model="attribute.value" :value="option.id">
           </label>
         </div>
       </div>

@@ -3,16 +3,14 @@
     <div class="control" v-if="attribute.options.length">
       <div class="control__head">
         <div class="control__title">{{ attribute.label }}</div>
-        <div class="control__value" v-if="attribute.value" @click="clearValue">{{ attribute.value.title }}</div>
-        <!-- <div class="control__error" v-if="vee.errors.length">
-           {{ vee.errors[0] }}
-         </div>-->
+        <div class="control__value" v-if="attribute.value" @click="clearValue">{{ selectedOption.title }}</div>
+
       </div>
       <div v-if="!attribute.value">
         <ul class="control__list" v-if="filteredOptions.length">
           <li class="control__item" v-for="option in filteredOptions" :key="option.id">
             <label class="control__label">
-              <input class="control__input" type="radio" :value="option" @change="update(option)">
+              <input class="control__input" type="radio" :value="option.id" @change="update(option.id)">
               {{ option.title }}
             </label>
           </li>
@@ -52,6 +50,11 @@ export default {
   computed: {
     showCollapseBlock () {
       return this.attribute.options.length > 25
+    },
+    selectedOption () {
+      return this.attribute.options.filter(item => {
+        return item.id === this.attribute.value
+      })[0]
     },
     filteredOptions () {
       if (this.collapse) {

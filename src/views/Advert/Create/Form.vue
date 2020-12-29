@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="page" v-if="form.length">
-      <h2 class="page__title">Добавить объявление</h2>
+      <h2 class="page__title" @click="update">Добавить объявление</h2>
       <div class="page__content">
         <div class="page__body" @click.ctrl.shift="showLog = !showLog">
 
@@ -23,44 +23,18 @@
           </div>
 
           <div v-show="stepsSuccess  && showOther">
-            <component :is="getComponent('desc-price')"/>
+            <step-description v-model="description" :description="description"/>
+          </div>
+          <div>
+            <a @click="store">Сохранить</a>
           </div>
         </div>
         <div class="page__aside">
           <div v-if="showLog">
-            <div>
-              шаг = {{ currentStep }}
-            </div>
-            <hr>
-            <div>
-              Шаг Стейп
-              <pre>
-             {{ stateSteps }}
-          </pre>
-            </div>
-            <hr>
-            <div>
-              Контакты
-              <pre>
-             {{ contacts }}
-          </pre>
-            </div>
-            <hr>
-            <div>
-              Фотографии
-              <pre>
-             {{ images }}
-          </pre>
-            </div>
-            <hr>
-            <div>
-              Цена описание
-              <pre>
-             {{ images }}
-          </pre>
-            </div>
+            <pre>
+              {{ parameters }}
+           </pre>
           </div>
-
         </div>
       </div>
     </div>
@@ -70,7 +44,7 @@
 <script>
 
 import StepContact from '@/components/Advert/Form/StepContact'
-import DescAndPriceControl from '@/components/Advert/Form/DescAndPriceControl'
+import StepDescription from '@/components/Advert/Form/StepDescription'
 import ImageControl from '@/components/Advert/Form/ImageControl'
 import StepSection from '@/components/Advert/Form/Step'
 
@@ -78,7 +52,7 @@ export default {
   name: 'Form',
   components: {
     StepContact,
-    DescAndPriceControl,
+    StepDescription,
     ImageControl,
     StepSection
   },
@@ -99,15 +73,14 @@ export default {
         email: null
       },
       images: [],
-      descAndPrice: {
-        description: null
+      description: {
+        price: null,
+        currency: 'byn',
+        text: null
       }
     }
   },
   watch: {
-    contacts () {
-      this.showOther = false
-    },
     showOther () {
       setTimeout(() => {
         this.$refs.photo.scrollIntoView({
@@ -116,7 +89,7 @@ export default {
         })
       }, 50)
     },
-    parameters () {
+    attributes () {
       this.update()
     }
   },
@@ -133,65 +106,52 @@ export default {
         return rv
       }, {})
     },
-    parameters () {
-      return this.form
+    attributes () {
+      const attributes = {}
+
+      this.form
+        .filter(item => item.value)
+        .map(item => {
+          if (!['string', 'integer', 'text'].includes(item.type)) {
+            attributes[item.attribute] = item.value
+          }
+        })
+
+      return attributes
+    },
+    fields () {
+      const fields = {}
+      this.form
         .filter(item => item.value)
         .map(item => {
           if (['string', 'integer', 'text'].includes(item.type)) {
-            return {
-              id: item.value,
-              name: item.attribute
-            }
-          } else {
-            return {
-              id: item.value.id,
-              name: item.attribute
-            }
+            fields[item.attribute] = item.value
           }
         })
+        .filter(item => item)
+
+      return fields
+    },
+    parameters () {
+      const other = {
+        images: this.images,
+        name: this.contacts.name,
+        email: this.contacts.email,
+        phones: this.contacts.phones.map(item => item.value),
+        price: this.description.price,
+        currency: this.description.currency,
+        description: this.description.text
+      }
+
+      return Object.assign(this.attributes, this.fields, other)
     }
   },
   methods: {
-    updateStepState (step) {
-      this.stateSteps.splice(step.index, 1, step.valid)
-
-      if (step.valid) {
-        this.currentStep = step.index + 1
-      } else {
-        this.currentStep = step.index
-      }
-    },
-    getComponent (type) {
-      switch (type) {
-        case 'desc-price' :
-          return 'DescAndPriceControl'
-      }
-    },
-    async reloadOptions (data) {
-      this.notUpdate = true
-
-      await data.map((item, key) => {
-        if (item.options) {
-          this.form[key].value = item.value
-          this.form[key].options = item.options
-
-          const i = item.options.filter(option => {
-            if (item.value) {
-              return option.id === item.value.id
-            }
-            return false
-          })
-          if (!i.length) this.form[key].value = null
-        }
-      })
-
-      this.notUpdate = false
-    },
     update () {
       if (this.notUpdate) return false
 
       this.$http.post(`${this.$config.host}/api/adverts/${this.$route.params.slug}/form`, {
-        params: this.parameters
+        params: this.attributes
       })
         .then(r => {
           this.reloadOptions(r.data)
@@ -208,6 +168,46 @@ export default {
         .catch(e => {
           alert(e)
         })
+    },
+    store () {
+      this.$http.post(`${this.$config.host}/api/adverts/${this.$route.params.slug}/create`, {
+        params: this.parameters
+      })
+        .then(r => {
+          // this.reloadOptions(r.data)
+        })
+        .catch(e => {
+          alert(e)
+        })
+    },
+    async reloadOptions (data) {
+      this.notUpdate = true
+
+      await data.map((item, key) => {
+        if (item.options) {
+          this.form[key].value = item.value
+          this.form[key].options = item.options
+
+          const i = item.options.filter(option => {
+            if (item.value) {
+              return option.id === item.value
+            }
+            return false
+          })
+          if (!i.length) this.form[key].value = null
+        }
+      })
+
+      this.notUpdate = false
+    },
+    updateStepState (step) {
+      this.stateSteps.splice(step.index, 1, step.valid)
+
+      if (step.valid) {
+        this.currentStep = step.index + 1
+      } else {
+        this.currentStep = step.index
+      }
     }
   },
   created () {

@@ -166,20 +166,20 @@ export default {
     },
     validatePhone () {
     },
-    fetchCountries () {
-      this.$http.get(`${this.$config.host}/api/locations/countries`)
+    async fetchCountries () {
+      await this.$http.get(`${this.$config.host}/api/locations/countries`)
         .then(r => {
           this.countries = r.data
         })
     },
-    fetchRegions () {
-      this.$http.get(`${this.$config.host}/api/locations/regions/${this.contacts.country_id}`)
+    async fetchRegions () {
+      await this.$http.get(`${this.$config.host}/api/locations/regions/${this.contacts.country_id}`)
         .then(r => {
           this.regions = r.data
         })
     },
-    fetchCities () {
-      this.$http.get(`${this.$config.host}/api/locations/cities/${this.contacts.region_id}`)
+    async fetchCities () {
+      await this.$http.get(`${this.$config.host}/api/locations/cities/${this.contacts.region_id}`)
         .then(r => {
           this.cities = r.data
         })
