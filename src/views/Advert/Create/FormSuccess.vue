@@ -1,12 +1,13 @@
 <template>
-  <div class="home">
-
-  </div>
+  <div></div>
 </template>
 
 <script>
-
 export default {
-  name: 'Home'
+  name: 'FormSuccess'
 }
 </script>
+
+<style scoped>
+
+</style>

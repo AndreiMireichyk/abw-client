@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Categories from '../views/Advert/Create/Categories'
 import Form from '../views/Advert/Create/Form'
+import FormSuccess from '@/views/Advert/Create/FormSuccess'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,16 @@ const routes = [
     path: '/advert/add/:slug',
     name: 'ad-form',
     component: Form
+  },
+  {
+    path: '/advert/add/success',
+    name: 'ad-success',
+    component: FormSuccess
+  },
+  {
+    path: '/:slug/prodaja',
+    name: 'ad-cat-list',
+    component: Home
   },
   {
     path: '/about',

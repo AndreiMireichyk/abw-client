@@ -1,23 +1,20 @@
 <template>
   <div class="app" id="app">
     <div class="header">
-      <div class="header__wrap">
-        <div class="header__logo">
-
-        </div>
-        <ul class="header__menu">
-          <li>
-            <router-link class="header__add-btn" :to="{name: 'ad-category'}">Добавить</router-link>
-          </li>
-        </ul>
-      </div>
+    <Header/>
     </div>
     <div class="content">
       <router-view/>
     </div>
   </div>
 </template>
+<script>
+import Header from '@/components/Layout/Header'
 
+export default {
+  components: { Header }
+}
+</script>
 <style lang="scss">
 body {
 
@@ -38,44 +35,12 @@ body {
   background: #eff2f3;
 }
 
-.header {
-  background: #fff;
-  margin-bottom: 24px;
-
-  &__wrap {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 25px 0;
-  }
-
-  &__logo {
-    font-weight: bold;
-    font-size: 24px;
-  }
-
-  &__add-btn {
-    display: block;
-    font-size: 14px;
-    padding: 8px 16px;
-    background: var(--primary-color);
-    color: var(--white-color);
-    border-radius: 4px;
-    text-decoration: none;
-    transition: all .2s;
-
-    &:hover {
-      opacity: .8;
-    }
-  }
-}
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity .2s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+
+.fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */
+{
   opacity: 0;
 }
 

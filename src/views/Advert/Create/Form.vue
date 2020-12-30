@@ -25,8 +25,9 @@
           <div v-show="stepsSuccess  && showOther">
             <step-description v-model="description" :description="description"/>
           </div>
-          <div>
-            <a @click="store">Сохранить</a>
+
+          <div  v-show="stepsSuccess  && showOther">
+            <a class="page__btn" @click="store">Сохранить</a>
           </div>
         </div>
         <div class="page__aside">
@@ -179,10 +180,11 @@ export default {
         params: this.parameters
       })
         .then(r => {
-          // this.reloadOptions(r.data)
+          alert(r.data.message)
         })
         .catch(e => {
-          alert(e)
+          console.log(e.data)
+          // alert(e.data.message)
         })
     },
     async reloadOptions (data) {
@@ -253,6 +255,24 @@ export default {
     width: 400px;
     min-width: 400px;
     margin-left: 24px;
+  }
+
+  &__btn{
+    margin: 16px 24px;
+    display: inline-block;
+    cursor: pointer;
+    box-shadow: 0 0 0 1px var(--primary-color) inset, 0 1px 0 rgba(24, 26, 27, 0.08);
+    background: var(--primary-color);
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all .3s;
+
+    &:hover {
+      background: transparent;
+      box-shadow: 0 0 0 1px #d3d9df inset, 0 1px 0 rgba(24, 26, 27, 0.08);
+      color: var(--font-color);
+    }
   }
 }
 </style>
