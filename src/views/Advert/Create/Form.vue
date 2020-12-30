@@ -65,9 +65,9 @@ export default {
       notUpdate: false,
       showLog: false,
       contacts: {
-        country_id: null,
-        region_id: null,
-        city_id: null,
+        country: null,
+        region: null,
+        city: null,
         phones: [],
         name: null,
         email: null
@@ -101,10 +101,12 @@ export default {
       return Object.keys(this.steps).length
     },
     steps () {
-      return this.form.reduce(function (rv, x) {
-        (rv[x.step] = rv[x.step] || []).push(x)
-        return rv
-      }, {})
+      return this.form
+        .filter(item => item.step)
+        .reduce(function (rv, x) {
+          (rv[x.step] = rv[x.step] || []).push(x)
+          return rv
+        }, {})
     },
     attributes () {
       const attributes = {}
@@ -137,6 +139,9 @@ export default {
         images: this.images,
         name: this.contacts.name,
         email: this.contacts.email,
+        country: this.contacts.country,
+        region: this.contacts.region,
+        city: this.contacts.city,
         phones: this.contacts.phones.map(item => item.value),
         price: this.description.price,
         currency: this.description.currency,
@@ -151,7 +156,7 @@ export default {
       if (this.notUpdate) return false
 
       this.$http.post(`${this.$config.host}/api/adverts/${this.$route.params.slug}/form`, {
-        params: this.attributes
+        params: this.parameters
       })
         .then(r => {
           this.reloadOptions(r.data)

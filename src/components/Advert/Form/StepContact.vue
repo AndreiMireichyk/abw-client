@@ -16,7 +16,7 @@
                   <ValidationProvider name="страна" rules="required" v-slot="props">
                     <select id="country"
                             class="select__input"
-                            v-model="contacts.country_id"
+                            v-model="contacts.country"
                             :class="{invalid:props.errors.length }"
                     >
                       <option disabled value="null">Выберите страну</option>
@@ -27,12 +27,12 @@
                     </select>
                   </ValidationProvider>
                 </div>
-                <div class="select" v-if="contacts.country_id && regions.length">
+                <div class="select" v-if="contacts.country && regions.length">
                   <label class="select__label" for="region">Регион</label>
                   <ValidationProvider name="регион" rules="required" v-slot="props">
                     <select id="region"
                             class="select__input"
-                            v-model="contacts.region_id"
+                            v-model="contacts.region"
                             :class="{invalid:props.errors.length }"
                     >
                       <option disabled value="null">Выберите регион</option>
@@ -40,12 +40,12 @@
                     </select>
                   </ValidationProvider>
                 </div>
-                <div class="select" v-if="contacts.region_id && cities.length">
+                <div class="select" v-if="contacts.region && cities.length">
                   <label class="select__label" for="city">Город</label>
                   <ValidationProvider name="город" rules="required" v-slot="props">
                     <select id="city"
                             class="select__input"
-                            v-model="contacts.city_id"
+                            v-model="contacts.city"
                             :class="{invalid:props.errors.length }"
                     >
                       <option disabled value="null">Выберите город</option>
@@ -141,16 +141,16 @@ export default {
     }
   },
   watch: {
-    'contacts.country_id' () {
+    'contacts.country' () {
       this.regions = []
-      this.contacts.region_id = null
+      this.contacts.region = null
       this.cities = []
-      this.contacts.city_id = null
+      this.contacts.city = null
       this.fetchRegions()
     },
-    'contacts.region_id' () {
-      this.contacts.city_id = null
-      if (this.contacts.country_id) this.fetchCities()
+    'contacts.region' () {
+      this.contacts.city = null
+      if (this.contacts.country) this.fetchCities()
     }
   },
   methods: {
@@ -173,13 +173,13 @@ export default {
         })
     },
     async fetchRegions () {
-      await this.$http.get(`${this.$config.host}/api/locations/regions/${this.contacts.country_id}`)
+      await this.$http.get(`${this.$config.host}/api/locations/regions/${this.contacts.country}`)
         .then(r => {
           this.regions = r.data
         })
     },
     async fetchCities () {
-      await this.$http.get(`${this.$config.host}/api/locations/cities/${this.contacts.region_id}`)
+      await this.$http.get(`${this.$config.host}/api/locations/cities/${this.contacts.region}`)
         .then(r => {
           this.cities = r.data
         })

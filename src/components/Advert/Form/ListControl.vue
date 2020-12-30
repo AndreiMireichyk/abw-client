@@ -4,7 +4,6 @@
       <div class="control__head">
         <div class="control__title">{{ attribute.label }}</div>
         <div class="control__value" v-if="attribute.value" @click="clearValue">{{ selectedOption.title }}</div>
-
       </div>
       <div v-if="!attribute.value">
         <ul class="control__list" v-if="filteredOptions.length">
