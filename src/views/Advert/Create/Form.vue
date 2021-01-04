@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="page" v-if="form.length">
-      <h2 class="page__title" @click="update">Добавить объявление</h2>
+      <h2 class="page__title">Добавить объявление</h2>
       <div class="page__content">
         <div class="page__body" @click.ctrl.shift="showLog = !showLog">
 
@@ -26,7 +26,7 @@
             <step-description v-model="description" :description="description"/>
           </div>
 
-          <div  v-show="stepsSuccess  && showOther">
+          <div v-show="stepsSuccess  && showOther">
             <a class="page__btn" @click="store">Сохранить</a>
           </div>
         </div>
