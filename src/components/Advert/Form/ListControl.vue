@@ -2,12 +2,12 @@
   <div>
     <div class="control" v-if="attribute.options.length">
       <div class="control__head">
-        <div class="control__title">{{ attribute.label }}</div>
+        <div class="control__title">{{ attribute.label }} </div>
         <div class="control__value" v-if="attribute.value" @click="clearValue">{{ selectedOption.title }}</div>
       </div>
       <div v-if="!attribute.value">
         <ul class="control__list" v-if="filteredOptions.length">
-          <li class="control__item" v-for="option in filteredOptions" :key="option.id">
+          <li class="control__item" :class="itemClassCol" v-for="option in filteredOptions" :key="option.id">
             <label class="control__label">
               <input class="control__input" type="radio" :value="option.id" @change="update(option.id)">
               {{ option.title }}
@@ -47,8 +47,19 @@ export default {
     }
   },
   computed: {
+    itemClassCol () {
+      if (this.maxTitleLen > 40) return 'cols-2'
+      if (this.maxTitleLen >= 30) return 'cols-2'
+      if (this.maxTitleLen > 20) return 'cols-2'
+      if (this.maxTitleLen >= 15) return 'cols-4'
+      return 'cols-5'
+    },
+    maxTitleLen () {
+      const titles = this.attribute.options.map(item => item.title.length)
+      return Math.max(...titles)
+    },
     showCollapseBlock () {
-      return this.attribute.options.length > 25
+      return this.attribute.options.length > 20
     },
     selectedOption () {
       return this.attribute.options.filter(item => {
@@ -57,7 +68,7 @@ export default {
     },
     filteredOptions () {
       if (this.collapse) {
-        return this.attribute.options.slice(0, 25)
+        return this.attribute.options.slice(0, 20)
       } else {
         if (this.search) {
           return this.attribute.options.filter(item => {
@@ -160,15 +171,34 @@ export default {
 
   &__item {
     box-sizing: border-box;
-    width: 20%;
     margin-bottom: 24px;
     padding: 6px;
+
+    &.cols-2 {
+      width: 100%;
+    }
+
+    &.cols-2 {
+      width: 50%;
+    }
+
+    &.cols-3 {
+      width: 33.333%;
+    }
+
+    &.cols-4 {
+      width: 25%;
+    }
+
+    &.cols-5 {
+      width: 20%;
+    }
   }
 
   &__label {
     cursor: pointer;
     font-weight: 500;
-    font-size: 15px;
+    font-size: 14px;
     color: var(--primary-color);
     text-transform: capitalize;
     transition: all .2s;
@@ -187,11 +217,11 @@ export default {
     align-items: center;
     justify-content: space-between;
     background: #ffffff;
-    position: sticky;
-    bottom: 0;
     padding: 0 12px 0 0;
 
     &.open {
+      position: sticky;
+      bottom: 0;
       margin: 0 -24px;
       padding: 16px 24px 16px;
       border-top: 1px solid #ebebeb;

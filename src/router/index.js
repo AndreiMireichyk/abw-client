@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Categories from '../views/Advert/Create/Categories'
 import Form from '../views/Advert/Create/Form'
 import FormSuccess from '@/views/Advert/Create/FormSuccess'
+import AdvertList from '@/views/Advert/List/List'
 
 Vue.use(VueRouter)
 
@@ -31,7 +32,7 @@ const routes = [
   {
     path: '/:slug/prodaja',
     name: 'ad-cat-list',
-    component: Home
+    component: AdvertList
   },
   {
     path: '/about',
