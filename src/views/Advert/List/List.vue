@@ -19,6 +19,7 @@
             </div>
             <div class="advert__info">
 
+              <router-link :to="{name: 'ad-detail', params:{slug: $route.params.slug, id: item.id}}" target="_blank" class="advert__stretch-link"></router-link>
               <div class="advert__left">
                 <div>
                   <div class="advert__title">
@@ -31,7 +32,7 @@
                   </div>
                 </div>
                 <div class="advert__properties">
-                  {{ formatPrice(item.properties.millage) }} км, {{ item.properties.sostoyanie }},
+                  {{ formatPrice(item.properties.millage) }} км, {{ item.properties.condition }},
                   {{ item.properties.kpp }}
 
                 </div>
@@ -40,7 +41,7 @@
                 </div>
                 <div class="advert__tags">
                   <div class="advert__tag success">
-                    VIN
+                    VIN +
                   </div>
                   <div class="advert__tag warning">
                     обмен
@@ -203,6 +204,7 @@ export default {
   }
 
   &__info {
+    position: relative;
     display: flex;
     align-items: stretch;
     justify-content: space-between;
@@ -306,6 +308,15 @@ export default {
     }
   }
 
+  &__stretch-link{
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .pagination {

@@ -63,7 +63,7 @@ export default {
   padding: 25px;
   max-width: 1200px;
   margin: 0 auto;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.7);
   min-height: 80vh;
 
   &__title {

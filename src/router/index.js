@@ -29,10 +29,17 @@ const routes = [
     name: 'ad-success',
     component: FormSuccess
   },
+
   {
     path: '/:slug/prodaja',
     name: 'ad-cat-list',
     component: AdvertList
+  },
+  {
+    path: '/:slug/:location?/prodaja/:id',
+    name: 'ad-detail',
+    props: (route) => ({ location: route.params.location || 'belarus' }),
+    component: Home
   },
   {
     path: '/about',

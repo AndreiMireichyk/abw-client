@@ -180,7 +180,11 @@ export default {
         params: this.parameters
       })
         .then(r => {
-          alert(r.data.message)
+          this.$router.push({
+            name: 'ad-cat-list',
+            params: { slug: this.$route.params.slug }
+          })
+          // alert(r.data.message)
         })
         .catch(e => {
           console.log(e.data)
@@ -257,7 +261,7 @@ export default {
     margin-left: 24px;
   }
 
-  &__btn{
+  &__btn {
     margin: 16px 24px;
     display: inline-block;
     cursor: pointer;

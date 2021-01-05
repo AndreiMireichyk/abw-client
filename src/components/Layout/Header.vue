@@ -19,7 +19,7 @@
 
       <ul class="header__actions">
         <li>
-          <router-link class="header__add-btn" :to="{name: 'ad-category'}">Добавить</router-link>
+          <router-link class="header__add-btn" :to="{name: 'ad-category'}">Подать объявление</router-link>
         </li>
       </ul>
     </div>
@@ -58,7 +58,7 @@ export default {
 .header {
   position: relative;
   z-index: 6;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.7);
   margin-bottom: 24px;
 
   &__wrap {
