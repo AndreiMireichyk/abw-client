@@ -1,7 +1,7 @@
 <template>
   <div class="cover" :style="{ 'background-image': 'url(' + this.$config.host+ cover + ')' }">
 
-    <div class="cover__pins" v-if="images.length">
+    <div class="cover__pins" v-if="images.length > 1">
       <div class="cover__pin"
            :class="{active: index === selectedIndex}"
            v-for="(image, index) in images" :key="image.id"
