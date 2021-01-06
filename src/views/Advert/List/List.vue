@@ -1,11 +1,7 @@
 <template>
-  <div class="page" :key="$route.params.slug">
+  <div class="page" >
     <div class="page__content">
       <div class="page__body">
-
-        <div class="page__filters">
-
-        </div>
 
         <div class="page__result">
           Найдено объявлений - {{ items.length }}
@@ -19,7 +15,8 @@
             </div>
             <div class="advert__info">
 
-              <router-link :to="{name: 'ad-detail', params:{slug: $route.params.slug, id: item.id}}" target="_blank" class="advert__stretch-link"></router-link>
+              <router-link :to="{name: 'ad-detail', params:{slug: $route.params.slug, id: item.id}}" target="_blank"
+                           class="advert__stretch-link"></router-link>
               <div class="advert__left">
                 <div>
                   <div class="advert__title">
@@ -95,7 +92,15 @@
         </div>
       </div>
       <div class="page__aside">
-        реклама + перелинковка
+        <div class="page__filters filter">
+          <div  class="filter__item" v-for="filter in filters" :key="filter.id">
+            <select v-model="filter.value">
+              <option disabled value="null">{{filter.label}}</option>
+              <option v-for="option in filter.options" :value="option.slug" :key="option.id">{{option.title}}</option>
+            </select>
+
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -110,16 +115,17 @@ export default {
   data () {
     return {
       category: null,
-      items: []
+      items: [],
+      filters: []
     }
   },
   watch: {
     category () {
       this.fetch()
+      this.fetchFilters()
     }
   },
   methods: {
-
     formatPrice (val) {
       return (new Intl.NumberFormat()).format(val)
     },
@@ -131,9 +137,21 @@ export default {
         .catch(e => {
           alert('fetch err')
         })
+    },
+    fetchFilters () {
+      this.$http.post(`${this.$config.host}/api/adverts/${this.$route.params.slug}/filters`, {
+        params: {}
+      })
+        .then(r => {
+          this.filters = r.data
+        })
+        .catch(e => {
+          alert('fetch filters err')
+        })
     }
   },
   created () {
+    this.fetchFilters()
     this.fetch()
   },
   beforeRouteUpdate (to, from, next) {
@@ -287,28 +305,31 @@ export default {
     display: flex;
   }
 
-  &__tag{
+  &__tag {
     font-size: 12px;
     text-transform: uppercase;
     font-weight: 500;
     padding: 3px 5px;
     margin-right: 6px;
     border-radius: 4px;
-    &.warning{
+
+    &.warning {
       color: var(--gray-color);
       border: 1px solid #f1bd0b;
     }
-    &.success{
-      color:  #3d8517;
+
+    &.success {
+      color: #3d8517;
       border: 1px solid #3d8517;
     }
-    &.danger{
-      color:  var(--red-color);
+
+    &.danger {
+      color: var(--red-color);
       border: 1px solid var(--red-color);
     }
   }
 
-  &__stretch-link{
+  &__stretch-link {
     position: absolute;
     top: 0;
     right: 0;
@@ -343,6 +364,31 @@ export default {
   &__total {
     padding-left: 16px;
     color: var(--gray-color);
+  }
+}
+.filter{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding: 12px 8px;
+  background: rgba(255,255,255,0.7);
+
+  &__item{
+    box-sizing: border-box;
+    width: 100%;
+    padding:  8px;
+
+    select{
+      box-shadow: 0 0 0 1px #d3d9df inset, 0 1px 0 rgba(24, 26, 27, 0.08);
+      border-radius: 4px;
+      background: none;
+      border: none;
+      outline: none;
+      padding: 6px;
+      width: 100%;
+
+    }
   }
 }
 </style>
