@@ -1,5 +1,5 @@
 <template>
-  <div class="page" >
+  <div class="page">
     <div class="page__content">
       <div class="page__body">
 
@@ -20,8 +20,9 @@
               <div class="advert__left">
                 <div>
                   <div class="advert__title">
-                    {{ item.properties.brand }}
+                    {{ item.properties.marka }}
                     {{ item.properties.model }}
+                    {{ item.properties.generation }}
                   </div>
                   <div class="advert__location">
                     {{ item.location.country }},
@@ -29,8 +30,9 @@
                   </div>
                 </div>
                 <div class="advert__properties">
-                  {{ formatPrice(item.properties.millage) }} км, {{ item.properties.condition }},
-                  {{ item.properties.kpp }}
+                  {{ item.properties.year }}г,
+                  {{ item.properties.engine }},
+                  {{ item.properties.transmission }}
 
                 </div>
                 <div class="advert__description">
@@ -87,16 +89,16 @@
         <div class="page__pagination">
           <div class="pagination">
             <a href="" class="pagination__btn">Показать еще</a>
-            <div class="pagination__total">На странице 50 объявлений из 126</div>
+            <div class="pagination__total">На странице {{items.length}} объявлений из {{items.length}}</div>
           </div>
         </div>
       </div>
       <div class="page__aside">
         <div class="page__filters filter">
-          <div  class="filter__item" v-for="filter in filters" :key="filter.id">
+          <div class="filter__item" v-for="filter in filters" :key="filter.id">
             <select v-model="filter.value">
-              <option disabled value="null">{{filter.label}}</option>
-              <option v-for="option in filter.options" :value="option.slug" :key="option.id">{{option.title}}</option>
+              <option disabled value="null">{{ filter.label }}</option>
+              <option v-for="option in filter.options" :value="option.slug" :key="option.id">{{ option.title }}</option>
             </select>
 
           </div>
@@ -366,20 +368,21 @@ export default {
     color: var(--gray-color);
   }
 }
-.filter{
+
+.filter {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   margin-bottom: 20px;
   padding: 12px 8px;
-  background: rgba(255,255,255,0.7);
+  background: rgba(255, 255, 255, 0.7);
 
-  &__item{
+  &__item {
     box-sizing: border-box;
     width: 100%;
-    padding:  8px;
+    padding: 8px;
 
-    select{
+    select {
       box-shadow: 0 0 0 1px #d3d9df inset, 0 1px 0 rgba(24, 26, 27, 0.08);
       border-radius: 4px;
       background: none;
