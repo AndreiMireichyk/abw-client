@@ -1,16 +1,63 @@
 <template>
-  <div>
-    <div> hello, im select {{attribute}}</div>
+  <div class="control">
+    <div class="control__title">{{attribute.label}}</div>
+    <select  v-model="attribute.value"
+             class="control__input"
+             :placeholder="attribute.placeholder"
+             @input="update"
+             :class="{invalid: vee.errors.length}"
+    >
+      <option v-for="(option) in attribute.options" :value="option.id" :key="option.id">{{option.title}}</option>
+    </select>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['attribute'],
-  name: 'SelectControl'
+  props: ['attribute', 'vee'],
+  name: 'SelectControl',
+  methods: {
+    update (event) {
+      this.$emit('input', event.target.value)
+    }
+  }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.control {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  position: relative;
+  margin-bottom: 24px;
 
+  &__title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--font-color);
+    margin-right: 24px;
+    width: 70px;
+  }
+
+  &__input {
+    width: 185px;
+    box-shadow: 0 0 0 1px #d3d9df inset, 0 1px 0 rgba(24, 26, 27, 0.08);
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+    color: var(--gray-color);
+  }
+
+  &__error {
+    position: absolute;
+    bottom: -16px;
+    font-size: 12px;
+    color: var(--red-color);
+    text-align: right;
+    flex-grow: 1;
+  }
+}
 </style>

@@ -92,6 +92,9 @@ export default {
     },
     attributes () {
       this.update()
+    },
+    parameters () {
+
     }
   },
   computed: {
