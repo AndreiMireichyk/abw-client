@@ -222,6 +222,13 @@ export default {
       } else {
         this.currentStep = step.index
       }
+
+      setTimeout(() => {
+        document.body.scrollIntoView({
+          block: 'end',
+          behavior: 'smooth'
+        })
+      }, 50)
     }
   },
   created () {

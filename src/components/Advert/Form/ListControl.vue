@@ -2,7 +2,7 @@
   <div>
     <div class="control" v-if="attribute.options.length">
       <div class="control__head">
-        <div class="control__title">{{ attribute.label }} </div>
+        <div class="control__title">{{ attribute.label }}</div>
         <div class="control__value" v-if="attribute.value" @click="clearValue">{{ selectedOption.title }}</div>
       </div>
       <div v-if="!attribute.value">
@@ -10,7 +10,7 @@
           <li class="control__item" :class="itemClassCol" v-for="option in filteredOptions" :key="option.id">
             <label class="control__label">
               <input class="control__input" type="radio" :value="option.id" @change="update(option.id)">
-              {{ option.title }}
+              {{ option.title }}{{ attribute.postfix }}
             </label>
           </li>
         </ul>
@@ -79,7 +79,11 @@ export default {
       }
     }
   },
-
+  watch: {
+    'attribute.options' () {
+      // if (this.attribute.options.length === 1) this.update(this.attribute.options[0].id)
+    }
+  },
   methods: {
     update (option) {
       this.$emit('input', option)

@@ -20,9 +20,9 @@
               <div class="advert__left">
                 <div>
                   <div class="advert__title">
-                    {{ item.properties.marka }}
-                    {{ item.properties.model }}
-                    {{ item.properties.generation }}
+                    {{ item.properties.car_marka }}
+                    {{ item.properties.car_model }}
+                    {{ item.properties.car_generation }}
                   </div>
                   <div class="advert__location">
                     {{ item.location.country }},
@@ -30,9 +30,10 @@
                   </div>
                 </div>
                 <div class="advert__properties">
-                  {{ item.properties.year }}г,
-                  {{ item.properties.engine }},
-                  {{ item.properties.transmission }}
+                  {{ item.properties.car_engine_volume }}л.,
+                  {{ item.properties.year }}г.,
+                  {{ item.properties.car_engine }},
+                  {{ item.properties.car_transmission }}
 
                 </div>
                 <div class="advert__description">
@@ -58,27 +59,27 @@
 
                 <div class="advert__pricelist">
                   <div class="advert__price second">
-                    ≈ {{ formatPrice(item.price[item.currency]) }}
+                    ≈ {{ formatPrice(item.price.usd) }}
                     <span class="advert__currency">
                       usd
                     </span>
                   </div>
                   <div class="advert__price second">
-                    ≈ {{ formatPrice(item.price[item.currency]) }}
+                    ≈ {{ formatPrice(item.price.eur) }}
                     <span class="advert__currency">
                       eur
                     </span>
                   </div>
                   <div class="advert__price second">
-                    ≈ {{ formatPrice(item.price[item.currency]) }}
+                    ≈ {{ formatPrice(item.price.rub) }}
                     <span class="advert__currency">
                       rub
                     </span>
                   </div>
                   <div class="advert__price base">
-                    {{ formatPrice(item.price[item.currency]) }}
+                    {{ formatPrice(item.price.byn) }}
                     <span class="advert__currency">
-                      {{ item.currency }}
+                      byn
                     </span>
                   </div>
                 </div>
