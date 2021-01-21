@@ -3,8 +3,8 @@
     <div class="page__content">
       <div class="page__body">
 
-        <div class="page__result">
-          Найдено объявлений - {{ items.length }}
+        <div class="page__result" v-if="pagination">
+          Найдено объявлений - {{ pagination.total }}
         </div>
 
         <div class="page__listing">
@@ -87,10 +87,11 @@
             </div>
           </div>
         </div>
-        <div class="page__pagination">
+        <div class="page__pagination" v-if="pagination">
           <div class="pagination">
-            <a href="" class="pagination__btn">Показать еще</a>
-            <div class="pagination__total">На странице {{items.length}} объявлений из {{items.length}}</div>
+            <a href="javascript:void(0)" class="pagination__btn" v-show="showNextPageBtn"
+               @click.prevent="nextPage">Показать еще</a>
+            <div class="pagination__total">На странице {{ showItemCount }} объявлений из {{ pagination.total }}</div>
           </div>
         </div>
       </div>
@@ -101,7 +102,6 @@
               <option disabled value="null">{{ filter.label }}</option>
               <option v-for="option in filter.options" :value="option.slug" :key="option.id">{{ option.title }}</option>
             </select>
-
           </div>
         </div>
       </div>
@@ -119,7 +119,20 @@ export default {
     return {
       category: null,
       items: [],
+      pagination: {
+        page: 1,
+        per_page: 25,
+        total: 0
+      },
       filters: []
+    }
+  },
+  computed: {
+    showNextPageBtn () {
+      return this.pagination.pages > this.pagination.page
+    },
+    showItemCount () {
+      return this.pagination.page * this.pagination.per_page
     }
   },
   watch: {
@@ -132,10 +145,16 @@ export default {
     formatPrice (val) {
       return (new Intl.NumberFormat()).format(val)
     },
-    fetch () {
-      this.$http.get(`${this.$config.host}/api/adverts/${this.$route.params.slug}/list`)
+    nextPage () {
+      this.fetch(this.pagination.page + 1)
+    },
+    fetch (page) {
+      page = page || 1
+
+      this.$http.get(`${this.$config.host}/api/adverts/${this.$route.params.slug}/list?page=${page}`)
         .then(r => {
-          this.items = r.data
+          r.data.items.map(item => this.items.push(item))
+          this.pagination = r.data.pagination
         })
         .catch(e => {
           alert('fetch err')
@@ -154,11 +173,13 @@ export default {
     }
   },
   created () {
-    this.fetchFilters()
     this.fetch()
+    this.fetchFilters()
   },
   beforeRouteUpdate (to, from, next) {
     this.category = to.params.slug
+    this.items = []
+    this.filters = []
     next()
   }
 }
