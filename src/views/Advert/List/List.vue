@@ -2,7 +2,10 @@
   <div class="page">
     <div class="page__content">
       <div class="page__body">
-
+       <pre>
+{{ categorySlug }}
+{{ searchParams }}
+       </pre>
         <div class="page__result" v-if="pagination">
           Найдено объявлений - {{ pagination.total }}
         </div>
@@ -113,6 +116,7 @@
 import CoverViewer from '@/components/Advert/List/CoverViewer'
 
 export default {
+  props: ['categorySlug', 'searchParams'],
   name: 'List',
   components: { CoverViewer },
   data () {
@@ -136,7 +140,7 @@ export default {
     }
   },
   watch: {
-    category () {
+    categorySlug () {
       this.fetch()
       this.fetchFilters()
     }
@@ -177,7 +181,6 @@ export default {
     this.fetchFilters()
   },
   beforeRouteUpdate (to, from, next) {
-    this.category = to.params.slug
     this.items = []
     this.filters = []
     next()
