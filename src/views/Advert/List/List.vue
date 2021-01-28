@@ -2,10 +2,7 @@
   <div class="page">
     <div class="page__content">
       <div class="page__body">
-       <pre>
-{{ categorySlug }}
-{{ searchParams }}
-       </pre>
+
         <div class="page__result" v-if="pagination">
           Найдено объявлений - {{ pagination.total }}
         </div>
@@ -99,14 +96,7 @@
         </div>
       </div>
       <div class="page__aside">
-        <div class="page__filters filter">
-          <div class="filter__item" v-for="filter in filters" :key="filter.id">
-            <select v-model="filter.value">
-              <option disabled value="null">{{ filter.label }}</option>
-              <option v-for="option in filter.options" :value="option.slug" :key="option.id">{{ option.title }}</option>
-            </select>
-          </div>
-        </div>
+        <adv-filter></adv-filter>
       </div>
     </div>
   </div>
@@ -114,11 +104,12 @@
 
 <script>
 import CoverViewer from '@/components/Advert/List/CoverViewer'
+import AdvFilter from '@/components/Advert/List/Filter/Filter'
 
 export default {
   props: ['categorySlug', 'searchParams'],
   name: 'List',
-  components: { CoverViewer },
+  components: { CoverViewer, AdvFilter },
   data () {
     return {
       category: null,
@@ -178,11 +169,9 @@ export default {
   },
   created () {
     this.fetch()
-    this.fetchFilters()
   },
   beforeRouteUpdate (to, from, next) {
     this.items = []
-    this.filters = []
     next()
   }
 }
@@ -394,29 +383,4 @@ export default {
   }
 }
 
-.filter {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-  padding: 12px 8px;
-  background: rgba(255, 255, 255, 0.7);
-
-  &__item {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 8px;
-
-    select {
-      box-shadow: 0 0 0 1px #d3d9df inset, 0 1px 0 rgba(24, 26, 27, 0.08);
-      border-radius: 4px;
-      background: none;
-      border: none;
-      outline: none;
-      padding: 6px;
-      width: 100%;
-
-    }
-  }
-}
 </style>
