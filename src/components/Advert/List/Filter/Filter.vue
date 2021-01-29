@@ -13,7 +13,7 @@
         Показать
       </router-link>
       <pre>
-        {{url}}
+        {{ paramsPath }}
         {{ attributes }}
       </pre>
       <component :is="resolvedComponent" :filters="filters"></component>
@@ -49,6 +49,7 @@ export default {
     }
   },
   computed: {
+
     attributes () {
       const attributes = {}
 
@@ -59,6 +60,18 @@ export default {
         })
 
       return attributes
+    },
+
+    paramsPath () {
+      let string = ''
+
+      this.filters
+        .filter(item => item.value)
+        .map(item => {
+          string += `/${item.attribute}_${item.value}`
+        })
+
+      return string
     },
     resolvedComponent () {
       switch (this.$route.params.slug) {

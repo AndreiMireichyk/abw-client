@@ -20,7 +20,7 @@ const routes = [
     component: Categories
   },
   {
-    path: '/advert/add/:slug',
+    path: '/advert/add/:slug/:id',
     name: 'ad-form',
     component: Form
   },
