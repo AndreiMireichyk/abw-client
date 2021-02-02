@@ -3,6 +3,14 @@
     <div class="page__content">
       <div class="page__body">
 
+        <div class="page__header">
+         <h1>Объявления о продаже автомобилей</h1>
+        </div>
+
+        <div class="page__filters">
+          <adv-filter></adv-filter>
+        </div>
+
         <div class="page__result" v-if="pagination">
           Найдено объявлений - {{ pagination.total }}
         </div>
@@ -96,7 +104,7 @@
         </div>
       </div>
       <div class="page__aside">
-        <adv-filter></adv-filter>
+        Реклама + пиерелинковка
       </div>
     </div>
   </div>
@@ -203,7 +211,11 @@ export default {
 
     flex-grow: 1;
   }
-
+  &__filters{
+    padding: 16px;
+    background: rgba(255, 255, 255, .7);
+    margin-bottom: 12px;
+  }
   &__aside {
     width: 300px;
     min-width: 300px;

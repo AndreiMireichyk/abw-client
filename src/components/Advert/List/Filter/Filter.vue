@@ -1,23 +1,15 @@
 <template>
-  <div>
-    <div>
-      <div class="page__filters filter">
-        <div class="filter__item" v-for="filter in filters" :key="filter.id">
-          <select v-model="filter.value">
-            <option disabled value="null">{{ filter.label }}</option>
-            <option v-for="option in filter.options" :value="option.code" :key="option.code">{{ option.title }}</option>
-          </select>
-        </div>
+  <div class="filter" v-if="filters.length">
+    <div>    {{paramsPath}}</div>
+    <component :is="resolvedComponent" :filters="filters"></component>
+    <div class="filter__footer">
+      <div class="filter__actions">
+        <a class="filter__btn-all" href="">Все параметры</a>
+        <a class="filter__btn-clear" href="javascript:void(0)" @click="clearFilters">Сбросить</a>
       </div>
-      <router-link class="categories__item-link" :to="{name: 'ad-form', params:{slug: this.$route.params.slug}}">
-        Показать
-      </router-link>
-      <pre>
-        {{ paramsPath }}
-        {{ attributes }}
-      </pre>
-      <component :is="resolvedComponent" :filters="filters"></component>
+      <a href="" class="filter__btn-results">Показать 6 предложений</a>
     </div>
+
   </div>
 </template>
 
@@ -83,7 +75,9 @@ export default {
     }
   },
   methods: {
-
+    getFilterByCode (code) {
+      this.filters.filter(item => item.attribute === code)
+    },
     update () {
       if (this.notUpdate) return false
 
@@ -129,6 +123,18 @@ export default {
         .catch(e => {
           alert('fetch filters err')
         })
+    },
+
+    clearFilters () {
+      this.$http.post(`${this.$config.host}/api/adverts/${this.$route.params.slug}/filters`, {
+        params: {}
+      })
+        .then(r => {
+          this.filters = r.data
+        })
+        .catch(e => {
+          alert('fetch filters err')
+        })
     }
   },
   created () {
@@ -141,31 +147,60 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style  lang="scss">
 
 .filter {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-  padding: 12px 8px;
-  background: rgba(255, 255, 255, 0.7);
+
+  &__body{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -8px;
+  }
+
+  &__footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__btn-all{
+    color: var(--primary-color);
+    text-decoration: none;
+    margin-right: 16px;
+  }
+  &__btn-clear{
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+  &__btn-results{
+    color: var(--white-color);
+    background: var(--primary-color);
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+  }
 
   &__item {
     box-sizing: border-box;
-    width: 100%;
-    padding: 8px;
+    padding: 0 8px;
+    margin-bottom: 12px;
 
-    select {
-      box-shadow: 0 0 0 1px #d3d9df inset, 0 1px 0 rgba(24, 26, 27, 0.08);
-      border-radius: 4px;
-      background: none;
-      border: none;
-      outline: none;
-      padding: 6px;
-      width: 100%;
-
+    &.col-6 {
+      max-width: 50%;
+      min-width: 50%;
+      width: 50%;
+    }
+    &.col-4 {
+      max-width: 33.3333333%;
+      min-width: 33.3333333%;
+      width: 33.3333333%;
+    }
+    &.col-4 {
+      max-width: 25%;
+      min-width: 25%;
+      width: 25%;
     }
   }
+
 }
 </style>
