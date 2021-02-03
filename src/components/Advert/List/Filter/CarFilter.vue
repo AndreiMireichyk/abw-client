@@ -1,11 +1,19 @@
 <template>
   <div class="filter__body">
     <div class="filter__item col-6">
-      Состояние
+      <switch-control :filter="getByCode('condition')" v-model="getByCode('car_marka').value"/>
     </div>
 
-    <div class="filter__item col-6">
-      Сохранить поиск
+    <div class="filter__item filter__item--save col-6">
+      <div class="filter__actions">
+        <div class="filter__action">
+          <a href="javascript:void(0)" class="filter__btn-save" @click="$emit('saveFilter')">Сохранить поиск</a>
+        </div>
+        <div class="filter__action">
+          <a class="filter__btn-clear" href="javascript:void(0)">История</a>
+        </div>
+      </div>
+
     </div>
 
     <div class="filter__item  col-4">
@@ -17,10 +25,10 @@
     <div class="filter__item  col-4">
       <select-control :filter="getByCode('car_generation')" v-model="getByCode('car_generation').value"/>
     </div>
-    <div class="filter__item  col-4">
+    <div class="filter__item  col-2">
       <select-control :filter="getByCode('year')" v-model="getByCode('year').value"/>
     </div>
-    <div class="filter__item  col-4">
+    <div class="filter__item  col-2">
       <select-control :filter="getByCode('car_engine')" v-model="getByCode('car_engine').value"/>
     </div>
     <div class="filter__item  col-4">
@@ -32,25 +40,18 @@
     <div class="filter__item  col-4">
       <select-control :filter="getByCode('car_engine_volume')" v-model="getByCode('car_engine_volume').value"/>
     </div>
-
-    <!--<div class="filter__item" v-for="filter in filters" :key="filter.id">
-      <select v-model="filter.value">
-        <option disabled value="null">{{ filter.label }}</option>
-        <option v-for="option in filter.options" :value="option.code" :key="option.code">{{ option.title }}</option>
-      </select>
-    </div>-->
-
   </div>
 </template>
 
 <script>
 
 import SelectControl from '@/components/Advert/List/Filter/Control/SelectControl'
+import SwitchControl from '@/components/Advert/List/Filter/Control/SwitchControl'
 
 export default {
   name: 'CarFilter',
   props: ['filters'],
-  components: { SelectControl },
+  components: { SelectControl, SwitchControl },
   methods: {
     getByCode (code) {
       return this.filters.filter(item => item.attribute === code)[0]

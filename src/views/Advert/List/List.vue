@@ -1,14 +1,9 @@
 <template>
-  <div class="page">
+  <div class="page" :key="categorySlug">
     <div class="page__content">
       <div class="page__body">
-
-        <div class="page__header">
-         <h1>Объявления о продаже автомобилей</h1>
-        </div>
-
         <div class="page__filters">
-          <adv-filter></adv-filter>
+          <adv-filter :key="categorySlug" :categorySlug="categorySlug"/>
         </div>
 
         <div class="page__result" v-if="pagination">
@@ -115,9 +110,12 @@ import CoverViewer from '@/components/Advert/List/CoverViewer'
 import AdvFilter from '@/components/Advert/List/Filter/Filter'
 
 export default {
-  props: ['categorySlug', 'searchParams'],
+  props: ['categorySlug'],
   name: 'List',
-  components: { CoverViewer, AdvFilter },
+  components: {
+    CoverViewer,
+    AdvFilter
+  },
   data () {
     return {
       category: null,
@@ -131,17 +129,24 @@ export default {
     }
   },
   computed: {
+    routeParamsPath () {
+      if (this.$route.params.params) {
+        return `/${this.$route.params.params}`
+      }
+      return ''
+    },
     showNextPageBtn () {
       return this.pagination.pages > this.pagination.page
     },
     showItemCount () {
+      if (this.pagination.total < this.pagination.per_page) return this.pagination.total
       return this.pagination.page * this.pagination.per_page
     }
   },
   watch: {
     categorySlug () {
+      this.items = []
       this.fetch()
-      this.fetchFilters()
     }
   },
   methods: {
@@ -154,7 +159,7 @@ export default {
     fetch (page) {
       page = page || 1
 
-      this.$http.get(`${this.$config.host}/api/adverts/${this.$route.params.slug}/list?page=${page}`)
+      this.$http.get(`${this.$config.host}/api/adverts/${this.$route.params.slug}/list${this.routeParamsPath}?page=${page}`)
         .then(r => {
           r.data.items.map(item => this.items.push(item))
           this.pagination = r.data.pagination
@@ -162,25 +167,10 @@ export default {
         .catch(e => {
           alert('fetch err')
         })
-    },
-    fetchFilters () {
-      this.$http.post(`${this.$config.host}/api/adverts/${this.$route.params.slug}/filters`, {
-        params: {}
-      })
-        .then(r => {
-          this.filters = r.data
-        })
-        .catch(e => {
-          alert('fetch filters err')
-        })
     }
   },
   created () {
     this.fetch()
-  },
-  beforeRouteUpdate (to, from, next) {
-    this.items = []
-    next()
   }
 }
 </script>
@@ -211,11 +201,13 @@ export default {
 
     flex-grow: 1;
   }
-  &__filters{
+
+  &__filters {
     padding: 16px;
     background: rgba(255, 255, 255, .7);
     margin-bottom: 12px;
   }
+
   &__aside {
     width: 300px;
     min-width: 300px;

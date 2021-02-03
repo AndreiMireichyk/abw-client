@@ -1,8 +1,16 @@
 <template>
-  <div class="control" :class="{disabled: !filter.options.length}">
+  <div class="control" :class="{disabled: !filter.options.length, active: filter.value}">
 
-    <div class="control__input" @click.stop="showList = !showList">
-      {{ selectedValue }}
+    <div class="control__input"
+         :class="{open: showList}"
+         @click.stop="showList = !showList">
+      <span class="control__value">
+              {{ selectedValue }}
+      </span>
+      <span class="control__value-count">
+
+      </span>
+      <i class="icon-chevron-down"/>
     </div>
 
     <div class="control__list scrollbar" v-if="showList">
@@ -11,7 +19,7 @@
         <input type="text" v-model="search" placeholder="Поиск...">
       </div>
 
-      <div class="control__item clear" @click="clear">Любая</div>
+      <div class="control__item clear" @click="clear">Любая <i class="icon-x"/></div>
 
       <div class="control__item"
            v-for="(option, index) in filteredList"
@@ -82,7 +90,13 @@ export default {
   border-radius: 4px;
   border: 1px solid rgba(0, 0, 0, .12);
   position: relative;
-  transition: border-color .3s;
+  transition: border-color, background .3s;
+
+  &.active {
+    color: var(--font-color);
+    border-color: var(--primary-color);
+    background: rgba(54, 153, 255, 0.15);
+  }
 
   &:hover {
     border: 1px solid var(--primary-color)
@@ -90,13 +104,38 @@ export default {
 
   &.disabled {
     opacity: .7;
+    background: #f1f1f1;
     pointer-events: none;
   }
 
   &__input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 8px 8px;
+
+    i {
+      transition: transform .3s;
+    }
+
+    &.open i {
+      transform: rotate(180deg);
+
+    }
+  }
+
+  &__value-count{
+    color: var(--gray-color);
+    font-size: 12px;
+  }
+  &__value{
+    flex-grow: 1;
     cursor: pointer;
     color: var(--gray-color);
-    padding: 6px 8px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   &__list {
@@ -132,8 +171,15 @@ export default {
     cursor: pointer;
 
     &.clear {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 6px 12px;
       border-bottom: 1px solid rgba(0, 0, 0, .12);
+
+      i {
+        color: var(--font-color);
+      }
     }
 
     label {

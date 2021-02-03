@@ -35,37 +35,8 @@ const routes = [
     name: 'ad-cat-list',
     component: AdvertList,
     props: (route) => {
-      let params = route.params.params ? route.params.params.split('/') : []
-
-      params = params.map(param => {
-        let type
-
-        let [code, value] = param.split(/(?:_([a-z-:,0-9]+))$/)
-
-        if (value && value.match(/:/)) {
-          type = 'range'
-          const [from, to] = value.split(':')
-          value = {
-            from,
-            to
-          }
-        } else if (value && value.match(/,/)) {
-          type = 'multiple'
-          value = value.split(',')
-        } else {
-          type = 'single'
-        }
-
-        return {
-          type,
-          code: code ?? null,
-          value: value ?? null
-        }
-      })
-
       return {
-        categorySlug: route.params.slug,
-        searchParams: params
+        categorySlug: route.params.slug
       }
     }
   },

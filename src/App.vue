@@ -16,6 +16,8 @@ export default {
 }
 </script>
 <style lang="scss">
+@import "assets/font/Icon/style.css";
+
 body {
 
   font-family: 'Roboto', sans-serif;
@@ -24,7 +26,7 @@ body {
   color: var(--font-color);
   font-size: 14px;
   --font-color: #323232;
-  --primary-color: #3699FF;
+  --primary-color: #3699ff;
   --white-color: #ffffff;
   --gray-color: #808080;
   --red-color: #f51958;
