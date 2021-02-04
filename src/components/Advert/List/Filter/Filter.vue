@@ -69,6 +69,7 @@ export default {
     resultsUrl () {
       return `/${this.$route.params.slug}/prodaja${this.paramsPath}`
     },
+
     routeParamsPath () {
       if (this.$route.params.params) {
         return `/${this.$route.params.params}`

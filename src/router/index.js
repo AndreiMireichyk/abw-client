@@ -36,6 +36,7 @@ const routes = [
     component: AdvertList,
     props: (route) => {
       return {
+        pathParams: route.params.params,
         categorySlug: route.params.slug
       }
     }

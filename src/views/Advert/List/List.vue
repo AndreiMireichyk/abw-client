@@ -110,7 +110,7 @@ import CoverViewer from '@/components/Advert/List/CoverViewer'
 import AdvFilter from '@/components/Advert/List/Filter/Filter'
 
 export default {
-  props: ['categorySlug'],
+  props: ['categorySlug', 'pathParams'],
   name: 'List',
   components: {
     CoverViewer,
@@ -144,6 +144,10 @@ export default {
     }
   },
   watch: {
+    pathParams () {
+      this.items = []
+      this.fetch()
+    },
     categorySlug () {
       this.items = []
       this.fetch()
