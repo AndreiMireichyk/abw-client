@@ -8,6 +8,7 @@
       <label>
         {{ option.title }}
         <input type="radio" v-model="filter.value" :value="option.code">
+
       </label>
     </div>
 

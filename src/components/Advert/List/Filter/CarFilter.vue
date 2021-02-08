@@ -29,16 +29,22 @@
       <select-control :filter="getByCode('year')" v-model="getByCode('year').value"/>
     </div>
     <div class="filter__item  col-2">
+      <select-control :filter="getByCode('car_engine_volume')" v-model="getByCode('car_engine_volume').value"/>
+    </div>
+    <div class="filter__item  col-2">
       <select-control :filter="getByCode('car_engine')" v-model="getByCode('car_engine').value"/>
     </div>
-    <div class="filter__item  col-4">
+    <div class="filter__item  col-2">
       <select-control :filter="getByCode('car_transmission')" v-model="getByCode('car_transmission').value"/>
     </div>
     <div class="filter__item  col-4">
       <select-control :filter="getByCode('car_body')" v-model="getByCode('car_body').value"/>
     </div>
-    <div class="filter__item  col-4">
-      <select-control :filter="getByCode('car_engine_volume')" v-model="getByCode('car_engine_volume').value"/>
+
+    <div class="filter__collapse" v-show="showAllFilters">
+      <div class="filter__item  col-4">
+        <select-control :filter="getByCode('car_drive')" v-model="getByCode('car_drive').value"/>
+      </div>
     </div>
   </div>
 </template>
@@ -50,8 +56,11 @@ import SwitchControl from '@/components/Advert/List/Filter/Control/SwitchControl
 
 export default {
   name: 'CarFilter',
-  props: ['filters'],
-  components: { SelectControl, SwitchControl },
+  props: ['filters', 'showAllFilters'],
+  components: {
+    SelectControl,
+    SwitchControl
+  },
   methods: {
     getByCode (code) {
       return this.filters.filter(item => item.attribute === code)[0]

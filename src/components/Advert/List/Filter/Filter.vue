@@ -1,19 +1,20 @@
 <template>
   <div class="filter" v-if="filters.length">
 
-    <component :is="resolvedComponent" :filters="filters"></component>
+    <component :is="resolvedComponent" :filters="filters" :showAllFilters="showAllFilters"></component>
 
     <div class="filter__footer">
       <div class="filter__actions">
         <div class="filter__action">
-          <a class="filter__btn-all" href="javascript:void(0)">Все параметры</a>
+          <a class="filter__btn-all" href="javascript:void(0)" @click="allFilters" v-if="showAllFilters">Меньше
+            параметров</a>
+          <a class="filter__btn-all" href="javascript:void(0)" @click="allFilters" v-else>Больше параметров</a>
         </div>
         <div class="filter__action" v-if="paramsPath">
           <a class="filter__btn-clear" href="javascript:void(0)" @click="clearFilters">Сбросить</a>
         </div>
       </div>
       <router-link :to="resultsUrl" class="filter__btn-results">Показать {{ advCount }} предложений</router-link>
-
     </div>
 
   </div>
@@ -40,6 +41,7 @@ export default {
       url: null,
       filters: [],
       notUpdate: false,
+      showAllFilters: false,
       advCount: 0
     }
   },
@@ -76,13 +78,25 @@ export default {
       }
       return ''
     },
+
     paramsPath () {
       let string = ''
 
       this.filters
         .filter(item => item.value)
+        .filter(item => item.value.length)
         .map(item => {
-          string += `/${item.attribute}_${item.value}`
+          switch (item.type) {
+            case 'equal' :
+              string += `/${item.attribute}_${item.value}`
+              break
+            case 'range' :
+              string += `/${item.attribute}_${item.value.join(':')}`
+              break
+            case 'multiple' :
+              string += `/${item.attribute}_${item.value.join(',')}`
+              break
+          }
         })
 
       return string
@@ -127,7 +141,9 @@ export default {
             }
             return false
           })
-          if (!i.length) this.filters[key].value = null
+          if (!i.length) {
+            //   this.filters[key].value = ['range', 'multiple'].includes(this.filters[key].type) ? [] : null
+          }
         }
       })
 
@@ -147,7 +163,9 @@ export default {
         })
       this.notUpdate = false
     },
-
+    allFilters () {
+      this.showAllFilters = !this.showAllFilters
+    },
     async clearFilters () {
       this.notUpdate = true
 
@@ -184,6 +202,10 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  &__collapse {
+    width: 100%;
   }
 
   &__actions {
