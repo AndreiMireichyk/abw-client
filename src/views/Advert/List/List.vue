@@ -13,6 +13,7 @@
         <div class="page__listing">
 
           <div class="advert" v-for="(item) in items" :key="item.id">
+
             <div class="advert__cover">
               <cover-viewer :images="item.images"/>
             </div>
@@ -58,6 +59,7 @@
               <div class="advert__right">
                 <div class="advert__at">
                   {{ item.created_at }}
+
                 </div>
 
                 <div class="advert__pricelist">

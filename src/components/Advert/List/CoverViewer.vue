@@ -25,7 +25,7 @@ export default {
       if (this.images.length) {
         return this.images[this.selectedIndex].src
       } else {
-        return null
+        return '/no-image.jpg'
       }
     }
   },

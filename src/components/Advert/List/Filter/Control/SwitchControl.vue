@@ -2,6 +2,15 @@
   <div class="control" :class="{disabled: !filter.options.length}">
 
     <div class="control__item"
+         :class="{active: filter.value === null}"
+    >
+      <label>
+        Все
+        <input type="radio" v-model="filter.value" :value="null">
+
+      </label>
+    </div>
+    <div class="control__item"
          :class="{active: filter.value === option.code}"
          v-for="(option, index) in filter.options" :key="index"
     >
@@ -41,6 +50,7 @@ export default {
     }
 
     label {
+      white-space: nowrap;
       display: block;
       cursor: pointer;
       color: var(--gray-color);

@@ -30,7 +30,7 @@
         <label>
           {{ option.title }}
           <input :type="inputType" v-model="filter.value" :value="option.code">
-          <i class="icon-check" v-if="optionIsActive(option)"/>
+          <i class="icon-check" v-if="optionIsActive(option) || optionIsRange(option)"/>
         </label>
       </div>
     </div>
@@ -90,46 +90,33 @@ export default {
       return this.filter.options
     },
     isActive () {
-      if (['multiple', 'range'].includes(this.filter.type) && this.filter.value.length) {
-        return true
-      }
-
-      return !!(this.filter.type === 'equal' && this.filter.value)
+      return ((this.isRange || this.isMultiple) && this.filter.value.length) ? true : !!(this.isEqual && this.filter.value)
     },
     selectedValueCount () {
-      if (this.filter.type === 'multiple' && this.filter.value.length) {
-        return this.filter.value.length
-      }
-
-      return false
+      return (this.isMultiple && this.filter.value.length) ? this.filter.value.length : false
     },
     selectedValue () {
-      if (this.filter.type === 'equal' && this.filter.value) {
-        const option = this.filter.options.filter(item => item.code === this.filter.value)
+      if (this.isEqual && this.filter.value) {
+        const option = this.filter.options
+          .filter(item => item.code === this.filter.value)
+
         return option.length ? option[0].title : this.filter.placeholder
       }
 
-      if (this.filter.type === 'range' && this.filter.value.length) {
-        const selectedOptions = this.filter.options
+      if (this.isRange && this.filter.value.length) {
+        const option = this.filter.options
           .filter(item => this.filter.value.includes(item.code))
           .filter(item => item.code)
+          .sort((a, b) => parseFloat(a.code) - parseFloat(b.code))
 
-        if (selectedOptions.length > 1) {
-          const start = selectedOptions.slice(0)[0]
-
-          const end = selectedOptions.slice(-1)[0]
-
-          return `${start.title} - ${end.title}${this.filter.postfix}`
-        } else {
-          const start = selectedOptions.slice(0)[0]
-
-          return `${start.title}${this.filter.postfix}`
-        }
+        return option.length > 1
+          ? `${option.slice(0)[0].title} - ${option.slice(-1)[0].title} ${this.filter.postfix}`
+          : `${option.slice(0)[0].title} ${this.filter.postfix}`
       }
 
-      if (this.filter.type === 'multiple' && this.filter.value.length) {
-        const selectedOption = this.filter.options.filter(item => this.filter.value.includes(item.code))
-        return selectedOption.map(item => {
+      if (this.isMultiple && this.filter.value.length) {
+        const option = this.filter.options.filter(item => this.filter.value.includes(item.code))
+        return option.map(item => {
           return item.title
         }).join(', ')
       }
@@ -139,35 +126,27 @@ export default {
   },
   methods: {
     select () {
-      if (['range', 'multiple'].includes(this.filter.type)) {
-        return false
-      }
+      if (this.isRange || this.isMultiple) return false
 
       // eslint-disable-next-line no-return-assign
       setTimeout(() => this.showList = false, 10)
     },
     optionIsRange (option) {
-      if (!this.isRange) return
+      if (this.isRange && this.filter.value.length > 1) {
+        const options = JSON.parse(JSON.stringify(this.filter.value)).sort((a, b) => parseFloat(a) - parseFloat(b))
+        const float = parseFloat(option.code)
+        return float > parseFloat(options[0]) && float < parseFloat(options[1])
+      }
 
-      return true
+      return false
     },
     optionIsActive (option) {
-      if (this.filter.type === 'range') {
-        return this.filter.value.includes(option.code)
-      }
-      if (this.filter.type === 'multiple') {
-        return this.filter.value.includes(option.code)
-      }
-      if (this.filter.type === 'equal') {
-        return this.filter.value === option.code
-      }
+      return this.isRange || this.isMultiple
+        ? this.filter.value.includes(option.code)
+        : this.filter.value === option.code
     },
     clear () {
-      if (['range', 'multiple'].includes(this.filter.type)) {
-        this.filter.value = []
-      } else {
-        this.filter.value = null
-      }
+      this.filter.value = this.isRange || this.isMultiple ? [] : null
     }
   },
   created () {
