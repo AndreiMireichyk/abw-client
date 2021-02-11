@@ -1,7 +1,7 @@
 <template>
   <div class="filter__body">
     <div class="filter__item col-6">
-      <switch-control :filter="getByCode('condition')" v-model="getByCode('car_marka').value"/>
+      <switch-control :filter="getByCode('car_condition')" v-model="getByCode('car_marka').value"/>
     </div>
 
     <div class="filter__item filter__item--save col-6">

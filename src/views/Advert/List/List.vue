@@ -5,9 +5,11 @@
         <div class="page__filters">
           <adv-filter :key="categorySlug" :categorySlug="categorySlug"/>
         </div>
-
         <div class="page__result" v-if="pagination">
-          Найдено объявлений - {{ pagination.total }}
+          <div class="page__result-count">Найдено объявлений - {{ pagination.total }}</div>
+          <div class="page__sort">
+            <sort-control :sort="sort"/>
+          </div>
         </div>
 
         <div class="page__listing">
@@ -110,18 +112,25 @@
 <script>
 import CoverViewer from '@/components/Advert/List/CoverViewer'
 import AdvFilter from '@/components/Advert/List/Filter/Filter'
+import SortControl from '@/components/Advert/List/SortControl'
 
 export default {
   props: ['categorySlug', 'pathParams'],
   name: 'List',
   components: {
     CoverViewer,
-    AdvFilter
+    AdvFilter,
+    SortControl
   },
   data () {
     return {
       category: null,
+      sortValue: null,
       items: [],
+      sort: {
+        value: null,
+        items: []
+      },
       pagination: {
         page: 1,
         per_page: 25,
@@ -141,7 +150,13 @@ export default {
       return this.pagination.pages > this.pagination.page
     },
     showItemCount () {
-      if (this.pagination.total < this.pagination.per_page) return this.pagination.total
+      if (this.pagination.total < this.pagination.per_page) {
+        return this.pagination.total
+      }
+      if (this.pagination.page * this.pagination.per_page > this.pagination.total) {
+        return this.pagination.total
+      }
+
       return this.pagination.page * this.pagination.per_page
     }
   },
@@ -151,6 +166,10 @@ export default {
       this.fetch()
     },
     categorySlug () {
+      this.items = []
+      this.fetch()
+    },
+    'sort.value' () {
       this.items = []
       this.fetch()
     }
@@ -164,11 +183,13 @@ export default {
     },
     fetch (page) {
       page = page || 1
+      const sort = this.sort.value ? `&sort=${this.sort.value}` : ''
 
-      this.$http.get(`${this.$config.host}/api/adverts/${this.$route.params.slug}/list${this.routeParamsPath}?page=${page}`)
+      this.$http.get(`${this.$config.host}/api/adverts/${this.$route.params.slug}/list${this.routeParamsPath}?page=${page}${sort}`)
         .then(r => {
           r.data.items.map(item => this.items.push(item))
           this.pagination = r.data.pagination
+          this.sort = r.data.sort
         })
         .catch(e => {
           alert('fetch err')
@@ -224,13 +245,21 @@ export default {
   }
 
   &__result {
-    color: var(--font-color);
-    font-weight: 500;
-    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     background: rgba(255, 255, 255, .7);
     padding: 16px;
     margin-bottom: 4px;
   }
+
+  &__result-count {
+    color: var(--font-color);
+    font-weight: 500;
+    font-size: 18px;
+
+  }
+
 }
 
 .advert {
@@ -380,6 +409,7 @@ export default {
     text-decoration: none;
     box-shadow: 0 0 0 1px #d3d9df inset, 0 1px 0 rgba(24, 26, 27, 0.08);
     transition: all .3s;
+    margin-right: 16px;
 
     &:hover {
       color: var(--primary-color);
@@ -388,7 +418,6 @@ export default {
   }
 
   &__total {
-    padding-left: 16px;
     color: var(--gray-color);
   }
 }
