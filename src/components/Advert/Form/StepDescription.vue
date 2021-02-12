@@ -38,9 +38,7 @@
         </div>
 
       </div>
-<!--      <div class="control__footer" v-if="showFooter">
-        <a @click="showFooter = !showFooter" class="control__btn">Далее</a>
-      </div>-->
+
     </div>
   </div>
 </template>

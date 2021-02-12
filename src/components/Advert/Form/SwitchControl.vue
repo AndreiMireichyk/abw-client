@@ -3,12 +3,10 @@
     <div class="control">
       <label class="control__title">{{ attribute.label }}:</label>
       <div class="control__group" :class="{invalid: vee.errors.length}">
-        <div class="control__item" v-for="option in attribute.options" :key="option.id">
-          <label class="control__label" :class="{active: attribute.value && attribute.value === option.id}">
-            {{ option.title }}
-            <input class="control__input" type="radio" v-model="attribute.value" :value="option.id">
-          </label>
-        </div>
+        <label class="control__item"  v-for="option in attribute.options" :key="option.id" :class="{active: attribute.value && attribute.value === option.id}">
+          {{ option.title }}
+          <input class="control__input" type="radio" v-model="attribute.value" :value="option.id">
+        </label>
       </div>
     </div>
   </div>
@@ -39,32 +37,39 @@ export default {
 
   &__group {
     display: flex;
-    border-radius: 8px;
-    border: 1px solid #ebebeb;
     overflow: hidden;
   }
 
   &__item {
-
-  }
-
-  &__label {
-    cursor: pointer;
-
     display: block;
-    padding: 8px 12px;
-    transition: all .3s;
+    border: 1px solid rgba(0, 0, 0, .12);
+    transition: background-color 0.3s;
 
-    &:hover, &.active {
-      box-shadow: 0 0 0 1px var(--primary-color) inset, 0 1px 0 rgba(24, 26, 27, 0.08);
-      background: var(--primary-color);
-      color: var(--white-color);
+    &:first-child {
+      border-radius: 4px 0 0 4px;
     }
 
+    &:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+
+    label {
+      white-space: nowrap;
+      display: block;
+      cursor: pointer;
+      color: var(--gray-color);
+      padding: 8px 8px;
+    }
+
+    input {
+      display: none;
+    }
+
+    &:hover, &.active {
+      border-color: var(--primary-color);
+      background: rgba(54, 153, 255, 0.2);
+    }
   }
 
-  &__input {
-    display: none;
-  }
 }
 </style>

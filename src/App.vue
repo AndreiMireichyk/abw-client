@@ -26,7 +26,8 @@ body {
   color: var(--font-color);
   font-size: 14px;
   --font-color: #323232;
-  --primary-color: #3699ff;
+  //--primary-color: #3699ff;
+  --primary-color: #1890e7;
   --white-color: #ffffff;
   --gray-color: #808080;
   --red-color: #f51958;

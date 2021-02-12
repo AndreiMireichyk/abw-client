@@ -11,9 +11,6 @@
             <label class="control__label">
               <input class="control__input" type="radio" :value="option.id" @change="update(option.id)">
               {{ option.title }}{{ attribute.postfix }}
-              <pre>
-                {{option.belongOptions}}
-              </pre>
             </label>
           </li>
         </ul>
