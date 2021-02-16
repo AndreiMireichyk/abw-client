@@ -7,6 +7,7 @@
 
           <div v-for="(step, index) in steps" :key="index">
             <step-section
+              class="page__section"
               v-show="currentStep >= index"
               :step="step"
               :currentStep="currentStep"
@@ -203,12 +204,17 @@ export default {
           this.form[key].options = item.options
 
           const i = item.options.filter(option => {
-            if (item.value) {
+            if (item.value && Array.isArray(item.value)) {
+              return item.value.includes(option.id)
+            } else if (item.value) {
               return option.id === item.value
             }
             return false
           })
-          if (!i.length) this.form[key].value = null
+
+          if (!i.length) {
+            this.form[key].value = Array.isArray(this.form[key].value) ? [] : null
+          }
         }
       })
 
@@ -258,10 +264,13 @@ export default {
   }
 
   &__aside {
-
     width: 400px;
     min-width: 400px;
     margin-left: 24px;
+  }
+
+  &__section {
+    transition: height .3s;
   }
 
   &__btn {
