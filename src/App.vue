@@ -1,7 +1,7 @@
 <template>
   <div class="app" id="app">
     <div class="header">
-    <Header/>
+      <Header/>
     </div>
     <div class="content">
       <router-view/>
@@ -17,6 +17,7 @@ export default {
 </script>
 <style lang="scss">
 @import "assets/font/Icon/style.css";
+@import 'assets/messages.css';
 
 body {
 
@@ -31,6 +32,7 @@ body {
   --white-color: #ffffff;
   --gray-color: #808080;
   --red-color: #f51958;
+  --white-bg: rgba(255, 255, 255, 0.7);
 }
 
 .app {

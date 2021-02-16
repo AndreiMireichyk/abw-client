@@ -7,6 +7,20 @@
       </router-link>
 
       <ul class="header__menu menu">
+        <li class="menu__item">
+          <div class="menu__group">Новости</div>
+          <ul class="menu__submenu">
+            <li>
+              <a class="menu__link" href="">Рубрика 1</a>
+            </li>
+            <li>
+              <a class="menu__link" href="">Рубрика 2</a>
+            </li>
+            <li>
+              <a class="menu__link" href="">Рубрика 3</a>
+            </li>
+          </ul>
+        </li>
         <li class="menu__item" v-for="(group, index) in groups" :key="index">
           <div class="menu__group">{{ group.title }}</div>
           <ul class="menu__submenu">
@@ -18,7 +32,10 @@
       </ul>
 
       <ul class="header__actions">
-        <li>
+        <li class="header__action">
+          <router-link class="header__login-btn" :to="{name: 'login'}">Войти</router-link>
+        </li>
+        <li class="header__action">
           <router-link class="header__add-btn" :to="{name: 'ad-category'}">Подать объявление</router-link>
         </li>
       </ul>
@@ -86,9 +103,28 @@ export default {
 
   &__actions {
     display: flex;
+    align-items: center;
     justify-content: flex-end;
   }
 
+  &__action{
+    margin-left: 16px;
+  }
+
+  &__login-btn{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: bold;
+    color: var(--primary-color);
+
+    &:before{
+      margin-right: 4px;
+      content: '\e990';
+      font-family: icomoon, serif;
+      font-size: 16px;
+    }
+  }
   &__add-btn {
     display: inline-block;
     font-size: 14px;

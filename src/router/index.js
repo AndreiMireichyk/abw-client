@@ -5,7 +5,7 @@ import Categories from '../views/Advert/Create/Categories'
 import Form from '../views/Advert/Create/Form'
 import FormSuccess from '@/views/Advert/Create/FormSuccess'
 import AdvertList from '@/views/Advert/List/List'
-
+import Login from '@/views/Auth/Login'
 Vue.use(VueRouter)
 
 const routes = [
@@ -13,6 +13,21 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: Login
+  },
+  {
+    path: '/registration',
+    name: 'registration',
+    component: Login
   },
   {
     path: '/advert/add',
