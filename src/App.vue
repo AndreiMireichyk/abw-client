@@ -26,10 +26,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: var(--font-color);
   font-size: 14px;
-  --font-color: #323232;
+  --font-color: rgb(63, 66, 84);
+  --font-muted-color: #a7a7ac;
   //--primary-color: #3699ff;
   --primary-color: #1890e7;
   --white-color: #ffffff;
+  --success-color: rgb(27, 197, 189);
   --gray-color: #808080;
   --red-color: #f51958;
   --white-bg: rgba(255, 255, 255, 0.7);

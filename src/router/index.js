@@ -6,6 +6,14 @@ import Form from '../views/Advert/Create/Form'
 import FormSuccess from '@/views/Advert/Create/FormSuccess'
 import AdvertList from '@/views/Advert/List/List'
 import Login from '@/views/Auth/Login'
+import User from '../views/User/User'
+import guards from '../guard/guard'
+import store from '../store'
+
+import Personal from '@/views/User/Settings/Personal'
+import Security from '@/views/User/Settings/Security'
+import Notification from '@/views/User/Settings/Notification'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -17,17 +25,52 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
+    meta: {
+      guards: ['not_auth']
+    }
   },
   {
     path: '/user',
     name: 'user',
-    component: Login
+    component: User,
+    meta: {
+      guards: ['auth']
+    },
+    children: [
+      {
+        path: 'settings/personal',
+        name: 'user.personal',
+        component: Personal,
+        meta: {
+          guards: ['auth']
+        }
+      },
+      {
+        path: 'settings/security',
+        name: 'user.security',
+        component: Security,
+        meta: {
+          guards: ['auth']
+        }
+      },
+      {
+        path: 'settings/notification',
+        name: 'user.notification',
+        component: Notification,
+        meta: {
+          guards: ['auth']
+        }
+      }
+    ]
   },
   {
     path: '/registration',
     name: 'registration',
-    component: Login
+    component: Login,
+    meta: {
+      guards: ['not_auth']
+    }
   },
   {
     path: '/advert/add',
@@ -76,6 +119,27 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+// Guards protection
+router.beforeEach((to, from, next) => {
+  const ctx = {
+    to,
+    from,
+    next,
+    router,
+    store
+  }
+
+  to.matched.map(route => {
+    if (!route.meta.guards) return false
+
+    route.meta.guards.map(nameGuard => {
+      if (nameGuard in guards) guards[nameGuard](ctx)
+    })
+  })
+
+  next()
 })
 
 export default router

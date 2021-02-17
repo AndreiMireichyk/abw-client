@@ -62,7 +62,7 @@
             </div>
             <div class="control">
               <a class="control__link wait" href="javascript:void(0)" v-if="authCodeReplayTtl">
-                Выслать код повторно {{authCodeReplayTtl}}c.
+                Выслать код повторно {{ authCodeReplayTtl }}c.
               </a>
               <a class="control__link" href="javascript:void(0)" @click.prevent="sentAuthCode" v-else>
                 Выслать код повторно
@@ -109,6 +109,7 @@
 <script>
 
 import { VueTelInput } from 'vue-tel-input'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Login',
@@ -146,6 +147,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('auth', ['logIn']),
     validatePhone (status) {
       console.log(status)
     },
@@ -183,8 +185,8 @@ export default {
         data.append('code', this.code)
       }
 
-      this.$http.post(`${this.$config.host}/api/auth`, data)
-        .then(r => {
+      this.logIn(data)
+        .then(() => {
           this.$message.success('Auth success')
         })
         .catch(e => {
@@ -376,7 +378,7 @@ export default {
       text-align: center;
       display: block;
       width: 100%;
-      font-size: 16px;
+      font-size: 15px;
       cursor: pointer;
       box-shadow: 0 0 0 1px var(--primary-color) inset, 0 1px 0 rgba(24, 26, 27, 0.08);
       padding: 8px 10px;
@@ -402,7 +404,7 @@ export default {
       text-decoration: none;
       color: var(--primary-color);
 
-      &.wait{
+      &.wait {
         color: var(--gray-color);
       }
     }

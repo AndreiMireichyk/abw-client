@@ -25,7 +25,9 @@
           <div class="menu__group">{{ group.title }}</div>
           <ul class="menu__submenu">
             <li v-for="(category, key) in group.categories" :key="key">
-              <router-link class="menu__link" :to="{name: 'ad-cat-list', params:{slug: category.slug}}">{{category.title}}</router-link>
+              <router-link class="menu__link" :to="{name: 'ad-cat-list', params:{slug: category.slug}}">
+                {{ category.title }}
+              </router-link>
             </li>
           </ul>
         </li>
@@ -33,7 +35,8 @@
 
       <ul class="header__actions">
         <li class="header__action">
-          <router-link class="header__login-btn" :to="{name: 'login'}">Войти</router-link>
+          <header-menu v-if="auth"/>
+          <router-link class="header__login-btn" :to="{name: 'login'}" v-else>Войти</router-link>
         </li>
         <li class="header__action">
           <router-link class="header__add-btn" :to="{name: 'ad-category'}">Подать объявление</router-link>
@@ -44,14 +47,23 @@
 </template>
 
 <script>
+
+import { mapGetters, mapActions } from 'vuex'
+import HeaderMenu from '@/components/User/HeaderMenu'
+
 export default {
   name: 'Header',
+  components: { HeaderMenu },
   data () {
     return {
       groups: []
     }
   },
+  computed: {
+    ...mapGetters('auth', ['token', 'auth'])
+  },
   methods: {
+    ...mapActions('auth', ['logOut']),
     fetch () {
       this.$http.get(`${this.$config.host}/api/adverts/categories`)
         .then(r => {
@@ -107,24 +119,25 @@ export default {
     justify-content: flex-end;
   }
 
-  &__action{
+  &__action {
     margin-left: 16px;
   }
 
-  &__login-btn{
+  &__login-btn {
     display: flex;
     align-items: center;
     text-decoration: none;
     font-weight: bold;
     color: var(--primary-color);
 
-    &:before{
+    &:before {
       margin-right: 4px;
       content: '\e990';
       font-family: icomoon, serif;
       font-size: 16px;
     }
   }
+
   &__add-btn {
     display: inline-block;
     font-size: 14px;
@@ -168,10 +181,10 @@ export default {
     position: absolute;
 
     display: none;
-    box-shadow: 0 8px 20px rgba(0,0,0,.16);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .16);
   }
 
-  &__link{
+  &__link {
     white-space: nowrap;
     display: block;
     color: var(--font-color);
@@ -181,7 +194,7 @@ export default {
 
     background: #fff;
 
-    &:hover{
+    &:hover {
       font-weight: 500;
       background: #f1f1f1;
       color: var(--primary-color);
