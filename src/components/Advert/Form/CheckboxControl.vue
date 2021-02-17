@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     update () {
-      this.$emit('input', this.attribute.value)
+      // this.$emit('input', this.attribute.value)
     }
   }
 }

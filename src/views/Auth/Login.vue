@@ -22,7 +22,8 @@
           <div class="card__body" v-show="isCredentialPhone">
             <div class="control">
               <ValidationProvider name="phone" rules="required" v-slot="{errors}">
-                <vue-tel-input v-model="phone" v-bind="phoneProps" @validate="validatePhone" class="control__phone" data-vv-as="телефон"/>
+                <vue-tel-input v-model="phone" v-bind="phoneProps" @validate="validatePhone" class="control__phone"
+                               data-vv-as="телефон"/>
                 <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
               </ValidationProvider>
             </div>
@@ -50,8 +51,22 @@
                        placeholder="Код подтверждения" data-vv-as="код подтверждения">
                 <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
               </ValidationProvider>
+              <ValidationProvider name="phone" v-slot="{errors}">
+                <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
+              </ValidationProvider>
+              <ValidationProvider name="ip" v-slot="{errors}">
+                <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
+              </ValidationProvider>
               <i class="icon-eye-off" v-if="showPassword" @click="showPassword  = false"/>
               <i class="icon-eye" v-else @click="showPassword  = true"/>
+            </div>
+            <div class="control">
+              <a class="control__link wait" href="javascript:void(0)" v-if="authCodeReplayTtl">
+                Выслать код повторно {{authCodeReplayTtl}}c.
+              </a>
+              <a class="control__link" href="javascript:void(0)" @click.prevent="sentAuthCode" v-else>
+                Выслать код повторно
+              </a>
             </div>
           </div>
           <div class="card__footer">
@@ -65,7 +80,7 @@
           <div class="card__body">
             <div class="control">
               <ValidationProvider name="login" data-as="asd" rules="required" v-slot="{errors}">
-                <input class="control__login" type="text" v-model="login" placeholder="Логин" >
+                <input class="control__login" type="text" v-model="login" placeholder="Логин">
                 <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
               </ValidationProvider>
             </div>
@@ -105,8 +120,10 @@ export default {
       code: null,
       password: null,
       showPassword: false,
-      credentialType: 'login',
+      credentialType: 'phone',
       authCodeSent: false,
+      authCodeSentAt: null,
+      authCodeReplayTtl: 0, // one min
       loading: false,
       phoneProps: {
         mode: 'international',
@@ -146,6 +163,10 @@ export default {
         .then(r => {
           this.authCodeSent = true
           this.$message.success(r.data.message)
+          this.$refs.form.setErrors({ phone: [] })
+          this.authCodeSentAt = Date.now()
+          this.authCodeReplayTtl = 60
+          this.setTimeoutReplayCode()
         })
         .catch(e => {
           this.$refs.form.setErrors(e.response.data)
@@ -169,6 +190,12 @@ export default {
         .catch(e => {
           this.$refs.form.setErrors(e.response.data)
         })
+    },
+    setTimeoutReplayCode () {
+      const interval = setInterval(() => {
+        this.authCodeReplayTtl--
+        if (!this.authCodeReplayTtl) clearInterval(interval)
+      }, 1000)
     }
   }
 }
@@ -244,6 +271,7 @@ export default {
       color: var(--primary-color);
     }
   }
+
   .control {
     position: relative;
     margin-bottom: 16px;
@@ -348,6 +376,7 @@ export default {
       text-align: center;
       display: block;
       width: 100%;
+      font-size: 16px;
       cursor: pointer;
       box-shadow: 0 0 0 1px var(--primary-color) inset, 0 1px 0 rgba(24, 26, 27, 0.08);
       padding: 8px 10px;
@@ -372,6 +401,10 @@ export default {
       text-align: center;
       text-decoration: none;
       color: var(--primary-color);
+
+      &.wait{
+        color: var(--gray-color);
+      }
     }
   }
 }
