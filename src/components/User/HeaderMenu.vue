@@ -33,10 +33,10 @@
             <span class="dropdown__title">Пополнить</span>
             <i class="dropdown__ie">15,44</i>
           </a>
-          <a class="dropdown__item">
+          <router-link :to="{name: 'user.personal'}" class="dropdown__item">
             <i class="icon-settings"></i>
             <span class="dropdown__title">Настройки</span>
-          </a>
+          </router-link>
           <a class="dropdown__item" @click="logOut">
             <i class="icon-log-out"></i>
             <span class="dropdown__title">Выйти</span>

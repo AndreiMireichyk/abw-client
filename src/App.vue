@@ -114,4 +114,65 @@ body {
     transform: translate3d(4px, 0, 0);
   }
 }
+
+.btn {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.2s;
+  appearance: none;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+
+  i {
+    padding-right: 8px;
+  }
+
+  &-default {
+    color: var(--gray-color);
+    border: 1px solid #d9deee;
+  }
+
+  &-primary {
+    background: var(--primary-color);
+    color: var(--white-color);
+  }
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: all;
+  font-weight: 500;
+
+  &-primary {
+    color: var(--primary-color);
+
+    &:hover {
+      color: var(--font-color);
+    }
+
+    &.hw:hover {
+      color: var(--white-color);
+    }
+  }
+
+  &-danger {
+    color: var(--red-color);
+
+    &:hover {
+      color: var(--font-color);
+    }
+
+    &.hw:hover {
+      color: var(--white-color);
+    }
+  }
+}
+
 </style>

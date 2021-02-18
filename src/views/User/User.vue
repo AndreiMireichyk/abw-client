@@ -5,41 +5,39 @@
       <div class="aside__header header">
         <div class="header__avatar" :style="avaSrc"></div>
         <div class="header__info">
-          <div class="header__login">Andrei</div>
-          <div class="header__name">Андрей Мирейчик</div>
-          <div class="header__link">Техподдржка</div>
+          <div class="header__login">{{ profile.username }}</div>
+          <div class="header__name">{{ profile.firstName }} {{ profile.lastName }}</div>
         </div>
       </div>
 
       <ul class="aside__info info">
         <li class="info__item">
           <span class="info__title">Баланс</span>
-          <span class="info__value">15.44 и.е</span>
+          <span class="info__value">{{ profile.balance }} и.е</span>
         </li>
         <li class="info__item">
           <span class="info__title">Телефон</span>
-          <span class="info__value">+375 (29) 181-82-62</span>
+          <span class="info__value">{{ formatPhone }}</span>
         </li>
-        <li class="info__item">
+        <li class="info__item" v-if="profile.address">
           <span class="info__title">Адрес</span>
-          <span class="info__value">Беларусь, Минск</span>
+          <span class="info__value">{{ profile.address }}</span>
         </li>
-        <li class="info__item">
+        <li class="info__item" v-if="profile.email">
           <span class="info__title">Email</span>
-          <span class="info__value">a.mireichyk@gmail.com</span>
+          <span class="info__value">{{ profile.email }}</span>
         </li>
       </ul>
 
       <ul class="aside__menu menu">
         <li class="menu__item" :class="{active:menuShowAdverts}" @click="showAdverts">
           <i class="icon-list"></i>
-          <span class="menu__title">Объявления</span>
+          <span class="menu__title">Мои объявления</span>
           <span class="menu__badge">873000</span>
           <i class="icon-chevron-right"></i>
         </li>
-        <transition name="fade">
-          <li class="menu__submenu" :class="{open: menuShowAdverts}">
-          <router-link :to="{name: 'user.personal'}" class="menu__item">
+        <li class="menu__submenu" :class="{open: menuShowAdverts}">
+          <router-link :to="{name: 'user.adverts'}" class="menu__item">
             <i class="icon-minus"/>
             <span class="menu__title">Легковые авто</span>
             <span class="menu__badge">5</span>
@@ -55,7 +53,6 @@
             <span class="menu__badge">5</span>
           </router-link>
         </li>
-        </transition>
 
         <li class="menu__item" :class="{active:menuShowFavorite}" @click="showFavorites">
           <i class="icon-bookmark"/>
@@ -129,6 +126,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'User',
   data () {
@@ -140,12 +139,19 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('profile', ['profile']),
+    formatPhone () {
+      const match = this.profile.phone.match(/^(\+\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/)
+
+      return match ? `${match[1]} (${match[2]}) ${match[3]}-${match[4]}-${match[5]}` : null
+    },
     avaSrc () {
       // eslint-disable-next-line quotes
-      return `background-image: url(https://us.123rf.com/450wm/dreamsvector/dreamsvector1709/dreamsvector170900185/87054759-young-afro-man-avatar-character-male-face-portrait-cartoon-person-vector-illustration-adult-design-h.jpg?ver=6)`
+      return `background-image: url(${this.$config.host}${this.profile.photo})`
     }
   },
   methods: {
+    ...mapActions('profile', { fetchProfile: 'profile' }),
     showAdverts () {
       this.menuShowAdverts = !this.menuShowAdverts
       this.menuShowFavorite = false
@@ -170,6 +176,9 @@ export default {
       this.menuShowSetting = false
       this.menuShowOther = !this.menuShowOther
     }
+  },
+  created () {
+    this.fetchProfile()
   }
 }
 </script>
@@ -201,7 +210,7 @@ export default {
   .aside {
 
     &__header {
-      margin-bottom: 16px;
+      margin-bottom: 24px;
     }
 
     &__info {
@@ -224,7 +233,7 @@ export default {
       border-radius: 9px;
       min-width: 90px;
       min-height: 90px;
-      margin-right: 24px;
+      margin-right: 18px;
       box-shadow: 0 3px 6px rgb(0 0 0 / 8%);
     }
 
@@ -232,14 +241,15 @@ export default {
       display: flex;
       flex-direction: column;
       flex-grow: 1;
-      padding: 12px 0;
+
     }
 
     &__login {
       font-size: 20px;
       font-weight: bold;
       line-height: 1;
-      margin-bottom: 2px;
+      margin-bottom: 8px;
+      width: 100%;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -300,7 +310,7 @@ export default {
         padding-right: 8px;
       }
 
-      &:hover, &.active {
+      &:hover, &.active, &.router-link-active {
         background: #eff2f3;
         color: var(--primary-color);
       }
@@ -320,9 +330,9 @@ export default {
       overflow: hidden;
       transition: max-height 0.35s ease-out;
 
-      &.open{
+      &.open {
         max-height: 500px;
-        transition: max-height 0.45s ease-in;
+        transition: max-height 0.35s ease-in;
       }
     }
 
@@ -341,10 +351,13 @@ export default {
     }
   }
 }
+
 .fade-enter-active, .fade-leave-active {
 
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+{
   height: 0;
 }
 </style>

@@ -13,6 +13,7 @@ import store from '../store'
 import Personal from '@/views/User/Settings/Personal'
 import Security from '@/views/User/Settings/Security'
 import Notification from '@/views/User/Settings/Notification'
+import Advert from '@/views/User/Advert/Advert'
 
 Vue.use(VueRouter)
 
@@ -38,6 +39,22 @@ const routes = [
       guards: ['auth']
     },
     children: [
+      {
+        path: 'adverts/:slug?',
+        name: 'user.adverts',
+        component: Advert,
+        meta: {
+          guards: ['auth']
+        }
+      },
+      {
+        path: 'favorite/:slug?',
+        name: 'user.adverts',
+        component: Personal,
+        meta: {
+          guards: ['auth']
+        }
+      },
       {
         path: 'settings/personal',
         name: 'user.personal',
