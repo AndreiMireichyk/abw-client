@@ -1,10 +1,10 @@
 <template>
-<div>a</div>
+  <div>password</div>
 </template>
 
 <script>
 export default {
-  name: 'Body'
+  name: 'PasswordControl'
 }
 </script>
 

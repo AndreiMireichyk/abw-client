@@ -1,10 +1,10 @@
 <template>
-<div>a</div>
+  <div>phone</div>
 </template>
 
 <script>
 export default {
-  name: 'Aside'
+  name: 'PhoneControl'
 }
 </script>
 

@@ -145,13 +145,32 @@ body {
 
 .link {
   display: flex;
+  cursor: pointer;
   align-items: center;
   text-decoration: none;
-  transition: all;
   font-weight: 500;
+  padding: 0;
+  transition: all 0.2s;
+  outline: none;
+  border: none;
+  background: none;
+  appearance: none;
+  font-family: 'Roboto', sans-serif;
 
   &-primary {
     color: var(--primary-color);
+
+    &:hover {
+      color: var(--font-color);
+    }
+
+    &.hw:hover {
+      color: var(--white-color);
+    }
+  }
+
+  &-muted {
+    color: var(--font-muted-color);
 
     &:hover {
       color: var(--font-color);

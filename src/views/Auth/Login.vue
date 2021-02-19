@@ -165,7 +165,6 @@ export default {
         .then(r => {
           this.authCodeSent = true
           this.$message.success(r.data.message)
-          this.$refs.form.setErrors({ phone: [] })
           this.authCodeSentAt = Date.now()
           this.authCodeReplayTtl = 60
           this.setTimeoutReplayCode()

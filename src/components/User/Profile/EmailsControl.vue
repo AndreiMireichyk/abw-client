@@ -25,7 +25,7 @@ export default {
   name: 'EmailsControl',
   watch: {
     'profile.emails' () {
-      if (!this.profile.emails.length) this.addEmail('')
+      if (!this.profile.emails.length) this.addEmail()
     }
   },
   computed: {
@@ -33,6 +33,9 @@ export default {
   },
   methods: {
     ...mapMutations('profile', ['addEmail', 'removeEmail'])
+  },
+  mounted () {
+    if (!this.profile.emails.length) this.addEmail()
   }
 }
 </script>

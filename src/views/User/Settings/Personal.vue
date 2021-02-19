@@ -2,12 +2,9 @@
   <div class="personal">
     <div class="personal__head">
       <div class="personal__title">Персональные данные</div>
-
     </div>
     <div class="personal__body">
-
-      <ValidationObserver ref="form" v-slot="s" :key="1123">
-
+      <ValidationObserver ref="form" v-slot="s" :key="1">
         <form id="form" @submit.prevent="s.passes(submit)">
           <div class="control">
             <div class="control__label"></div>
@@ -17,7 +14,7 @@
           </div>
           <div class="personal__divider">Личные данные</div>
 
-          <ValidationProvider v-slot="{errors}" rules="required" tag="div" class="control">
+          <ValidationProvider v-slot="{errors}" rules="required" name="lastName" tag="div" class="control">
             <label for="last_name" class="control__label">Фамилия</label>
             <div class="control__group">
               <input id="last_name" type="text" v-model="profile.lastName" class="control__input"
@@ -26,7 +23,7 @@
             </div>
           </ValidationProvider>
 
-          <ValidationProvider v-slot="{errors}" rules="required" tag="div" class="control">
+          <ValidationProvider v-slot="{errors}" rules="required" name="firstName" tag="div" class="control">
             <label for="first_name" class="control__label">Имя</label>
             <div class="control__group">
               <input id="first_name" type="text" v-model="profile.firstName" class="control__input"
@@ -35,7 +32,7 @@
             </div>
           </ValidationProvider>
 
-          <ValidationProvider v-slot="{errors}" rules="required" tag="div" class="control">
+          <ValidationProvider v-slot="{errors}" rules="required" name="middleName" tag="div" class="control">
             <label for="middleName" class="control__label">Отчество</label>
             <div class="control__group">
               <input id="middleName" type="text" v-model="profile.middleName" class="control__input"
@@ -46,15 +43,15 @@
 
           <div class="personal__divider">Контакты</div>
 
-          <ValidationProvider v-slot="{errors}" tag="div" class="control">
+          <ValidationProvider v-slot="{errors}" name="phones" tag="div" class="control">
             <div class="control__label p-top">Телефоны</div>
             <div class="control__group">
-              <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
               <phones-control/>
+              <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
             </div>
           </ValidationProvider>
 
-          <ValidationProvider v-slot="{errors}" rules="email" tag="div" class="control">
+          <ValidationProvider v-slot="{errors}" rules="email" name="emails" tag="div" class="control">
             <div class="control__label">Email</div>
             <div class="control__group">
               <emails-control/>
@@ -64,7 +61,7 @@
 
           <div class="personal__divider">Адрес</div>
 
-          <ValidationProvider v-slot="{errors}" rules="required" tag="div" class="control">
+          <ValidationProvider v-slot="{errors}" rules="required" name="country" tag="div" class="control">
             <label for="country" class="control__label">Страна</label>
             <div class="control__group">
               <select id="country" type="text" v-model="profile.location.country" class="control__input">
@@ -77,11 +74,11 @@
             </div>
           </ValidationProvider>
 
-          <ValidationProvider v-slot="{errors}" rules="required" tag="div" class="control"
-                              v-if="profile.location.country && regions.length">
+          <ValidationProvider v-slot="{errors}" rules="required" name="region" tag="div" class="control">
             <label for="region" class="control__label">Область</label>
             <div class="control__group">
-              <select id="region" type="text" v-model="profile.location.region" class="control__input">
+              <select id="region" type="text" v-model="profile.location.region" class="control__input"
+                      :disabled="!profile.location.country && !regions.length">
                 <option disabled value="null">Выберите регион</option>
                 <option v-for="region in regions" :key="region.id" :value="region.id">{{ region.title }}</option>
               </select>
@@ -89,11 +86,11 @@
             </div>
           </ValidationProvider>
 
-          <ValidationProvider v-slot="{errors}"  rules="required" tag="div" class="control"
-                              v-if="profile.location.region && cities.length">
+          <ValidationProvider v-slot="{errors}" rules="required" name="city" tag="div" class="control">
             <label for="city" class="control__label">Город</label>
             <div class="control__group">
-              <select id="city" type="text" v-model="profile.location.city" class="control__input">
+              <select id="city" type="text" v-model="profile.location.city" class="control__input"
+                      :disabled="!profile.location.region && !cities.length">
                 <option disabled value="null">Выберите город</option>
                 <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.title }}</option>
               </select>
@@ -105,7 +102,7 @@
     </div>
     <div class="personal__footer">
       <button class="btn btn-primary" form="form">Сохранить</button>
-      <a href="javascript:void(0)" @click="fetchProfile" class="btn btn-default">Отменить</a>
+      <a href="javascript:void(0)" @click="reset" class="btn btn-default">Отменить</a>
     </div>
   </div>
 </template>
@@ -122,7 +119,9 @@ export default {
     return {
       countries: [],
       regions: [],
-      cities: []
+      cities: [],
+      countryUpd: false,
+      regionUpd: false
     }
   },
   components: {
@@ -131,16 +130,23 @@ export default {
     EmailsControl
   },
   watch: {
+
     'profile.location.country' () {
-      this.regions = []
-      this.profile.location.region = null
-      this.cities = []
-      this.profile.location.city = null
+      if (this.countryUpd) {
+        this.regions = []
+        this.profile.location.region = null
+        this.cities = []
+        this.profile.location.city = null
+      }
+      this.countryUpd = true
       this.fetchRegions()
     },
     'profile.location.region' () {
-      this.profile.location.city = null
-      if (this.profile.location.country) this.fetchCities()
+      if (this.regionUpd) {
+        this.profile.location.city = null
+      }
+      this.regionUpd = true
+      if (this.profile.location.region) this.fetchCities()
     }
   },
   computed: {
@@ -154,13 +160,17 @@ export default {
     submitForm () {
       this.$refs.form.submit()
     },
+    reset () {
+      this.countryUpd = this.regionUpd = false
+      this.fetchProfile()
+    },
     submit () {
-      this.applyChanges
+      this.applyChanges()
         .then(r => {
           this.$message.success(r.data.message)
         })
         .catch(e => {
-          if (e.response.code === 422) {
+          if (e.response.status === 422) {
             this.$refs.form.setErrors(e.response.data)
           } else if ('message' in e.response.data) {
             this.$message.error(e.response.data.message)
@@ -188,6 +198,9 @@ export default {
   },
   created () {
     this.fetchCountries()
+    if (this.profile.location.country) this.fetchRegions()
+    if (this.profile.location.region) this.fetchCities()
+    if (this.profile.id) this.countryUpd = this.regionUpd = true
   }
 }
 </script>
@@ -236,7 +249,7 @@ export default {
   }
 }
 
-.control {
+.personal .control {
   display: flex;
   align-items: stretch;
   margin-bottom: 16px;
@@ -285,4 +298,5 @@ export default {
     color: var(--red-color);
   }
 }
+
 </style>

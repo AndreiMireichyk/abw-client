@@ -6,6 +6,7 @@ const profile = {
 
   state: {
     profile: {
+      id: null,
       username: null,
       firstName: null,
       lastName: null,
@@ -30,23 +31,37 @@ const profile = {
       return state.profile
     },
     updatedData (state) {
-      return {
-        firstName: state.profile.firstName,
-        lastName: state.profile.lastName,
-        middleName: state.profile.middleName,
-        photo: state.profile.photo,
-        phones: state.profile.phones,
-        emails: state.profile.emails,
-        country: state.profile.location.country,
-        region: state.profile.location.region,
-        city: state.profile.location.city
-      }
+      const data = new URLSearchParams()
+      data.append('form[firstName]', state.profile.firstName)
+      data.append('form[lastName]', state.profile.lastName)
+      data.append('form[middleName]', state.profile.middleName)
+      data.append('form[photo]', state.profile.photo)
+      data.append('form[country]', state.profile.location.country)
+      data.append('form[region]', state.profile.location.region)
+      data.append('form[city]', state.profile.location.city)
+
+      state.profile.phones
+        .filter((item) => !!item)
+        .map(item => {
+          data.append('form[phones][]', item)
+        })
+
+      state.profile.emails
+        .filter((item) => !!item)
+        .map(item => {
+          data.append('form[emails][]', item)
+        })
+
+      return data
     }
   },
 
   mutations: {
     profile (state, payload) {
       state.profile = payload
+    },
+    changePhone (state, payload) {
+      state.profile.phone = payload
     },
     addPhone (state) {
       state.profile.phones.push('')
@@ -79,9 +94,8 @@ const profile = {
         })
     },
     applyChanges ({ getters }) {
-      alert('asd')
       return new Promise((resolve, reject) => {
-        axios.post(`${config.host}/api/user/update`, { form: getters.updatedData })
+        axios.post(`${config.host}/api/user/profile/update`, getters.updatedData)
           .then(response => {
             resolve(response)
           })

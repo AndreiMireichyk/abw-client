@@ -44,7 +44,7 @@ export default {
   },
   watch: {
     'profile.phones' () {
-      if (!this.profile.phones.length) this.addPhone('')
+      if (!this.profile.phones.length) this.addPhone()
     }
   },
   computed: {
@@ -57,6 +57,7 @@ export default {
     }
   },
   mounted () {
+    if (!this.profile.phones.length) this.addPhone()
   }
 }
 </script>
