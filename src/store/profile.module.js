@@ -30,7 +30,14 @@ const profile = {
     profile (state) {
       return state.profile
     },
-    updatedData (state) {
+    formattedPhone (state) {
+      if ([null, ''].includes(state.profile.phone)) return 'не указан'
+
+      const match = state.profile.phone.match(/^(\+\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/)
+
+      return match ? `${match[1]} (${match[2]}) ${match[3]}-${match[4]}-${match[5]}` : null
+    },
+    prepareFormData (state) {
       const data = new URLSearchParams()
       data.append('form[firstName]', state.profile.firstName)
       data.append('form[lastName]', state.profile.lastName)
@@ -95,7 +102,7 @@ const profile = {
     },
     applyChanges ({ getters }) {
       return new Promise((resolve, reject) => {
-        axios.post(`${config.host}/api/user/profile/update`, getters.updatedData)
+        axios.post(`${config.host}/api/user/profile/update`, getters.prepareFormData)
           .then(response => {
             resolve(response)
           })

@@ -17,7 +17,7 @@
         </li>
         <li class="info__item">
           <span class="info__title">Телефон</span>
-          <span class="info__value">{{ formatPhone }}</span>
+          <span class="info__value">{{ formattedPhone }}</span>
         </li>
         <li class="info__item" v-if="profile.address">
           <span class="info__title">Адрес</span>
@@ -139,12 +139,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('profile', ['profile']),
-    formatPhone () {
-      const match = this.profile.phone.match(/^(\+\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/)
-
-      return match ? `${match[1]} (${match[2]}) ${match[3]}-${match[4]}-${match[5]}` : null
-    },
+    ...mapGetters('profile', ['profile', 'formattedPhone']),
     avaSrc () {
       // eslint-disable-next-line quotes
       return `background-image: url(${this.$config.host}${this.profile.photo})`
@@ -241,6 +236,7 @@ export default {
       display: flex;
       flex-direction: column;
       flex-grow: 1;
+      overflow: hidden;
 
     }
 
