@@ -35,6 +35,8 @@ body {
   --gray-color: #808080;
   --red-color: #f51958;
   --white-bg: rgba(255, 255, 255, 0.7);
+
+  --input-radius: 4px;
 }
 
 .app {
@@ -132,6 +134,10 @@ body {
     padding-right: 8px;
   }
 
+  &-block {
+    width: 100%;
+    display: block;
+  }
   &-default {
     color: var(--gray-color);
     border: 1px solid #d9deee;

@@ -6,8 +6,8 @@
     <div class="security__body">
 
       <div class="security__divider">Изменить номер телефона</div>
-      <change-phone   v-if="profile.phone"/>
-      <add-phone      v-else/>
+      <change-phone v-if="profile.phone"/>
+      <add-phone v-else/>
 
       <div class="security__divider">Изменить Email адрес</div>
       <change-email/>

@@ -173,6 +173,11 @@ export default {
     }
   },
   created () {
+    if (this.$route.path.indexOf('/user/adverts') >= 0) this.showAdverts()
+    if (this.$route.path.indexOf('/user/settings') >= 0) this.showSettings()
+    if (this.$route.path.indexOf('/user/favorites') >= 0) this.showFavorites()
+    if (this.$route.path.indexOf('/user/other') >= 0) this.showOther()
+
     this.fetchProfile()
   }
 }
@@ -306,7 +311,7 @@ export default {
         padding-right: 8px;
       }
 
-      &:hover, &.active, &.router-link-active {
+      &:hover, &.active, &.router-link-active, &.router-link-exact-active {
         background: #eff2f3;
         color: var(--primary-color);
       }

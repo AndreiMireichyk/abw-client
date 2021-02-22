@@ -4,8 +4,7 @@
       <div class="card__header">
         <div class="card__title">Авторизация</div>
       </div>
-      <div>
-      </div>
+
       <ul class="card__nav">
         <li class="card__nav-item">
           <a class="card__nav-link" :class="{active: isCredentialPhone}" href="javascript:void(0)"
@@ -93,7 +92,7 @@
               <i class="icon-eye" v-else @click="showPassword  = true"/>
             </div>
             <div class="control">
-              <router-link class="control__link" :to="{name: 'recovery-password'}">Востановление пароля</router-link>
+              <router-link class="control__link" :to="{name: 'reset-password'}">Востановление пароля</router-link>
             </div>
           </div>
           <div class="card__footer">
@@ -186,7 +185,7 @@ export default {
 
       this.logIn(data)
         .then(() => {
-          this.$message.success('Auth success')
+          this.$message.success('Вход выполнен успешно')
         })
         .catch(e => {
           this.$refs.form.setErrors(e.response.data)
@@ -287,16 +286,22 @@ export default {
 
       input {
         text-align: center;
-        border: 1px solid #f1f1f1 !important;
-        border-radius: 4px;
+        border: 1px solid #d9deee !important;
+        border-radius: var(--input-radius);
         padding: 8px 12px 8px 60px;
-        box-shadow: 0 0 0 1px #d3d9df inset, 0 1px 0 rgba(24, 26, 27, 0.08);
         color: var(--gray-color);
 
-        &:focus-within {
-          border-color: var(--primary-color);
-          box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+        transition: all .3s;
+
+        &::placeholder {
+          color: var(--font-muted-color);
         }
+
+        &:focus-within {
+          border-color: var(--primary-color) !important;
+          box-shadow: none;
+        }
+
       }
 
       .vti__dropdown {
@@ -325,33 +330,41 @@ export default {
 
     &__password {
       text-align: center;
-      border: none;
       width: 100%;
       box-sizing: border-box;
-      box-shadow: 0 0 0 1px #d3d9df inset, 0 1px 0 rgba(24, 26, 27, 0.08);
+      border: 1px solid #d9deee;
       padding: 8px 12px;
-      border-radius: 4px;
+      border-radius: var(--input-radius);
       outline: none;
       color: var(--gray-color);
+      transition: all .3s;
+
+      &::placeholder {
+        color: var(--font-muted-color);
+      }
 
       &:focus-within {
-        box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+        border: 1px solid var(--primary-color);
       }
     }
 
     &__login {
       text-align: center;
-      border: none;
       width: 100%;
       box-sizing: border-box;
-      box-shadow: 0 0 0 1px #d3d9df inset, 0 1px 0 rgba(24, 26, 27, 0.08);
+      border: 1px solid #d9deee;
       padding: 8px 12px;
-      border-radius: 4px;
+      border-radius: var(--input-radius);
       outline: none;
       color: var(--gray-color);
+      transition: all .3s;
+
+      &::placeholder {
+        color: var(--font-muted-color);
+      }
 
       &:focus-within {
-        box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+        border: 1px solid var(--primary-color);
       }
     }
 

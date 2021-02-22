@@ -1,19 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Categories from '../views/Advert/Create/Categories'
-import Form from '../views/Advert/Create/Form'
-import FormSuccess from '@/views/Advert/Create/FormSuccess'
-import AdvertList from '@/views/Advert/List/List'
-import Login from '@/views/Auth/Login'
-import User from '../views/User/User'
+
 import guards from '../guard/guard'
 import store from '../store'
-
-import Personal from '@/views/User/Settings/Personal'
-import Security from '@/views/User/Settings/Security'
-import Notification from '@/views/User/Settings/Notification'
-import Advert from '@/views/User/Advert/Advert'
 
 Vue.use(VueRouter)
 
@@ -21,12 +10,20 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: () => import('@/views/Home.vue')
   },
   {
     path: '/login',
     name: 'login',
-    component: Login,
+    component: () => import('@/views/Auth/Login'),
+    meta: {
+      guards: ['not_auth']
+    }
+  },
+  {
+    path: '/reset-password',
+    name: 'reset-password',
+    component: () => import('@/views/Auth/ResetPassword'),
     meta: {
       guards: ['not_auth']
     }
@@ -34,7 +31,7 @@ const routes = [
   {
     path: '/user',
     name: 'user',
-    component: User,
+    component: () => import('@/views/User/User'),
     meta: {
       guards: ['auth']
     },
@@ -42,7 +39,7 @@ const routes = [
       {
         path: 'adverts/:slug?',
         name: 'user.adverts',
-        component: Advert,
+        component: () => import('@/views/User/Advert/Advert'),
         meta: {
           guards: ['auth']
         }
@@ -50,7 +47,7 @@ const routes = [
       {
         path: 'favorite/:slug?',
         name: 'user.adverts',
-        component: Personal,
+        component: () => import('@/views/User/Advert/Advert'),
         meta: {
           guards: ['auth']
         }
@@ -58,7 +55,7 @@ const routes = [
       {
         path: 'settings/personal',
         name: 'user.personal',
-        component: Personal,
+        component: () => import('@/views/User/Settings/Personal'),
         meta: {
           guards: ['auth']
         }
@@ -66,7 +63,7 @@ const routes = [
       {
         path: 'settings/security',
         name: 'user.security',
-        component: Security,
+        component: () => import('@/views/User/Settings/Personal'),
         meta: {
           guards: ['auth']
         }
@@ -74,7 +71,7 @@ const routes = [
       {
         path: 'settings/notification',
         name: 'user.notification',
-        component: Notification,
+        component: () => import('@/views/User/Settings/Notification'),
         meta: {
           guards: ['auth']
         }
@@ -82,33 +79,19 @@ const routes = [
     ]
   },
   {
-    path: '/registration',
-    name: 'registration',
-    component: Login,
-    meta: {
-      guards: ['not_auth']
-    }
-  },
-  {
     path: '/advert/add',
     name: 'ad-category',
-    component: Categories
+    component: () => import('@/views/Advert/Create/Categories')
   },
   {
     path: '/advert/add/:slug',
     name: 'ad-form',
-    component: Form
+    component: () => import('@/views/Advert/Create/Form')
   },
-  {
-    path: '/advert/add/success',
-    name: 'ad-success',
-    component: FormSuccess
-  },
-
   {
     path: '/:slug/prodaja/:params*',
     name: 'ad-cat-list',
-    component: AdvertList,
+    component: () => import('@/views/Advert/List/List'),
     props: (route) => {
       return {
         pathParams: route.params.params,
@@ -120,15 +103,7 @@ const routes = [
     path: '/:slug/:location?/prodaja/:id',
     name: 'ad-detail',
     props: (route) => ({ location: route.params.location || 'belarus' }),
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import('@/views/Advert/List/List')
   }
 ]
 
