@@ -21,8 +21,7 @@
           <div class="card__body" v-show="isCredentialPhone">
             <div class="control">
               <ValidationProvider name="phone" rules="required" v-slot="{errors}">
-                <vue-tel-input v-model="phone" v-bind="phoneProps" @validate="validatePhone" class="control__phone"
-                               data-vv-as="телефон"/>
+                <vue-tel-input v-model="phone" v-bind="phoneProps" @validate="validatePhone" class="control__phone"/>
                 <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
               </ValidationProvider>
             </div>

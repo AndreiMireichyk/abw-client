@@ -21,7 +21,7 @@ const routes = [
     }
   },
   {
-    path: '/reset-password',
+    path: '/reset-password/:hash?',
     name: 'reset-password',
     component: () => import('@/views/Auth/ResetPassword'),
     meta: {
@@ -63,7 +63,7 @@ const routes = [
       {
         path: 'settings/security',
         name: 'user.security',
-        component: () => import('@/views/User/Settings/Personal'),
+        component: () => import('@/views/User/Settings/Security'),
         meta: {
           guards: ['auth']
         }
