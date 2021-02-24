@@ -1,11 +1,10 @@
 <template>
   <div class="app" id="app">
-    <div class="header">
-      <Header/>
-    </div>
-    <div class="content">
-      <router-view/>
-    </div>
+
+    <Header class="header"/>
+
+    <router-view class="content"/>
+
   </div>
 </template>
 <script>
@@ -35,8 +34,13 @@ body {
   --gray-color: #808080;
   --red-color: #f51958;
   --white-bg: rgba(255, 255, 255, 0.7);
-
   --input-radius: 4px;
+
+  --input-sm-radius: 4px;
+  --input-lg-radius: 6px;
+
+  --danger-color: #ff4d4f;
+  --light-gray-color: #d9deee;
 }
 
 .app {
@@ -138,6 +142,7 @@ body {
     width: 100%;
     display: block;
   }
+
   &-default {
     color: var(--gray-color);
     border: 1px solid #d9deee;

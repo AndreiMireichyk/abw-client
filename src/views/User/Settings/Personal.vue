@@ -16,28 +16,25 @@
           <div class="page__divider">Личные данные</div>
 
           <ValidationProvider v-slot="{errors}" rules="required" name="lastName" tag="div" class="control">
-            <label for="last_name" class="control__label">Фамилия</label>
+            <label class="control__label">Фамилия</label>
             <div class="control__group">
-              <input id="last_name" type="text" v-model="profile.lastName" class="control__input"
-                     placeholder="Ваша фамилия">
+              <a-input v-model="profile.lastName" placeholder="Ваша фамилия"/>
               <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
             </div>
           </ValidationProvider>
 
           <ValidationProvider v-slot="{errors}" rules="required" name="firstName" tag="div" class="control">
-            <label for="first_name" class="control__label">Имя</label>
+            <label class="control__label">Имя</label>
             <div class="control__group">
-              <input id="first_name" type="text" v-model="profile.firstName" class="control__input"
-                     placeholder="Ваше Имя">
+              <a-input v-model="profile.firstName" placeholder="Ваше Имя"/>
               <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
             </div>
           </ValidationProvider>
 
           <ValidationProvider v-slot="{errors}" rules="required" name="middleName" tag="div" class="control">
-            <label for="middleName" class="control__label">Отчество</label>
+            <label class="control__label">Отчество</label>
             <div class="control__group">
-              <input id="middleName" type="text" v-model="profile.middleName" class="control__input"
-                     placeholder="Ваше отчество">
+              <a-input v-model="profile.middleName" placeholder="Ваше отчество"/>
               <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
             </div>
           </ValidationProvider>
@@ -102,8 +99,8 @@
       </ValidationObserver>
     </template>
     <template #footer>
-      <button class="btn btn-primary" form="form">Сохранить</button>
-      <a href="javascript:void(0)" @click="reset" class="btn btn-default">Отменить</a>
+      <a-button type="primary" form="form" :loading="loading">Сохранить</a-button>
+      <a-button type="default" @click.stop="reset">Отменить</a-button>
     </template>
   </page-content>
 </template>
@@ -114,11 +111,14 @@ import PageContent from '@/components/User/Profile/PageContent'
 import PhotoControl from '@/components/User/Profile/Settings/PhotoControl'
 import PhonesControl from '@/components/User/Profile/Settings/PhonesControl'
 import EmailsControl from '@/components/User/Profile/Settings/EmailsControl'
+import AInput from '@/components/components/Input/AInput'
+import AButton from '@/components/components/Button/AButton'
 
 export default {
   name: 'Personal',
   data () {
     return {
+      loading: false,
       countries: [],
       regions: [],
       cities: [],
@@ -130,7 +130,9 @@ export default {
     PhotoControl,
     PhonesControl,
     EmailsControl,
-    PageContent
+    PageContent,
+    AInput,
+    AButton
   },
   watch: {
 
@@ -160,19 +162,20 @@ export default {
       fetchProfile: 'profile',
       applyChanges: 'applyChanges'
     }),
-    submitForm () {
-      this.$refs.form.submit()
-    },
     reset () {
+      alert('asd')
       this.countryUpd = this.regionUpd = false
       this.fetchProfile()
     },
     submit () {
+      this.loading = true
       this.applyChanges()
         .then(r => {
+          this.loading = false
           this.$message.success(r.data.message)
         })
         .catch(e => {
+          this.loading = false
           if (e.response.status === 422) {
             this.$refs.form.setErrors(e.response.data)
           } else if ('message' in e.response.data) {

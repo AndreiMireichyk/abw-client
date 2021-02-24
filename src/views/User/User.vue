@@ -143,11 +143,12 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-
 export default {
   name: 'User',
+
   data () {
     return {
+      value: null,
       menuShowAdverts: false,
       menuShowFavorite: false,
       menuShowSetting: false,

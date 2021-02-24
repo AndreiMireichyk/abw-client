@@ -5,23 +5,21 @@
         <ValidationProvider v-slot="{errors}" rules="required" name="password" tag="div" class="control">
           <label class="control__label">Текущий пароль</label>
           <div class="control__group">
-            <input type="password" class="control__input" v-model="password" placeholder="Введите действующий пароль">
+            <a-input type="password" v-model="password" placeholder="Введите действующий пароль"/>
             <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
           </div>
         </ValidationProvider>
         <ValidationProvider v-slot="{errors}" rules="required" name="newPassword" tag="div" class="control">
           <label class="control__label">Новый пароль</label>
           <div class="control__group">
-            <input type="password" class="control__input" v-model="newPassword"
-                   placeholder="Введите новый пароль">
+            <a-input type="password" v-model="newPassword" placeholder="Введите новый пароль"/>
             <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
           </div>
         </ValidationProvider>
         <ValidationProvider v-slot="{errors}" rules="required" name="confirmPassword" tag="div" class="control">
           <label class="control__label">Подтвердите пароль</label>
           <div class="control__group">
-            <input type="password" class="control__input" v-model="confirmPassword"
-                   placeholder="Подвердите новый пароль">
+            <a-input type="password" v-model="confirmPassword" placeholder="Подвердите новый пароль"/>
             <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
           </div>
         </ValidationProvider>
@@ -38,9 +36,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
+import AInput from '@/components/components/Input/AInput'
 export default {
   name: 'ChangePassword',
+  components: { AInput },
   data () {
     return {
       password: null,

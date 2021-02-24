@@ -3,7 +3,7 @@
   <div class="control">
     <label class="control__label">Текущий email</label>
     <div class="control__group">
-      <input type="email" class="control__input" disabled="disabled" v-model="profile.email">
+      <a-input type="email" v-model="profile.email" :disabled="true" placeholder="Введите адрес электронной почты"/>
     </div>
   </div>
   <div class="control">
@@ -18,8 +18,12 @@
 <script>
 
 import { mapGetters } from 'vuex'
+import AInput from '@/components/components/Input/AInput'
 export default {
   name: 'ChangeEmail',
+  components: {
+    AInput
+  },
   computed: {
     ...mapGetters('profile', ['profile'])
   }

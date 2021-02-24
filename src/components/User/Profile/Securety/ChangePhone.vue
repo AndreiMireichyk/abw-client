@@ -32,7 +32,7 @@
       <ValidationProvider v-slot="{errors}" rules="required" name="code" tag="div" class="control">
         <label class="control__label">Код подверждения</label>
         <div class="control__group">
-          <input type="number" class="control__input" v-model="code" placeholder="Введите код подтверждения">
+          <a-input type="number" v-model="code" placeholder="Введите код подтверждения"/>
           <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
           <ValidationProvider v-slot="{errors}" name="ip">
             <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
@@ -56,7 +56,7 @@
       <ValidationProvider v-slot="{errors}" rules="required" name="phone" tag="div" class="control">
         <label class="control__label">Текущий телефон</label>
         <div class="control__group">
-          <input type="text" class="control__input" v-model="formattedPhone" :disabled="true">
+          <a-input v-model="formattedPhone" placeholder="Введите новый пароль" :disabled="true"/>
           <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
           <ValidationProvider v-slot="{errors}" name="ip">
             <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
@@ -81,10 +81,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { VueTelInput } from 'vue-tel-input'
+import AInput from '@/components/components/Input/AInput'
 
 export default {
   name: 'ChangePhone',
-  components: { VueTelInput },
+  components: { VueTelInput, AInput },
   data () {
     return {
       password: null,
