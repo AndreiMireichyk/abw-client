@@ -147,7 +147,6 @@ export default {
   methods: {
     ...mapActions('auth', ['logIn']),
     validatePhone (status) {
-      console.log(status)
     },
     credentialLogin () {
       this.credentialType = 'login'

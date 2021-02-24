@@ -1,9 +1,9 @@
 <template>
-  <div class="personal">
-    <div class="personal__head">
-      <div class="personal__title">Персональные данные</div>
-    </div>
-    <div class="personal__body">
+  <page-content class="personal">
+    <template #title>
+      Персональные данные
+    </template>
+    <template #body>
       <ValidationObserver ref="form" v-slot="s" :key="1">
         <form id="form" @submit.prevent="s.passes(submit)">
           <div class="control">
@@ -12,7 +12,8 @@
               <photo-control/>
             </div>
           </div>
-          <div class="personal__divider">Личные данные</div>
+
+          <div class="page__divider">Личные данные</div>
 
           <ValidationProvider v-slot="{errors}" rules="required" name="lastName" tag="div" class="control">
             <label for="last_name" class="control__label">Фамилия</label>
@@ -41,7 +42,7 @@
             </div>
           </ValidationProvider>
 
-          <div class="personal__divider">Контакты</div>
+          <div class="page__divider">Контакты</div>
 
           <ValidationProvider v-slot="{errors}" name="phones" tag="div" class="control">
             <div class="control__label p-top">Телефоны</div>
@@ -99,19 +100,20 @@
           </ValidationProvider>
         </form>
       </ValidationObserver>
-    </div>
-    <div class="personal__footer">
+    </template>
+    <template #footer>
       <button class="btn btn-primary" form="form">Сохранить</button>
       <a href="javascript:void(0)" @click="reset" class="btn btn-default">Отменить</a>
-    </div>
-  </div>
+    </template>
+  </page-content>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import PhotoControl from '@/components/User/Profile/PhotoControl'
-import PhonesControl from '@/components/User/Profile/PhonesControl'
-import EmailsControl from '@/components/User/Profile/EmailsControl'
+import PageContent from '@/components/User/Profile/PageContent'
+import PhotoControl from '@/components/User/Profile/Settings/PhotoControl'
+import PhonesControl from '@/components/User/Profile/Settings/PhonesControl'
+import EmailsControl from '@/components/User/Profile/Settings/EmailsControl'
 
 export default {
   name: 'Personal',
@@ -127,7 +129,8 @@ export default {
   components: {
     PhotoControl,
     PhonesControl,
-    EmailsControl
+    EmailsControl,
+    PageContent
   },
   watch: {
 
@@ -206,49 +209,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.personal {
-  &__head {
-    display: flex;
-    align-items: center;
-    padding: 0 24px 24px 24px;
-    margin: 0 -24px;
-    border-bottom: 1px solid #EBEDF3;
-    margin-bottom: 24px;
-  }
-
-  &__footer {
-    background: #fafbfb;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin: 0 -24px -24px -24px;
-    border-top: 1px solid #EBEDF3;
-    padding: 16px 24px;
-
-    & > * {
-      margin-left: 12px;
-    }
-  }
-
-  &__title {
-    flex-grow: 1;
-    font-size: 18px;
-    font-weight: bold;
-  }
-
-  &__actions {
-
-  }
-
-  &__divider {
-    padding-left: 30%;
-    margin-top: 36px;
-    margin-bottom: 16px;
-    font-weight: 500;
-    font-size: 16px;
-  }
-}
-
 .personal .control {
   display: flex;
   align-items: stretch;

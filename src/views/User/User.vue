@@ -98,6 +98,22 @@
           </router-link>
         </li>
 
+        <li class="menu__item" :class="{active:menuShowBalance}" @click="showBalance">
+          <i class="icon-credit-card"/>
+          <span class="menu__title">Баланс</span>
+          <i class="icon-chevron-right"></i>
+        </li>
+        <li class="menu__submenu" :class="{open: menuShowBalance}">
+          <router-link :to="{name: 'user.balance.refill'}" class="menu__item">
+            <i class="icon-plus-square"/>
+            <span class="menu__title">Пополнить</span>
+          </router-link>
+          <router-link :to="{name: 'user.balance.history'}" class="menu__item">
+            <i class="icon-activity"/>
+            <span class="menu__title">История</span>
+          </router-link>
+        </li>
+
         <li class="menu__item" :class="{active:menuShowOther}" @click="showOther">
           <i class="icon-archive"/>
           <span class="menu__title">Импорт / Экспорт</span>
@@ -135,7 +151,8 @@ export default {
       menuShowAdverts: false,
       menuShowFavorite: false,
       menuShowSetting: false,
-      menuShowOther: false
+      menuShowOther: false,
+      menuShowBalance: false
     }
   },
   computed: {
@@ -152,30 +169,42 @@ export default {
       this.menuShowFavorite = false
       this.menuShowSetting = false
       this.menuShowOther = false
+      this.menuShowBalance = false
     },
     showFavorites () {
       this.menuShowAdverts = false
       this.menuShowFavorite = !this.menuShowFavorite
       this.menuShowSetting = false
       this.menuShowOther = false
+      this.menuShowBalance = false
     },
     showSettings () {
       this.menuShowAdverts = false
       this.menuShowFavorite = false
       this.menuShowSetting = !this.menuShowSetting
       this.menuShowOther = false
+      this.menuShowBalance = false
     },
     showOther () {
       this.menuShowAdverts = false
       this.menuShowFavorite = false
       this.menuShowSetting = false
       this.menuShowOther = !this.menuShowOther
+      this.menuShowBalance = false
+    },
+    showBalance () {
+      this.menuShowAdverts = false
+      this.menuShowFavorite = false
+      this.menuShowSetting = false
+      this.menuShowOther = false
+      this.menuShowBalance = !this.menuShowBalance
     }
   },
   created () {
     if (this.$route.path.indexOf('/user/adverts') >= 0) this.showAdverts()
     if (this.$route.path.indexOf('/user/settings') >= 0) this.showSettings()
     if (this.$route.path.indexOf('/user/favorites') >= 0) this.showFavorites()
+    if (this.$route.path.indexOf('/user/balance') >= 0) this.showBalance()
     if (this.$route.path.indexOf('/user/other') >= 0) this.showOther()
 
     this.fetchProfile()
@@ -307,6 +336,8 @@ export default {
       color: var(--font-color);
 
       i:first-child {
+        position: relative;
+        top: -1px;
         font-size: 16px;
         padding-right: 8px;
       }

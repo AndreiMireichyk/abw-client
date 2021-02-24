@@ -17,7 +17,7 @@ const routes = [
     name: 'login',
     component: () => import('@/views/Auth/Login'),
     meta: {
-      guards: ['not_auth']
+      guards: ['notAuth']
     }
   },
   {
@@ -25,7 +25,7 @@ const routes = [
     name: 'reset-password',
     component: () => import('@/views/Auth/ResetPassword'),
     meta: {
-      guards: ['not_auth']
+      guards: ['notAuth']
     }
   },
   {
@@ -72,6 +72,22 @@ const routes = [
         path: 'settings/notification',
         name: 'user.notification',
         component: () => import('@/views/User/Settings/Notification'),
+        meta: {
+          guards: ['auth']
+        }
+      },
+      {
+        path: 'balance/refill',
+        name: 'user.balance.refill',
+        component: () => import('@/views/User/Balance/Refill'),
+        meta: {
+          guards: ['auth']
+        }
+      },
+      {
+        path: 'balance/history',
+        name: 'user.balance.history',
+        component: () => import('@/views/User/Balance/History'),
         meta: {
           guards: ['auth']
         }

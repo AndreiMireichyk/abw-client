@@ -29,9 +29,9 @@
             <i class="dropdown__badge">2</i>
           </a>
           <a class="dropdown__item">
-            <i class="icon-dollar-sign"></i>
+            <i class="icon-credit-card"></i>
             <span class="dropdown__title">Пополнить</span>
-            <i class="dropdown__ie">15,44</i>
+            <i class="dropdown__ie">{{profile.balance}}</i>
           </a>
           <router-link :to="{name: 'user.personal'}" class="dropdown__item">
             <i class="icon-settings"></i>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'HeaderMenu',
@@ -58,6 +58,9 @@ export default {
       showMessageMenu: false,
       showNotificationMenu: false
     }
+  },
+  computed: {
+    ...mapGetters('profile', ['profile'])
   },
   methods: {
     ...mapActions('auth', ['logOut'])
