@@ -1,7 +1,8 @@
 <template>
   <ValidationObserver ref="phoneForm" v-slot="{errors, passes}" :key="1">
     <form id="phoneFormStep3" @submit.prevent="passes(changePhone)" v-if="newPhoneCodeSent" :key="2">
-      <ValidationProvider v-slot="{errors}" rules="required" name="newCode" tag="div" class="control">
+
+      <ValidationProvider v-slot="{errors}" rules="required" name="newCode">
         <label class="control__label">Код подверждения</label>
         <div class="control__group">
           <input type="number" class="control__input" v-model="newCode" placeholder="Введите код подтверждения">
@@ -85,7 +86,10 @@ import AInput from '@/components/components/Input/AInput'
 
 export default {
   name: 'ChangePhone',
-  components: { VueTelInput, AInput },
+  components: {
+    VueTelInput,
+    AInput
+  },
   data () {
     return {
       password: null,

@@ -8,7 +8,7 @@
     <div class="page__body">
       <slot name="body"></slot>
     </div>
-    <div class="page__footer">
+    <div class="page__footer" v-if="hasFooterSlot">
       <slot name="footer"></slot>
     </div>
   </div>
@@ -16,7 +16,12 @@
 
 <script>
 export default {
-  name: 'PageContent'
+  name: 'PageContent',
+  computed: {
+    hasFooterSlot () {
+      return this.$slots.footer
+    }
+  }
 }
 </script>
 

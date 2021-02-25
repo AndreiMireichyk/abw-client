@@ -2,33 +2,27 @@
   <div>
     <ValidationObserver ref="passwordForm" v-slot="{errors, passes}" :key="1">
       <form id="passwordForm" @submit.prevent="passes(changePassword)">
-        <ValidationProvider v-slot="{errors}" rules="required" name="password" tag="div" class="control">
-          <label class="control__label">Текущий пароль</label>
-          <div class="control__group">
+        <ValidationProvider v-slot="{errors}" rules="required" name="password">
+          <a-form-item label="Текущий пароль" :errors="errors">
             <a-input type="password" v-model="password" placeholder="Введите действующий пароль"/>
-            <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
-          </div>
+          </a-form-item>
         </ValidationProvider>
-        <ValidationProvider v-slot="{errors}" rules="required" name="newPassword" tag="div" class="control">
-          <label class="control__label">Новый пароль</label>
-          <div class="control__group">
+
+        <ValidationProvider v-slot="{errors}" rules="required" name="newPassword">
+          <a-form-item label="Новый пароль" :errors="errors">
             <a-input type="password" v-model="newPassword" placeholder="Введите новый пароль"/>
-            <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
-          </div>
+          </a-form-item>
         </ValidationProvider>
-        <ValidationProvider v-slot="{errors}" rules="required" name="confirmPassword" tag="div" class="control">
-          <label class="control__label">Подтвердите пароль</label>
-          <div class="control__group">
+
+        <ValidationProvider v-slot="{errors}" rules="required" name="confirmPassword">
+          <a-form-item label="Подтвердите пароль" :errors="errors">
             <a-input type="password" v-model="confirmPassword" placeholder="Подвердите новый пароль"/>
-            <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
-          </div>
+          </a-form-item>
         </ValidationProvider>
-        <div class="control">
-          <label class="control__label"></label>
-          <div class="control__group">
-            <button class="btn btn-primary">Изменить пароль</button>
-          </div>
-        </div>
+
+        <a-form-item>
+          <a-button type="primary" :loading="loading">Изменить пароль</a-button>
+        </a-form-item>
       </form>
     </ValidationObserver>
   </div>
@@ -37,11 +31,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import AInput from '@/components/components/Input/AInput'
+import AFormItem from '@/components/components/Form/AFormItem'
+import AButton from '@/components/components/Button/AButton'
 export default {
   name: 'ChangePassword',
-  components: { AInput },
+  components: { AInput, AFormItem, AButton },
   data () {
     return {
+      loading: false,
       password: null,
       newPassword: null,
       confirmPassword: null
@@ -57,15 +54,19 @@ export default {
       data.append('form[newPassword][', this.newPassword)
       data.append('form[confirmPassword]', this.confirmPassword)
 
+      this.loading = true
+
       this.$http.post(`${this.$config.host}/api/user/change_password`, data)
         .then(r => {
           this.$message.success(r.data.message)
           this.password = null
           this.newPassword = null
           this.confirmPassword = null
+          this.loading = false
           this.$refs.passwordForm.reset()
         })
         .catch(e => {
+          this.loading = false
           this.$refs.passwordForm.setErrors(e.response.data)
         })
     }

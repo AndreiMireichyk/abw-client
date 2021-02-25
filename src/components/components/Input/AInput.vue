@@ -1,22 +1,34 @@
 <template>
-  <div class="a-input-affix-wrapper" v-if="hasSlotPrefix || hasSlotPostfix">
-    <span  class="a-input-prefix" v-if="hasSlotPostfix">
+  <div class="a-input-affix-wrapper" v-if="hasTypePassword">
+    <span class="a-input-prefix" v-if="hasSlotPostfix">
           <slot name="prefix"></slot>
     </span>
-    <input :type="inputType"
-           @input="$emit('input', value)"
-           v-model="value" :class="inputClass"
+    <input :type="inputPasswordType"
+           v-model="internalValue" :class="inputClass"
            :placeholder="placeholder"
            :disabled="disabled"
     >
-    <span  class="a-input-postfix" v-if="hasSlotPostfix">
+    <a href="javascript:void(0)" class="a-input-postfix" @click="showPassword = !showPassword">
+      <a-icon type="eye-off" v-if="showPassword"/>
+      <a-icon type="eye" v-else/>
+    </a>
+  </div>
+  <div class="a-input-affix-wrapper" v-else-if="hasSlotPrefix || hasSlotPostfix">
+    <span class="a-input-prefix" v-if="hasSlotPostfix">
+          <slot name="prefix"></slot>
+    </span>
+    <input :type="inputType"
+           v-model="internalValue" :class="inputClass"
+           :placeholder="placeholder"
+           :disabled="disabled"
+    >
+    <span class="a-input-postfix" v-if="hasSlotPostfix">
           <slot name="postfix"></slot>
     </span>
 
   </div>
   <input :type="inputType"
-         @input="$emit('input', value)"
-         v-model="value" :class="inputClass"
+         v-model="internalValue" :class="inputClass"
          :placeholder="placeholder"
          :disabled="disabled"
          v-else
@@ -24,9 +36,12 @@
 </template>
 
 <script>
+import AIcon from '@/components/components/Icon/AIcon'
+
 export default {
   name: 'AInput',
   props: {
+    value: {},
     type: {
       type: String,
       default: 'text'
@@ -44,12 +59,23 @@ export default {
       default: ''
     }
   },
+  components: {
+    AIcon
+  },
   data () {
     return {
-      value: null
+      showPassword: false
     }
   },
   computed: {
+    internalValue: {
+      get () {
+        return this.value
+      },
+      set (value) {
+        this.$emit('input', value)
+      }
+    },
     inputType () {
       switch (this.type) {
         case 'password':
@@ -61,6 +87,9 @@ export default {
         default :
           return 'text'
       }
+    },
+    inputPasswordType () {
+      return this.showPassword ? 'text' : 'password'
     },
     inputClass () {
       return `a-input ${this.inputSizeClass}`
@@ -74,6 +103,9 @@ export default {
         default:
           return ''
       }
+    },
+    hasTypePassword () {
+      return this.type === 'password'
     },
     hasSlotPrefix () {
       return this.$slots.prefix
@@ -91,10 +123,11 @@ export default {
   position: relative;
 }
 
-.a-input-affix-wrapper .a-input:not(:first-child){
+.a-input-affix-wrapper .a-input:not(:first-child) {
   padding-left: 30px;
 }
-.a-input-affix-wrapper .a-input:not(:last-child){
+
+.a-input-affix-wrapper .a-input:not(:last-child) {
   padding-right: 30px;
 }
 
@@ -111,20 +144,24 @@ export default {
   color: var(--gray-color);
   transition: all .3s ease-in-out;
 
-  &-postfix, &-prefix{
+  &-postfix, &-prefix {
     position: absolute;
     top: 50%;
     z-index: 2;
     display: flex;
     align-items: center;
-    color: rgba(0,0,0,.65);
+    color: rgba(0, 0, 0, .65);
     line-height: 0;
     transform: translateY(-50%);
+
+    text-decoration: none;
   }
-  &-prefix{
+
+  &-prefix {
     left: 12px;
   }
-  &-postfix{
+
+  &-postfix {
     right: 12px;
   }
 

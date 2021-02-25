@@ -145,7 +145,6 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'User',
-
   data () {
     return {
       value: null,
@@ -153,7 +152,15 @@ export default {
       menuShowFavorite: false,
       menuShowSetting: false,
       menuShowOther: false,
-      menuShowBalance: false
+      menuShowBalance: false,
+      data: [
+        { id: 1, title: 'РБ' },
+        { id: 2, title: 'РФ' },
+        { id: 3, title: 'БУ' },
+        { id: 4, title: 'РБ' },
+        { id: 5, title: 'РБ' },
+        { id: 7, title: 'РБ' }
+      ]
     }
   },
   computed: {

@@ -6,113 +6,101 @@
     <template #body>
       <ValidationObserver ref="form" v-slot="s" :key="1">
         <form id="form" @submit.prevent="s.passes(submit)">
-          <div class="control">
-            <div class="control__label"></div>
-            <div class="control__group">
+
+          <ValidationProvider name="photo">
+            <a-form-item>
               <photo-control/>
-            </div>
-          </div>
+            </a-form-item>
+          </ValidationProvider>
 
-          <div class="page__divider">Личные данные</div>
+          <a-form-divider>Личные данные</a-form-divider>
 
-          <ValidationProvider v-slot="{errors}" rules="required" name="lastName" tag="div" class="control">
-            <label class="control__label">Фамилия</label>
-            <div class="control__group">
+          <ValidationProvider v-slot="{errors}" rules="required" name="lastName">
+            <a-form-item label="Фамилия" :errors="errors">
               <a-input v-model="profile.lastName" placeholder="Ваша фамилия"/>
-              <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
-            </div>
+            </a-form-item>
           </ValidationProvider>
 
-          <ValidationProvider v-slot="{errors}" rules="required" name="firstName" tag="div" class="control">
-            <label class="control__label">Имя</label>
-            <div class="control__group">
+          <ValidationProvider v-slot="{errors}" rules="required" name="firstName">
+            <a-form-item label="Имя" :errors="errors">
               <a-input v-model="profile.firstName" placeholder="Ваше Имя"/>
-              <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
-            </div>
+            </a-form-item>
           </ValidationProvider>
 
-          <ValidationProvider v-slot="{errors}" rules="required" name="middleName" tag="div" class="control">
-            <label class="control__label">Отчество</label>
-            <div class="control__group">
+          <ValidationProvider v-slot="{errors}" rules="required" name="middleName">
+            <a-form-item label="Отчество" :errors="errors">
               <a-input v-model="profile.middleName" placeholder="Ваше отчество"/>
-              <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
-            </div>
+            </a-form-item>
           </ValidationProvider>
 
-          <div class="page__divider">Контакты</div>
+          <a-form-divider>Контакты</a-form-divider>
 
-          <ValidationProvider v-slot="{errors}" name="phones" tag="div" class="control">
-            <div class="control__label p-top">Телефоны</div>
-            <div class="control__group">
-              <phones-control/>
-              <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
-            </div>
+          <ValidationProvider v-slot="{errors}" name="phones">
+            <a-form-item label="Телефоны" :errors="errors">
+              <a-repeater :data="profile.phones" @remove="removePhone" @add="addPhone">
+                <template #default="{data, index}">
+                  <a-tel-input v-model="data[index]" placeholder="Введите email"/>
+                </template>
+              </a-repeater>
+            </a-form-item>
           </ValidationProvider>
 
-          <ValidationProvider v-slot="{errors}" rules="email" name="emails" tag="div" class="control">
-            <div class="control__label">Email</div>
-            <div class="control__group">
-              <emails-control/>
-              <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
-            </div>
+          <ValidationProvider v-slot="{errors}" name="emails">
+            <a-form-item label="Email" :errors="errors">
+              <a-repeater :data="profile.emails" @remove="removeEmail" @add="addEmail">
+                <template #default="{data, index}">
+                  <a-input type="email" v-model="data[index]" placeholder="Введите email"/>
+                </template>
+              </a-repeater>
+            </a-form-item>
           </ValidationProvider>
 
-          <div class="personal__divider">Адрес</div>
+          <a-form-divider>Адрес</a-form-divider>
 
-          <ValidationProvider v-slot="{errors}" rules="required" name="country" tag="div" class="control">
-            <label for="country" class="control__label">Страна</label>
-            <div class="control__group">
-              <select id="country" type="text" v-model="profile.location.country" class="control__input">
-                <option disabled value="null">Выберите страну</option>
-                <option v-for="country in countries" :key="country.id" :value="country.id">
-                  {{ country.title }}
-                </option>
-              </select>
-              <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
-            </div>
+          <ValidationProvider v-slot="{errors}" rules="required" name="country">
+            <a-form-item label="Страна" :errors="errors">
+              <a-select :data="countries" v-model="profile.location.country" placeholder="Выберите регион"/>
+            </a-form-item>
           </ValidationProvider>
 
-          <ValidationProvider v-slot="{errors}" rules="required" name="region" tag="div" class="control">
-            <label for="region" class="control__label">Область</label>
-            <div class="control__group">
-              <select id="region" type="text" v-model="profile.location.region" class="control__input"
-                      :disabled="!profile.location.country && !regions.length">
-                <option disabled value="null">Выберите регион</option>
-                <option v-for="region in regions" :key="region.id" :value="region.id">{{ region.title }}</option>
-              </select>
-              <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
-            </div>
+          <ValidationProvider v-slot="{errors}" rules="required" name="region">
+            <a-form-item label="Область" :errors="errors">
+              <a-select :data="regions"
+                        v-model="profile.location.region"
+                        placeholder="Выберите регион"
+                        :disabled="!profile.location.country && !regions.length"/>
+            </a-form-item>
           </ValidationProvider>
 
-          <ValidationProvider v-slot="{errors}" rules="required" name="city" tag="div" class="control">
-            <label for="city" class="control__label">Город</label>
-            <div class="control__group">
-              <select id="city" type="text" v-model="profile.location.city" class="control__input"
-                      :disabled="!profile.location.region && !cities.length">
-                <option disabled value="null">Выберите город</option>
-                <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.title }}</option>
-              </select>
-              <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
-            </div>
+          <ValidationProvider v-slot="{errors}" rules="required" name="city">
+            <a-form-item label="Город" :errors="errors">
+              <a-select :data="cities"
+                        v-model="profile.location.city"
+                        placeholder="Выберите город"
+                        :disabled="!profile.location.region && !cities.length"/>
+            </a-form-item>
           </ValidationProvider>
         </form>
       </ValidationObserver>
     </template>
     <template #footer>
       <a-button type="primary" form="form" :loading="loading">Сохранить</a-button>
-      <a-button type="default" @click.stop="reset">Отменить</a-button>
+      <a-button type="default" @click.native.stop="fetchProfile">Отменить</a-button>
     </template>
   </page-content>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import PageContent from '@/components/User/Profile/PageContent'
 import PhotoControl from '@/components/User/Profile/Settings/PhotoControl'
-import PhonesControl from '@/components/User/Profile/Settings/PhonesControl'
-import EmailsControl from '@/components/User/Profile/Settings/EmailsControl'
 import AInput from '@/components/components/Input/AInput'
 import AButton from '@/components/components/Button/AButton'
+import ASelect from '@/components/components/Select/ASelect'
+import ARepeater from '@/components/components/Repeater/ARepeater'
+import ATelInput from '@/components/components/Input/ATelInput'
+import AFormItem from '@/components/components/Form/AFormItem'
+import AFormDivider from '@/components/components/Form/AFormDivider'
 
 export default {
   name: 'Personal',
@@ -128,14 +116,16 @@ export default {
   },
   components: {
     PhotoControl,
-    PhonesControl,
-    EmailsControl,
     PageContent,
     AInput,
-    AButton
+    AButton,
+    ASelect,
+    ARepeater,
+    ATelInput,
+    AFormItem,
+    AFormDivider
   },
   watch: {
-
     'profile.location.country' () {
       if (this.countryUpd) {
         this.regions = []
@@ -158,6 +148,7 @@ export default {
     ...mapGetters('profile', ['profile'])
   },
   methods: {
+    ...mapMutations('profile', ['addEmail', 'removeEmail', 'addPhone', 'removePhone']),
     ...mapActions('profile', {
       fetchProfile: 'profile',
       applyChanges: 'applyChanges'
@@ -212,54 +203,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.personal .control {
-  display: flex;
-  align-items: stretch;
-  margin-bottom: 16px;
-
-  &__label {
-    position: relative;
-    top: 9px;
-    box-sizing: border-box;
-    width: 30%;
-    text-align: right;
-    padding-right: 24px;
-    height: 100%;
-  }
-
-  &__group {
-    width: 40%;
-  }
-
-  &__input {
-    box-sizing: border-box;
-    display: block;
-    width: 100%;
-    background-color: var(--white-color);
-    outline: none;
-    appearance: none;
-    border: 1px solid #d9deee;
-    padding: 8px 12px;
-    border-radius: 6px;
-    color: var(--gray-color);
-    transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, -webkit-box-shadow 0.15s ease;
-
-    &::placeholder {
-      color: var(--font-muted-color);
-    }
-
-    &:focus {
-      border: 1px solid var(--primary-color);
-      background-color: #f6f6f6;
-    }
-  }
-
-  &__error {
-    margin-top: 6px;
-    display: block;
-    font-size: 12px;
-    color: var(--red-color);
-  }
-}
-
 </style>
