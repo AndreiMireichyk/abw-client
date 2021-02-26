@@ -3,91 +3,77 @@
     <form id="phoneFormStep3" @submit.prevent="passes(changePhone)" v-if="newPhoneCodeSent" :key="2">
 
       <ValidationProvider v-slot="{errors}" rules="required" name="newCode">
-        <label class="control__label">Код подверждения</label>
-        <div class="control__group">
-          <input type="number" class="control__input" v-model="newCode" placeholder="Введите код подтверждения">
-          <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
-          <small class="control__desc">
+        <a-form-item label="Код подверждения" label-col="4" input-col="4" :errors="errors">
+          <a-input type="number" v-model="newCode" placeholder="Введите код подтверждения"/>
+          <template #desc>
             На номер телефона {{ phone }} было отправлено сообщение с кодом подтверждения.
-          </small>
-        </div>
+          </template>
+          <template #actions>
+            <a-button weight="bold" el-style="link">Привязать номер</a-button>
+            <a-link weight="bold" type="danger" @click.native.prevent="newPhoneCodeSent = false">Назад</a-link>
+          </template>
+          <template></template>
+        </a-form-item>
       </ValidationProvider>
-      <div class="control">
-        <label class="control__label"></label>
-        <div class="control__group">
-          <div class="control__actions">
-            <button class="link link-primary">Привязать номер</button>
-            <a href="javascript:void(0)" class="link link-danger" @click="newPhoneCodeSent = false">Назад</a>
-          </div>
-        </div>
-      </div>
     </form>
+
     <form id="phoneFormStep2" @submit.prevent="passes(acceptChangePhone)" v-else-if="phoneCodeSent" :key="3">
-      <ValidationProvider v-slot="{errors}" rules="required" name="phone" tag="div" class="control">
-        <label class="control__label">Новый телефон</label>
-        <div class="control__group">
-          <vue-tel-input class="control__input-phone" v-model="phone" v-bind="bindProps"/>
-          <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
-        </div>
+      <ValidationProvider v-slot="{errors}" rules="required" name="phone">
+        <a-form-item label="Новый телефон" label-col="4" input-col="4" :errors="errors">
+          <a-tel-input v-model="phone"></a-tel-input>
+        </a-form-item>
       </ValidationProvider>
-      <ValidationProvider v-slot="{errors}" rules="required" name="code" tag="div" class="control">
-        <label class="control__label">Код подверждения</label>
-        <div class="control__group">
+      <ValidationProvider v-slot="{errors}" rules="required" name="code">
+        <a-form-item label="Код подверждения" label-col="4" input-col="4" :errors="errors">
           <a-input type="number" v-model="code" placeholder="Введите код подтверждения"/>
-          <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
           <ValidationProvider v-slot="{errors}" name="ip">
-            <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
+            <a-form-item label="" :errors="errors" v-if="errors.length"/>
           </ValidationProvider>
-          <small class="control__desc">
+          <template #desc>
             На номер телефона {{ formattedPhone }} было отправлено сообщение с кодом подтверждения.
-          </small>
-        </div>
+          </template>
+          <template #actions>
+            <a-button weight="bold" el-style="link">Продолжить</a-button>
+            <a-link weight="bold" type="danger" @click.native.prevent="phoneCodeSent = false">Назад</a-link>
+          </template>
+        </a-form-item>
       </ValidationProvider>
-      <div class="control">
-        <label class="control__label"></label>
-        <div class="control__group">
-          <div class="control__actions">
-            <button class="link link-primary">Продолжить</button>
-            <a href="javascript:void(0)" class="link link-danger" @click="phoneCodeSent = false">Назад</a>
-          </div>
-        </div>
-      </div>
     </form>
+
     <form id="phoneFormStep1" @submit.prevent="passes(sendPhoneCode)" v-else :key="4">
-      <ValidationProvider v-slot="{errors}" rules="required" name="phone" tag="div" class="control">
-        <label class="control__label">Текущий телефон</label>
-        <div class="control__group">
+      <ValidationProvider v-slot="{errors}" rules="required" name="phone">
+        <a-form-item label="Текущий телефон" :errors="errors" label-col="4" input-col="4">
           <a-input v-model="formattedPhone" placeholder="Введите новый пароль" :disabled="true"/>
-          <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
           <ValidationProvider v-slot="{errors}" name="ip">
-            <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
+            <a-form-item label="" :errors="errors" v-if="errors.length"/>
           </ValidationProvider>
-        </div>
-      </ValidationProvider>
-      <div class="control">
-        <label class="control__label"></label>
-        <div class="control__group">
-          <small class="control__desc" v-if="phoneCodeSentTtl">
+          <template #desc v-if="phoneCodeSentTtl">
             Отправить код через {{ phoneCodeSentTtl }} с.
-          </small>
-          <a href="javascript:void(0)" class="link link-primary" @click="sendPhoneCode" v-else>
-            Изменить телефон
-          </a>
-        </div>
-      </div>
+          </template>
+          <template #actions v-else>
+            <a-button weight="bold" el-style="link">Изменить телефон</a-button>
+          </template>
+        </a-form-item>
+      </ValidationProvider>
     </form>
   </ValidationObserver>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { VueTelInput } from 'vue-tel-input'
 import AInput from '@/components/components/Input/AInput'
+import AFormItem from '@/components/components/Form/AFormItem'
+import AButton from '@/components/components/Button/AButton'
+import ATelInput from '@/components/components/Input/ATelInput'
+import ALink from '@/components/components/Link/ALink'
 
 export default {
   name: 'ChangePhone',
   components: {
-    VueTelInput,
+    ALink,
+    ATelInput,
+    AButton,
+    AFormItem,
     AInput
   },
   data () {
@@ -104,14 +90,7 @@ export default {
       phoneCodeSent: false,
       phoneCodeSentAt: false,
       phoneCodeSentTtl: 0,
-      newPhoneCodeSent: false,
-      bindProps: {
-        mode: 'international',
-        placeholder: 'Введите телефон',
-        required: false,
-        enabledCountryCode: false,
-        onlyCountries: ['BY', 'RU']
-      }
+      newPhoneCodeSent: false
     }
   },
   computed: {

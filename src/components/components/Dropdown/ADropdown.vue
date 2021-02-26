@@ -4,7 +4,7 @@
       <slot></slot>
     </div>
     <div class="a-dropdown-list-wrap">
-      <ul class="a-dropdown-list scrollbar" v-if="open">
+      <ul class="a-dropdown-list scrollbar" v-if="open" @click.stop>
         <slot name="list"></slot>
       </ul>
     </div>
@@ -25,9 +25,9 @@ export default {
     }
   },
   created () {
-    /*    document.body.addEventListener('click', () => {
+    document.body.addEventListener('click', () => {
       this.open = false
-    }, true) */
+    }, true)
   }
 }
 </script>

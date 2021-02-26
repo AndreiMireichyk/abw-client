@@ -1,6 +1,6 @@
 <template>
   <div class="a-input-affix-wrapper" v-if="hasTypePassword">
-    <span class="a-input-prefix" v-if="hasSlotPostfix">
+    <span class="a-input-prefix" v-if="hasSlotPrefix">
           <slot name="prefix"></slot>
     </span>
     <input :type="inputPasswordType"
@@ -14,7 +14,7 @@
     </a>
   </div>
   <div class="a-input-affix-wrapper" v-else-if="hasSlotPrefix || hasSlotPostfix">
-    <span class="a-input-prefix" v-if="hasSlotPostfix">
+    <span class="a-input-prefix" v-if="hasSlotPrefix">
           <slot name="prefix"></slot>
     </span>
     <input :type="inputType"
@@ -57,6 +57,10 @@ export default {
     placeholder: {
       type: String,
       default: ''
+    },
+    align: {
+      type: String,
+      default: 'left'
     }
   },
   components: {
@@ -92,7 +96,10 @@ export default {
       return this.showPassword ? 'text' : 'password'
     },
     inputClass () {
-      return `a-input ${this.inputSizeClass}`
+      return `a-input ${this.inputSizeClass} ${this.inputAlignClass}`
+    },
+    inputAlignClass () {
+      return `text-${this.align}`
     },
     inputSizeClass () {
       switch (this.size) {

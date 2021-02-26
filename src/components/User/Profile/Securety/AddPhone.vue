@@ -1,59 +1,58 @@
 <template>
   <ValidationObserver ref="phoneForm" v-slot="{errors, passes}" :key="1">
+
     <form id="phoneForm" @submit.prevent="passes(addPhone)" v-if="phoneCodeSent" :key="2">
-      <ValidationProvider v-slot="{errors}" rules="required" name="code" tag="div" class="control">
-        <label class="control__label">Код подверждения</label>
-        <div class="control__group">
-          <input type="number" class="control__input" v-model="code" placeholder="Введите код подтверждения">
-          <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
-          <small class="control__desc">
+      <ValidationProvider v-slot="{errors}" rules="required" name="code">
+        <a-form-item label="Код подверждения" :errors="errors" label-col="4" label-align="left" input-col="4">
+          <a-input v-model="code" placeholder="Введите код подтверждения"/>
+          <template #desc>
             На номер телефона {{ phone }} было отправлено сообщение с кодом подтверждения.
-          </small>
-        </div>
+          </template>
+          <template #actions>
+            <a-button  weight="bold" el-style="link">Привязать телефон</a-button>
+            <a-link type="danger" weight="bold" @click="phoneCodeSent = false">Назад</a-link>
+          </template>
+        </a-form-item>
       </ValidationProvider>
-      <div class="control">
-        <label class="control__label"></label>
-        <div class="control__group">
-          <div class="control__actions">
-            <button class="link link-primary">Привязать телефон</button>
-            <a href="javascript:void(0)" class="link link-danger" @click="phoneCodeSent = false">Назад</a>
-          </div>
-        </div>
-      </div>
     </form>
+
     <form id="phoneAuthForm" @submit.prevent="passes(sendPhoneCode)" v-else :key="3">
-      <ValidationProvider v-slot="{errors}" rules="required" name="phone" tag="div" class="control">
-        <label class="control__label">Номер телефона</label>
-        <div class="control__group">
-          <vue-tel-input class="control__input-phone" v-model="phone" v-bind="bindProps"/>
-          <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
+      <ValidationProvider v-slot="{errors}" rules="required" name="phone">
+        <a-form-item label="Номер телефона" :errors="errors" label-col="4" label-align="left" input-col="4">
+          <a-tel-input v-model="phone"/>
           <ValidationProvider v-slot="{errors}" name="ip">
-            <small class="control__error" v-if="errors.length">{{ errors[0] }}</small>
+            <a-form-item label="" :errors="errors" v-if="errors.length"/>
           </ValidationProvider>
-        </div>
-      </ValidationProvider>
-      <div class="control">
-        <label class="control__label"></label>
-        <div class="control__group">
-          <small class="control__desc" v-if="phoneCodeSentTtl">
+          <template #desc v-if="phoneCodeSentTtl">
             Отправить код через {{ phoneCodeSentTtl }} с.
-          </small>
-          <button class="link link-primary" v-else>
-            Выслать код подтверждения
-          </button>
-        </div>
-      </div>
+          </template>
+          <template #actions v-else>
+            <a-button weight="bold" el-style="link">Выслать код подтверждения</a-button>
+          </template>
+        </a-form-item>
+      </ValidationProvider>
     </form>
+
   </ValidationObserver>
 </template>
 
 <script>
-import { VueTelInput } from 'vue-tel-input'
 import { mapActions, mapGetters } from 'vuex'
+import AFormItem from '@/components/components/Form/AFormItem'
+import ATelInput from '@/components/components/Input/ATelInput'
+import AInput from '@/components/components/Input/AInput'
+import ALink from '@/components/components/Link/ALink'
+import AButton from '@/components/components/Button/AButton'
 
 export default {
   name: 'AddPhone',
-  components: { VueTelInput },
+  components: {
+    AButton,
+    ALink,
+    AFormItem,
+    ATelInput,
+    AInput
+  },
   data () {
     return {
       password: null,

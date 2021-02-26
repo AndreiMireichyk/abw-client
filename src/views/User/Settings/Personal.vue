@@ -8,35 +8,35 @@
         <form id="form" @submit.prevent="s.passes(submit)">
 
           <ValidationProvider name="photo">
-            <a-form-item>
+            <a-form-item  label=" " label-col="4" label-align="left" input-col="4">
               <photo-control/>
             </a-form-item>
           </ValidationProvider>
 
-          <a-form-divider>Личные данные</a-form-divider>
+          <a-form-divider offset="4">Личные данные</a-form-divider>
 
           <ValidationProvider v-slot="{errors}" rules="required" name="lastName">
-            <a-form-item label="Фамилия" :errors="errors">
+            <a-form-item label="Фамилия" :errors="errors" label-col="4" label-align="left" input-col="4">
               <a-input v-model="profile.lastName" placeholder="Ваша фамилия"/>
             </a-form-item>
           </ValidationProvider>
 
           <ValidationProvider v-slot="{errors}" rules="required" name="firstName">
-            <a-form-item label="Имя" :errors="errors">
+            <a-form-item label="Имя" :errors="errors" label-col="4" label-align="left" input-col="4">
               <a-input v-model="profile.firstName" placeholder="Ваше Имя"/>
             </a-form-item>
           </ValidationProvider>
 
           <ValidationProvider v-slot="{errors}" rules="required" name="middleName">
-            <a-form-item label="Отчество" :errors="errors">
+            <a-form-item label="Отчество" :errors="errors" label-col="4" label-align="left" input-col="4">
               <a-input v-model="profile.middleName" placeholder="Ваше отчество"/>
             </a-form-item>
           </ValidationProvider>
 
-          <a-form-divider>Контакты</a-form-divider>
+          <a-form-divider offset="4">Контакты</a-form-divider>
 
           <ValidationProvider v-slot="{errors}" name="phones">
-            <a-form-item label="Телефоны" :errors="errors">
+            <a-form-item label="Телефоны" :errors="errors" label-col="4" label-align="left" input-col="4">
               <a-repeater :data="profile.phones" @remove="removePhone" @add="addPhone">
                 <template #default="{data, index}">
                   <a-tel-input v-model="data[index]" placeholder="Введите email"/>
@@ -46,7 +46,7 @@
           </ValidationProvider>
 
           <ValidationProvider v-slot="{errors}" name="emails">
-            <a-form-item label="Email" :errors="errors">
+            <a-form-item label="Email" :errors="errors" label-col="4" label-align="left" input-col="4">
               <a-repeater :data="profile.emails" @remove="removeEmail" @add="addEmail">
                 <template #default="{data, index}">
                   <a-input type="email" v-model="data[index]" placeholder="Введите email"/>
@@ -55,16 +55,16 @@
             </a-form-item>
           </ValidationProvider>
 
-          <a-form-divider>Адрес</a-form-divider>
+          <a-form-divider offset="4">Адрес</a-form-divider>
 
           <ValidationProvider v-slot="{errors}" rules="required" name="country">
-            <a-form-item label="Страна" :errors="errors">
+            <a-form-item label="Страна" :errors="errors" label-col="4" label-align="left" input-col="4">
               <a-select :data="countries" v-model="profile.location.country" placeholder="Выберите регион"/>
             </a-form-item>
           </ValidationProvider>
 
           <ValidationProvider v-slot="{errors}" rules="required" name="region">
-            <a-form-item label="Область" :errors="errors">
+            <a-form-item label="Область" :errors="errors" label-col="4" label-align="left" input-col="4">
               <a-select :data="regions"
                         v-model="profile.location.region"
                         placeholder="Выберите регион"
@@ -73,7 +73,7 @@
           </ValidationProvider>
 
           <ValidationProvider v-slot="{errors}" rules="required" name="city">
-            <a-form-item label="Город" :errors="errors">
+            <a-form-item label="Город" :errors="errors" label-col="4" label-align="left" input-col="4">
               <a-select :data="cities"
                         v-model="profile.location.city"
                         placeholder="Выберите город"

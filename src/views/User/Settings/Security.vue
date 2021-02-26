@@ -4,14 +4,14 @@
       Безопасность
     </template>
     <template #body>
-      <a-form-divider>Изменить номер телефона</a-form-divider>
+      <a-form-divider offset="4">Изменить номер телефона</a-form-divider>
       <change-phone v-if="profile.phone"/>
       <add-phone v-else/>
 
-      <a-form-divider>Изменить Email адрес</a-form-divider>
+      <a-form-divider offset="4">Изменить Email адрес</a-form-divider>
       <change-email/>
 
-      <a-form-divider>Изменить пароль</a-form-divider>
+      <a-form-divider offset="4">Изменить пароль</a-form-divider>
       <change-password/>
 
     </template>

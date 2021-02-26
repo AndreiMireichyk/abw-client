@@ -7,32 +7,27 @@
 
       <ul class="card__nav">
         <li class="card__nav-item">
-          <a class="card__nav-link" :class="{active: isCredentialPhone}" href="javascript:void(0)"
-             @click="credentialPhone">телефон</a>
+          <a-link type="default" :active="isCredentialPhone" @click.native="credentialPhone">телефон</a-link>
         </li>
         <li class="card__nav-item">
-          <a class="card__nav-link" :class="{active: isCredentialLogin}" href="javascript:void(0)"
-             @click="credentialLogin">логин</a>
+          <a-link type="default" :active="isCredentialLogin" @click.native="credentialLogin">логин</a-link>
         </li>
       </ul>
 
       <ValidationObserver ref="form" v-slot="{passes}" v-if="isCredentialPhone && !authCodeSent" :key="1">
         <form @submit.prevent="passes(sentAuthCode)">
           <div class="card__body" v-show="isCredentialPhone">
-            <div class="control">
-              <ValidationProvider name="phone" rules="required" v-slot="{errors}">
-                <vue-tel-input v-model="phone" v-bind="phoneProps" @validate="validatePhone" class="control__phone"/>
-                <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
-              </ValidationProvider>
-            </div>
-            <div class="control">
-              <ValidationProvider name="ip" v-slot="{errors}">
-                <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
-              </ValidationProvider>
-            </div>
-          </div>
-          <div class="card__footer" v-show="isCredentialPhone">
-            <button class="control__btn">Далее</button>
+            <ValidationProvider name="phone" rules="required" v-slot="{errors}">
+              <a-form-item :errors="errors" input-align="center">
+                <a-tel-input v-model="phone" align="center"/>
+                <ValidationProvider name="ip" v-slot="{errors}">
+                  <a-form-item :errors="errors"  input-align="center" v-if="errors.length"></a-form-item>
+                </ValidationProvider>
+              </a-form-item>
+            </ValidationProvider>
+            <a-form-item>
+              <a-button block :loading="loading">Далее</a-button>
+            </a-form-item>
           </div>
         </form>
       </ValidationObserver>
@@ -43,32 +38,32 @@
             <div class="card__description">
               Код отправлен на номер <br> <span>{{ phone }}</span>
             </div>
-            <div class="control">
-              <ValidationProvider name="code" rules="required" v-slot="{errors}">
-                <input class="control__password" :type="passwordInputType" v-model="code"
-                       placeholder="Код подтверждения" data-vv-as="код подтверждения">
-                <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
-              </ValidationProvider>
-              <ValidationProvider name="phone" v-slot="{errors}">
-                <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
-              </ValidationProvider>
-              <ValidationProvider name="ip" v-slot="{errors}">
-                <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
-              </ValidationProvider>
-              <i class="icon-eye-off" v-if="showPassword" @click="showPassword  = false"/>
-              <i class="icon-eye" v-else @click="showPassword  = true"/>
-            </div>
-            <div class="control">
-              <a class="control__link wait" href="javascript:void(0)" v-if="authCodeReplayTtl">
-                Выслать код повторно {{ authCodeReplayTtl }}c.
-              </a>
-              <a class="control__link" href="javascript:void(0)" @click.prevent="sentAuthCode" v-else>
-                Выслать код повторно
-              </a>
-            </div>
-          </div>
-          <div class="card__footer">
-            <button class="control__btn">Вход</button>
+            <ValidationProvider name="code" rules="required" v-slot="{errors}">
+              <a-form-item :errors="errors" input-align="center">
+                <a-input type="password" v-model="code" align="center" placeholder="Код подтверждения">
+                  <template #prefix>
+                    <a-icon type="lock"/>
+                  </template>
+                </a-input>
+                <ValidationProvider name="phone" v-slot="{errors}">
+                  <a-form-item :errors="errors" v-if="errors.length"/>
+                </ValidationProvider>
+                <ValidationProvider name="ip" v-slot="{errors}">
+                  <a-form-item :errors="errors" v-if="errors.length"/>
+                </ValidationProvider>
+                <template #desc v-if="authCodeReplayTtl">
+                  Выслать код повторно {{ authCodeReplayTtl }}c.
+                </template>
+                <template #actions v-else>
+                  <div class="text-center">
+                    <a-link type="primary" @click.native="sentAuthCode">Выслать код повторно</a-link>
+                  </div>
+                </template>
+              </a-form-item>
+            </ValidationProvider>
+            <a-form-item>
+              <a-button type="primary" block :loading="loading">Вход</a-button>
+            </a-form-item>
           </div>
         </form>
       </ValidationObserver>
@@ -76,26 +71,35 @@
       <ValidationObserver ref="form" v-slot="{passes}" v-if="isCredentialLogin" :key="3">
         <form @submit.prevent="passes(auth)">
           <div class="card__body">
-            <div class="control">
-              <ValidationProvider name="login" data-as="asd" rules="required" v-slot="{errors}">
-                <input class="control__login" type="text" v-model="login" placeholder="Логин">
-                <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
-              </ValidationProvider>
-            </div>
-            <div class="control">
-              <ValidationProvider name="password" rules="required" v-slot="{errors}">
-                <input class="control__password" :type="passwordInputType" v-model="password" placeholder="Пароль">
-                <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
-              </ValidationProvider>
-              <i class="icon-eye-off" v-if="showPassword" @click="showPassword  = false"/>
-              <i class="icon-eye" v-else @click="showPassword  = true"/>
-            </div>
-            <div class="control">
-              <router-link class="control__link" :to="{name: 'reset-password'}">Востановление пароля</router-link>
-            </div>
-          </div>
-          <div class="card__footer">
-            <button class="control__btn">Войти</button>
+            <ValidationProvider name="login" rules="required" v-slot="{errors}">
+              <a-form-item :errors="errors" input-align="center">
+                <a-input v-model="login" type="text" align="center" placeholder="Введите логин">
+                  <template #prefix>
+                    <a-icon type="user"/>
+                  </template>
+                  <template #postfix>
+                    <span></span>
+                  </template>
+                </a-input>
+              </a-form-item>
+            </ValidationProvider>
+            <ValidationProvider name="password" rules="required" v-slot="{errors}">
+              <a-form-item :errors="errors" input-align="center">
+                <a-input type="password" v-model="password" align="center" placeholder="Введите пароль">
+                  <template #prefix>
+                    <a-icon type="lock"/>
+                  </template>
+                </a-input>
+              </a-form-item>
+            </ValidationProvider>
+            <a-form-item>
+              <div class="text-center">
+                <a-link type="primary" :to="{name: 'reset-password'}">Востановление пароля</a-link>
+              </div>
+            </a-form-item>
+            <a-form-item>
+              <a-button type="primary" block :loading="loading">Войти</a-button>
+            </a-form-item>
           </div>
         </form>
       </ValidationObserver>
@@ -106,31 +110,35 @@
 
 <script>
 
-import { VueTelInput } from 'vue-tel-input'
 import { mapActions } from 'vuex'
+import AFormItem from '@/components/components/Form/AFormItem'
+import ATelInput from '@/components/components/Input/ATelInput'
+import AInput from '@/components/components/Input/AInput'
+import AButton from '@/components/components/Button/AButton'
+import ALink from '@/components/components/Link/ALink'
+import AIcon from '@/components/components/Icon/AIcon'
 
 export default {
   name: 'Login',
-  components: { VueTelInput },
+  components: {
+    AFormItem,
+    ATelInput,
+    AInput,
+    AButton,
+    ALink,
+    AIcon
+  },
   data () {
     return {
       phone: null,
       login: null,
       code: null,
       password: null,
-      showPassword: false,
       credentialType: 'phone',
       authCodeSent: false,
       authCodeSentAt: null,
       authCodeReplayTtl: 0, // one min
-      loading: false,
-      phoneProps: {
-        mode: 'international',
-        placeholder: 'Введите телефона',
-        required: false,
-        enabledCountryCode: false,
-        onlyCountries: ['BY', 'RU']
-      }
+      loading: false
     }
   },
   computed: {
@@ -139,9 +147,6 @@ export default {
     },
     isCredentialPhone () {
       return this.credentialType === 'phone'
-    },
-    passwordInputType () {
-      return this.showPassword ? 'text' : 'password'
     }
   },
   methods: {
@@ -158,6 +163,8 @@ export default {
       const data = new URLSearchParams()
       data.append('phone', this.phone)
 
+      this.loading = true
+
       this.$http.post(`${this.$config.host}/api/auth/get-code`, data)
         .then(r => {
           this.authCodeSent = true
@@ -165,9 +172,11 @@ export default {
           this.authCodeSentAt = Date.now()
           this.authCodeReplayTtl = 60
           this.setTimeoutReplayCode()
+          this.loading = false
         })
         .catch(e => {
           this.$refs.form.setErrors(e.response.data)
+          this.loading = false
         })
     },
     auth () {
@@ -181,12 +190,16 @@ export default {
         data.append('code', this.code)
       }
 
+      this.loading = true
+
       this.logIn(data)
         .then(() => {
           this.$message.success('Вход выполнен успешно')
+          this.loading = false
         })
         .catch(e => {
           this.$refs.form.setErrors(e.response.data)
+          this.loading = false
         })
     },
     setTimeoutReplayCode () {
@@ -213,7 +226,7 @@ export default {
   max-width: 255px;
   min-width: 255px;
   background: var(--white-bg);
-  padding: 24px;
+  padding: 24px 24px 8px 24px;
 
   &__title {
     font-weight: 600;
@@ -233,7 +246,7 @@ export default {
     text-align: center;
     color: var(--gray-color);
     margin-bottom: 8px;
-    font-size: 14px;
+    font-size: 13px;
 
     span {
       margin-top: 3px;
@@ -258,165 +271,6 @@ export default {
 
     &:last-child:after {
       display: none;
-    }
-  }
-
-  &__nav-link {
-    text-decoration: none;
-    color: var(--gray-color);
-
-    &:hover, &.active {
-      color: var(--primary-color);
-    }
-  }
-
-  .control {
-    position: relative;
-    margin-bottom: 16px;
-
-    &__phone {
-      position: relative;
-      border: none !important;
-
-      &:focus-within {
-        box-shadow: none !important;
-      }
-
-      input {
-        text-align: center;
-        border: 1px solid #d9deee !important;
-        border-radius: var(--input-radius);
-        padding: 8px 12px 8px 60px;
-        color: var(--gray-color);
-
-        transition: all .3s;
-
-        &::placeholder {
-          color: var(--font-muted-color);
-        }
-
-        &:focus-within {
-          border-color: var(--primary-color) !important;
-          box-shadow: none;
-        }
-
-      }
-
-      .vti__dropdown {
-        position: absolute;
-        top: 0;
-        left: 0;
-        padding: 0;
-        margin: 8px 0 8px 12px;
-        background: none !important;
-        border-right: 1px solid rgba(0, 0, 0, 0.18);
-
-        &:focus {
-          outline: none;
-        }
-      }
-
-      .vti__selection {
-        height: 15px;
-        padding-right: 6px;
-      }
-
-      .vti__flag {
-        margin-left: 0;
-      }
-    }
-
-    &__password {
-      text-align: center;
-      width: 100%;
-      box-sizing: border-box;
-      border: 1px solid #d9deee;
-      padding: 8px 12px;
-      border-radius: var(--input-radius);
-      outline: none;
-      color: var(--gray-color);
-      transition: all .3s;
-
-      &::placeholder {
-        color: var(--font-muted-color);
-      }
-
-      &:focus-within {
-        border: 1px solid var(--primary-color);
-      }
-    }
-
-    &__login {
-      text-align: center;
-      width: 100%;
-      box-sizing: border-box;
-      border: 1px solid #d9deee;
-      padding: 8px 12px;
-      border-radius: var(--input-radius);
-      outline: none;
-      color: var(--gray-color);
-      transition: all .3s;
-
-      &::placeholder {
-        color: var(--font-muted-color);
-      }
-
-      &:focus-within {
-        border: 1px solid var(--primary-color);
-      }
-    }
-
-    &__error {
-      line-height: 1.1;
-      text-align: center;
-      display: block;
-      font-size: 12px;
-      color: var(--red-color);
-      margin-top: 10px;
-    }
-
-    i {
-      cursor: pointer;
-      font-size: 15px;
-      color: #9b9b9b;
-      position: absolute;
-      top: 8px;
-      right: 8px;
-    }
-
-    &__btn {
-      text-align: center;
-      display: block;
-      width: 100%;
-      font-size: 15px;
-      cursor: pointer;
-      box-shadow: 0 0 0 1px var(--primary-color) inset, 0 1px 0 rgba(24, 26, 27, 0.08);
-      padding: 8px 10px;
-      border-radius: 4px;
-      transition: all .3s;
-      background: var(--primary-color);
-      color: var(--white-color);
-      text-decoration: none;
-      border: none;
-      outline: none;
-      appearance: none;
-
-      &:hover {
-        background: transparent;
-        box-shadow: 0 0 0 2px #d3d9df inset, 0 2px 0 rgba(24, 26, 27, 0.08);
-        color: var(--font-color);
-      }
-    }
-
-    &__link {
-      display: block;
-      text-align: center;
-      text-decoration: none;
-      color: var(--primary-color);
-
-      &.wait {
-        color: var(--gray-color);
-      }
     }
   }
 }

@@ -15,6 +15,10 @@ export default {
       type: String,
       default: 'normal'
     },
+    active: {
+      type: Boolean,
+      default: false
+    },
     to: {
       type: [String, Object],
       default: '#'
@@ -23,7 +27,7 @@ export default {
   name: 'ALink',
   computed: {
     linkClass () {
-      return `a-link ${this.linkTypeClassType} ${this.linkWeightClass}`
+      return `a-link ${this.linkTypeClassType} ${this.linkWeightClass} ${this.linkActiveClass}`
     },
     linkTypeClassType () {
       switch (this.type) {
@@ -48,6 +52,9 @@ export default {
         default:
           return 'normal'
       }
+    },
+    linkActiveClass () {
+      return this.active ? 'a-link-active' : ''
     }
   }
 }
@@ -55,7 +62,7 @@ export default {
 
 <style scoped lang="scss">
 .a-link {
-  display: flex;
+  display: inline-block;
   cursor: pointer;
   align-items: center;
   text-decoration: none;
@@ -68,9 +75,9 @@ export default {
   }
 
   &-default {
-    color: var(--font-color);
+    color: var(--gray-color);
 
-    &:hover {
+    &:hover, &.a-link-active {
       color: var(--primary-color);
     }
   }

@@ -20,6 +20,10 @@ export default {
     placeholder: {
       type: String,
       default: ''
+    },
+    align: {
+      type: String,
+      default: 'left'
     }
   },
   components: {
@@ -32,7 +36,8 @@ export default {
         placeholder: 'Введите телефон',
         required: false,
         enabledCountryCode: false,
-        onlyCountries: ['BY', 'RU']
+        onlyCountries: ['BY', 'RU'],
+        defaultCountry: 'BY'
       }
     }
   },
@@ -46,7 +51,7 @@ export default {
       }
     },
     inputClass () {
-      return `a-tel-input ${this.inputSizeClass}`
+      return `a-tel-input ${this.inputSizeClass} ${this.inputAlignClass}`
     },
     inputSizeClass () {
       switch (this.size) {
@@ -57,6 +62,9 @@ export default {
         default:
           return ''
       }
+    },
+    inputAlignClass () {
+      return `a-tel-input-align-${this.align}`
     }
   }
 }
@@ -100,7 +108,15 @@ export default {
       background-color: #f6f6f6;
     }
   }
-
+  &-align-right input{
+    text-align: right;
+  }
+  &-align-left input{
+    text-align: left;
+  }
+  &-align-center input{
+    text-align: center;
+  }
   &-sm {
     padding: 6px 10px;
     border-radius: var(--input-sm-radius);

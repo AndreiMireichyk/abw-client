@@ -3,24 +3,24 @@
     <ValidationObserver ref="passwordForm" v-slot="{errors, passes}" :key="1">
       <form id="passwordForm" @submit.prevent="passes(changePassword)">
         <ValidationProvider v-slot="{errors}" rules="required" name="password">
-          <a-form-item label="Текущий пароль" :errors="errors">
+          <a-form-item label="Текущий пароль" :errors="errors" label-col="4" label-align="left" input-col="4">
             <a-input type="password" v-model="password" placeholder="Введите действующий пароль"/>
           </a-form-item>
         </ValidationProvider>
 
         <ValidationProvider v-slot="{errors}" rules="required" name="newPassword">
-          <a-form-item label="Новый пароль" :errors="errors">
+          <a-form-item label="Новый пароль" :errors="errors" label-col="4" label-align="left" input-col="4">
             <a-input type="password" v-model="newPassword" placeholder="Введите новый пароль"/>
           </a-form-item>
         </ValidationProvider>
 
         <ValidationProvider v-slot="{errors}" rules="required" name="confirmPassword">
-          <a-form-item label="Подтвердите пароль" :errors="errors">
+          <a-form-item label="Подтвердите пароль" :errors="errors" label-col="4" label-align="left" input-col="4">
             <a-input type="password" v-model="confirmPassword" placeholder="Подвердите новый пароль"/>
           </a-form-item>
         </ValidationProvider>
 
-        <a-form-item>
+        <a-form-item label=" " label-col="4" label-align="left" input-col="4">
           <a-button type="primary" :loading="loading">Изменить пароль</a-button>
         </a-form-item>
       </form>

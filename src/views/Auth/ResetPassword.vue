@@ -9,62 +9,82 @@
           <form @submit.prevent="passes(resetPassword)">
             <div class="card__body">
 
-              <ValidationProvider name="password" rules="required" v-slot="{errors}" class="control" tag="div">
-                <input class="control__password" :type="passwordInputType" v-model="password"
-                       placeholder="Введите пароль">
-                <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
-                <i class="icon-eye-off" v-if="showPassword" @click="showPassword  = false"/>
-                <i class="icon-eye" v-else @click="showPassword  = true"/>
-              </ValidationProvider>
-              <ValidationProvider name="confirmPassword" rules="required" v-slot="{errors}" class="control" tag="div">
-                <input class="control__password" :type="confirmPasswordInputType" v-model="confirmPassword"
-                       placeholder="Подтвердите пароль">
-                <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
-                <i class="icon-eye-off" v-if="showConfirmPassword" @click="showConfirmPassword  = false"/>
-                <i class="icon-eye" v-else @click="showConfirmPassword  = true"/>
-                <ValidationProvider name="token" v-slot="{errors}" tag="div">
-                  <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
-                  <small class="control__desc">Установите новый пароль для дальнешего доступа к личнму кабинету.</small>
-                </ValidationProvider>
+              <ValidationProvider name="password" rules="required" v-slot="{errors}">
+                <a-form-item :errors="errors" input-align="center">
+                  <a-input v-model="password" align="center" placeholder="Введите пароль" type="password">
+                    <template #prefix>
+                      <a-icon type="lock"/>
+                    </template>
+                  </a-input>
+                </a-form-item>
               </ValidationProvider>
 
-            </div>
-            <div class="card__footer">
-              <button class="btn btn-primary btn-block">Сохранить</button>
+              <ValidationProvider name="confirmPassword" rules="required" v-slot="{errors}">
+                <a-form-item :errors="errors" input-align="center">
+                  <a-input v-model="confirmPassword" align="center" placeholder="Повторите пароль" type="password">
+                    <template #prefix>
+                      <a-icon type="lock"/>
+                    </template>
+                  </a-input>
+                  <ValidationProvider name="token" v-slot="{errors}">
+                    <a-form-item :errors="errors" input-align="center" v-if="errors.length"/>
+                  </ValidationProvider>
+                  <template #desc>
+                    Установите новый пароль для дальнешего доступа к личнму кабинету.
+                  </template>
+                </a-form-item>
+              </ValidationProvider>
+
+              <a-form-item :errors="errors" input-align="center">
+                <a-button block>Сохранить</a-button>
+              </a-form-item>
             </div>
           </form>
         </ValidationObserver>
+
         <ValidationObserver ref="form" v-slot="{passes}" :key="2" v-else-if="tokenSent">
           <form @submit.prevent="passes(resetPasswordTokenCheck)">
             <div class="card__body">
               <div class="control">
                 <ValidationProvider name="token" rules="required" v-slot="{errors}">
-                  <input class="control__input" type="text" v-model="token" placeholder="Введите код подтверждения">
-                  <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
-                  <small class="control__desc">На {{ email }} было выслано письмо с кодом подтверждения пароля.</small>
+                  <a-form-item :errors="errors" input-align="center">
+                    <a-input v-model="token" align="center" placeholder="Введите код подтверждения" type="password">
+                      <template #prefix>
+                        <a-icon type="lock"/>
+                      </template>
+                    </a-input>
+                    <template #desc>
+                      На {{ email }} было выслано письмо с кодом подтверждения пароля.
+                    </template>
+                  </a-form-item>
                 </ValidationProvider>
               </div>
             </div>
-            <div class="card__footer">
-              <button class="btn btn-primary btn-block">Далее</button>
-            </div>
+            <a-form-item>
+              <a-button block>Далее</a-button>
+            </a-form-item>
           </form>
         </ValidationObserver>
+
         <ValidationObserver ref="form" v-slot="{passes}" :key="3" v-else>
           <form @submit.prevent="passes(resetPasswordRequest)">
             <div class="card__body">
-              <div class="control">
-                <ValidationProvider name="email" rules="required|email" v-slot="{errors}">
-                  <input class="control__input" type="text" v-model="email" placeholder="Введите email">
-                  <small v-if="errors.length" class="control__error">{{ errors[0] }}</small>
-                  <small class="control__desc">На указанный email будет выслано письмо с инструкциями по сбросу
-                    пароля.</small>
-                </ValidationProvider>
-              </div>
+              <ValidationProvider name="email" rules="required|email" v-slot="{errors}">
+                <a-form-item :errors="errors" input-align="center">
+                  <a-input v-model="email" align="center" placeholder="Введите email" type="text">
+                    <template #prefix>
+                      <a-icon type="mail"/>
+                    </template>
+                  </a-input>
+                  <template #desc>
+                    На указанный email будет выслано письмо с инструкциями по сбросу пароля.
+                  </template>
+                </a-form-item>
+              </ValidationProvider>
             </div>
-            <div class="card__footer">
-              <button class="btn btn-primary btn-block">Выслать сообщение</button>
-            </div>
+            <a-form-item>
+              <a-button block>Выслать сообщение</a-button>
+            </a-form-item>
           </form>
         </ValidationObserver>
       </div>
@@ -73,8 +93,18 @@
 </template>
 
 <script>
+import AInput from '@/components/components/Input/AInput'
+import AFormItem from '@/components/components/Form/AFormItem'
+import AButton from '@/components/components/Button/AButton'
+import AIcon from '@/components/components/Icon/AIcon'
 export default {
   name: 'ResetPassword',
+  components: {
+    AInput,
+    AFormItem,
+    AButton,
+    AIcon
+  },
   data () {
     return {
       email: null,
@@ -171,7 +201,7 @@ export default {
   max-width: 255px;
   min-width: 255px;
   background: var(--white-bg);
-  padding: 24px;
+  padding: 24px 24px 8px 24px;
 
   &__title {
     font-weight: 600;
@@ -192,78 +222,6 @@ export default {
       font-size: 13px;
       font-weight: 500;
       color: var(--primary-color);
-    }
-  }
-
-  .control {
-    position: relative;
-    margin-bottom: 16px;
-
-    &__input {
-      text-align: center;
-      border: 1px solid #d9deee;
-      width: 100%;
-      box-sizing: border-box;
-      padding: 8px 12px;
-      border-radius: var(--input-radius);
-      outline: none;
-      color: var(--gray-color);
-      transition: all .3s;
-
-      &::placeholder {
-        color: var(--font-muted-color);
-      }
-
-      &:focus-within {
-        border: 1px solid var(--primary-color);
-      }
-    }
-
-    &__password {
-      text-align: center;
-      width: 100%;
-      box-sizing: border-box;
-      border: 1px solid #d9deee;
-      padding: 8px 12px;
-      border-radius: var(--input-radius);
-      outline: none;
-      color: var(--gray-color);
-      transition: all .3s;
-
-      &::placeholder {
-        color: var(--font-muted-color);
-      }
-
-      &:focus-within {
-        border: 1px solid var(--primary-color);
-      }
-    }
-
-    i {
-      cursor: pointer;
-      font-size: 15px;
-      color: #9b9b9b;
-      position: absolute;
-      top: 8px;
-      right: 8px;
-    }
-
-    &__error {
-      line-height: 1.1;
-      text-align: center;
-      display: block;
-      font-size: 12px;
-      color: var(--red-color);
-      margin-top: 10px;
-    }
-
-    &__desc {
-      text-align: center;
-      display: block;
-      margin-top: 6px;
-      line-height: 1.2;
-      font-size: 12px;
-      color: var(--font-muted-color);
     }
   }
 }
