@@ -33,24 +33,18 @@
         <li class="menu__item" :class="{active:menuShowAdverts}" @click="showAdverts">
           <i class="icon-list"></i>
           <span class="menu__title">Мои объявления</span>
-          <span class="menu__badge">873000</span>
+          <span class="menu__badge">{{ totalAdverts }}</span>
           <i class="icon-chevron-right"></i>
         </li>
         <li class="menu__submenu" :class="{open: menuShowAdverts}">
-          <router-link :to="{name: 'user.adverts'}" class="menu__item">
+          <router-link :to="{name: 'user.adverts', params:{slug: item.slug}}"
+                       class="menu__item"
+                       v-for="(item, index) in advertCategories"
+                       :key="index"
+          >
             <i class="icon-minus"/>
-            <span class="menu__title">Легковые авто</span>
-            <span class="menu__badge">5</span>
-          </router-link>
-          <router-link :to="{name: 'user.security'}" class="menu__item">
-            <i class="icon-minus"/>
-            <span class="menu__title">Легковые запчасти</span>
-            <span class="menu__badge">5</span>
-          </router-link>
-          <router-link :to="{name: 'user.notification'}" class="menu__item">
-            <i class="icon-minus"/>
-            <span class="menu__title">Диски</span>
-            <span class="menu__badge">5</span>
+            <span class="menu__title">{{ item.title }}</span>
+            <span class="menu__badge">{{ item.total }}</span>
           </router-link>
         </li>
 
@@ -143,6 +137,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'User',
   data () {
@@ -154,24 +149,45 @@ export default {
       menuShowOther: false,
       menuShowBalance: false,
       data: [
-        { id: 1, title: 'РБ' },
-        { id: 2, title: 'РФ' },
-        { id: 3, title: 'БУ' },
-        { id: 4, title: 'РБ' },
-        { id: 5, title: 'РБ' },
-        { id: 7, title: 'РБ' }
+        {
+          id: 1,
+          title: 'РБ'
+        },
+        {
+          id: 2,
+          title: 'РФ'
+        },
+        {
+          id: 3,
+          title: 'БУ'
+        },
+        {
+          id: 4,
+          title: 'РБ'
+        },
+        {
+          id: 5,
+          title: 'РБ'
+        },
+        {
+          id: 7,
+          title: 'РБ'
+        }
       ]
     }
   },
   computed: {
-    ...mapGetters('profile', ['profile', 'formattedPhone']),
+    ...mapGetters('profile', ['profile', 'formattedPhone', 'advertCategories', 'totalAdverts']),
     avaSrc () {
       // eslint-disable-next-line quotes
       return `background-image: url(${this.$config.host}${this.profile.photo})`
     }
   },
   methods: {
-    ...mapActions('profile', { fetchProfile: 'profile' }),
+    ...mapActions('profile', {
+      fetchProfile: 'profile',
+      fetchAdvertCategories: 'advertCategories'
+    }),
     showAdverts () {
       this.menuShowAdverts = !this.menuShowAdverts
       this.menuShowFavorite = false
@@ -216,6 +232,7 @@ export default {
     if (this.$route.path.indexOf('/user/other') >= 0) this.showOther()
 
     this.fetchProfile()
+    this.fetchAdvertCategories()
   }
 }
 </script>
@@ -224,6 +241,7 @@ export default {
 .user {
   display: flex;
   box-sizing: border-box;
+  align-items: flex-start;
   margin: 0 auto;
   max-width: 1200px;
   padding: 24px;
@@ -236,6 +254,8 @@ export default {
     background: var(--white-bg);
     margin-right: 24px;
     padding: 24px;
+    position: sticky;
+    top: 15px;
   }
 
   &__body {

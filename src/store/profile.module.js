@@ -23,12 +23,20 @@ const profile = {
         region: null,
         country: null
       }
-    }
+    },
+    favoriteCategories: [],
+    advertCategories: []
   },
 
   getters: {
     profile (state) {
       return state.profile
+    },
+    advertCategories (state) {
+      return state.advertCategories
+    },
+    totalAdverts (state) {
+      return state.advertCategories.reduce((a, b) => a + b.total, 0)
     },
     formattedPhone (state) {
       if ([null, ''].includes(state.profile.phone)) return 'не указан'
@@ -66,6 +74,9 @@ const profile = {
   mutations: {
     profile (state, payload) {
       state.profile = payload
+    },
+    advertCategories (state, payload) {
+      state.advertCategories = payload
     },
     changePhone (state, payload) {
       state.profile.phone = payload
@@ -111,6 +122,15 @@ const profile = {
             reject(response)
           })
       })
+    },
+    advertCategories ({ commit }) {
+      axios.get(`${config.host}/api/user/categories_with_user_ads`)
+        .then(res => {
+          commit('advertCategories', res.data)
+        })
+        .catch(res => {
+
+        })
     }
   }
 }

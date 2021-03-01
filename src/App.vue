@@ -77,7 +77,9 @@ body {
   width: 5px;
   background-color: #F5F5F5;
 }
-
+::-webkit-scrollbar {
+  display: none;
+}
 .scrollbar::-webkit-scrollbar-thumb {
   background: var(--primary-color);
 }

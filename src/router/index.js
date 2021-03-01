@@ -37,9 +37,10 @@ const routes = [
     },
     children: [
       {
-        path: 'adverts/:slug?',
+        path: 'adverts/:slug',
         name: 'user.adverts',
         component: () => import('@/views/User/Advert/Advert'),
+        props: (route) => ({ slug: route.params.slug }),
         meta: {
           guards: ['auth']
         }
