@@ -7,7 +7,9 @@ import * as rules from 'vee-validate/dist/rules'
 import services from './service/services'
 import { message } from 'ant-design-vue'
 import store from './store'
+import VueFrappe from 'vue2-frappe'
 
+Vue.use(VueFrappe)
 // Configuration global plugins
 Vue.prototype.$http = axios
 Vue.prototype.$config = config

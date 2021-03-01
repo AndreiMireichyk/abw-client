@@ -1,5 +1,5 @@
 <template>
-  <a-dropdown class="a-select" @onToggleList="onToggleList">
+  <a-dropdown :class="selectClass" @onToggleList="onToggleList">
 
     <template #default>
       <div class="a-select-affix-wrapper">
@@ -88,10 +88,12 @@ export default {
       }
     },
     selectClass () {
-      return `a-select ${this.inputSizeClass}`
+      return `a-select ${this.selectSizeClass}`
     },
-    inputSizeClass () {
+    selectSizeClass () {
       switch (this.size) {
+        case 'xsmall':
+          return 'a-select-xs'
         case 'small':
           return 'a-select-sm'
         case 'large':
@@ -217,6 +219,11 @@ export default {
   &:focus {
     border: 1px solid var(--primary-color);
     background-color: #f6f6f6;
+  }
+
+  &-xs input{
+    padding: 3px 6px;
+    border-radius: var(--input-sm-radius);
   }
 
   &-sm {

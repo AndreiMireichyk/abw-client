@@ -1,9 +1,11 @@
 <template>
   <div class="page">
     <div class="page__head">
-      <div class="page__title">
-        <slot name="title"></slot>
-      </div>
+      <slot name="head">
+        <div class="page__title">
+          <slot name="title"></slot>
+        </div>
+      </slot>
     </div>
     <div class="page__body">
       <slot name="body"></slot>

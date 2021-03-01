@@ -1,87 +1,101 @@
 <template>
-  <div class="advert">
+  <div class="item">
+    <div class="advert">
+      <div class="advert__cover">
+        <cover-viewer :images="item.images"/>
+      </div>
+      <div class="advert__info">
+        <router-link :to="{name: 'ad-detail', params:{slug: slug, id: item.id}}" target="_blank"
+                     class="advert__stretch-link"/>
+        <div class="advert__left">
+          <div>
+            <div class="advert__title">
+              {{ item.properties.car_marka }}
+              {{ item.properties.car_model }}
+              {{ item.properties.car_generation }}
+            </div>
+            <div class="advert__location">
+              {{ item.location.country }},
+              {{ item.location.city }}
+            </div>
+          </div>
+          <div class="advert__properties">
+            {{ item.properties.car_engine_volume }}л.,
+            {{ item.properties.year }}г.,
+            {{ item.properties.car_engine }},
+            {{ item.properties.car_transmission }}
+          </div>
+          <div class="advert__description">
+            {{ item.description }}
+          </div>
+          <div class="advert__tags">
+            <div class="advert__tag success">
+              VIN +
+            </div>
+            <div class="advert__tag warning">
+              обмен
+            </div>
+            <div class="advert__tag danger">
+              аварийный
+            </div>
+          </div>
 
-    <div class="advert__cover">
-      <cover-viewer :images="item.images"/>
+        </div>
+        <div class="advert__right">
+          <div class="advert__actions">
+
+            <div class="advert__action">
+              <a-button type="default" size="small">
+                <a-icon type="edit"/>
+              </a-button>
+            </div>
+            <div class="advert__action">
+              <a-button type="default" size="small" @click.native="showStat = !showStat">
+                <a-icon type="activity"/>
+                117/12
+              </a-button>
+            </div>
+            <div class="advert__action">
+              <a-button type="default" size="small">
+                <a-icon type="trash"/>
+              </a-button>
+            </div>
+          </div>
+          <div class="advert__at">
+            {{ 'created_at' in item ? item.created_at : null }}
+          </div>
+          <div class="advert__price-list">
+
+            <div class="advert__price second">
+              ≈ {{ formatPrice('usd' in item.price ? item.price.usd : null) }}
+              <span class="advert__currency">usd</span>
+            </div>
+            <div class="advert__price second">
+              ≈ {{ formatPrice(item.price.eur) }}
+              <span class="advert__currency">eur</span>
+            </div>
+            <div class="advert__price second">
+              ≈ {{ formatPrice(item.price.rub) }}
+              <span class="advert__currency">rub</span>
+            </div>
+
+            <div class="advert__price base">
+              {{ formatPrice(item.price.byn) }}
+              <span class="advert__currency">byn</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="advert__info">
-      <router-link :to="{name: 'ad-detail', params:{slug: slug, id: item.id}}" target="_blank"
-                   class="advert__stretch-link"/>
-      <div class="advert__left">
-        <div>
-          <div class="advert__title">
-            {{ item.properties.car_marka }}
-            {{ item.properties.car_model }}
-            {{ item.properties.car_generation }}
-          </div>
-          <div class="advert__location">
-            {{ item.location.country }},
-            {{ item.location.city }}
-          </div>
-        </div>
-        <div class="advert__properties">
-          {{ item.properties.car_engine_volume }}л.,
-          {{ item.properties.year }}г.,
-          {{ item.properties.car_engine }},
-          {{ item.properties.car_transmission }}
-        </div>
-        <div class="advert__description">
-          {{ item.description }}
-        </div>
-        <div class="advert__tags">
-          <div class="advert__tag success">
-            VIN +
-          </div>
-          <div class="advert__tag warning">
-            обмен
-          </div>
-          <div class="advert__tag danger">
-            аварийный
-          </div>
-        </div>
-      </div>
-      <div class="advert__right">
-        <div class="advert__at">
-          {{ 'created_at' in item ? item.created_at : null }}
-        </div>
-        <div class="advert__price-list">
-          <div class="advert__price second">
-            ≈ {{ formatPrice('usd' in item.price ? item.price.usd : null) }}
-            <span class="advert__currency">usd</span>
-
-            ≈ {{ formatPrice(item.price.eur) }}
-            <span class="advert__currency">eur</span>
-          </div>
-          <div class="advert__price second">
-            ≈ {{ formatPrice(item.price.rub) }}
-            <span class="advert__currency">rub</span>
-          </div>
-          <div class="advert__price base">
-            {{ formatPrice(item.price.byn) }}
-            <span class="advert__currency">byn</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="advert__actions">
-
-        <a-dropdown>
-          <template>
-            <a-icon type="more-vertical"/>
-          </template>
-          <template #list>
-            <a-icon type="more-vertical"/>
-          </template>
-        </a-dropdown>
-      </div>
-    </div>
+    <item-stat v-if="showStat"  :item="item" :key="item.id"/>
   </div>
 </template>
 
 <script>
 import CoverViewer from '@/components/Classified/Listing/Item/CoverViewer'
 import AIcon from '@/components/components/Icon/AIcon'
-import ADropdown from '@/components/components/Dropdown/ADropdown'
+import AButton from '@/components/components/Button/AButton'
+import ItemStat from '@/components/Classified/Listing/ItemStat'
 
 export default {
   name: 'Item',
@@ -89,7 +103,13 @@ export default {
   components: {
     CoverViewer,
     AIcon,
-    ADropdown
+    AButton,
+    ItemStat
+  },
+  data () {
+    return {
+      showStat: false
+    }
   },
   methods: {
     formatPrice (val) {
@@ -233,9 +253,14 @@ export default {
     height: 100%;
   }
 
-  &__actions{
+  &__actions {
     position: relative;
     z-index: 2;
+    display: flex;
+  }
+
+  &__action {
+    margin-left: 6px;
   }
 }
 </style>

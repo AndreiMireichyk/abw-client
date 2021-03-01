@@ -167,6 +167,11 @@ export default {
     background: var(--white-color);
     color: var(--gray-color);
     border-color: var(--light-gray-color);
+
+    &:hover{
+      color: var(--primary-color);
+      background: #f1f1f1;
+    }
   }
 
   &-primary {

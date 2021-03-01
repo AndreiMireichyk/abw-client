@@ -7,6 +7,9 @@
       <div class="wrap">
         <item-base :item="item" :slug="slug" v-for="(item, index) in items" :key="index"/>
       </div>
+      <div class="pagination">
+        <pagination :pagination="pagination"/>
+      </div>
     </template>
   </page-content>
 </template>
@@ -15,13 +18,15 @@
 
 import PageContent from '@/components/User/Profile/PageContent'
 import ItemBase from '@/components/Classified/Listing/ItemBase'
+import Pagination from '@/components/Classified/Listing/Pagination'
 
 export default {
   props: ['slug'],
   name: 'Advert',
   components: {
     PageContent,
-    ItemBase
+    ItemBase,
+    Pagination
   },
   data () {
     return {
@@ -68,5 +73,8 @@ export default {
 .wrap {
   margin: -24px;
   background: #eff2f3;
+}
+.pagination{
+
 }
 </style>
