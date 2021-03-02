@@ -35,8 +35,14 @@ const profile = {
     advertCategories (state) {
       return state.advertCategories
     },
+    favoriteCategories (state) {
+      return state.favoriteCategories
+    },
     totalAdverts (state) {
       return state.advertCategories.reduce((a, b) => a + b.total, 0)
+    },
+    totalFavorites (state) {
+      return state.favoriteCategories.reduce((a, b) => a + b.total, 0)
     },
     formattedPhone (state) {
       if ([null, ''].includes(state.profile.phone)) return 'не указан'
@@ -77,6 +83,9 @@ const profile = {
     },
     advertCategories (state, payload) {
       state.advertCategories = payload
+    },
+    favoriteCategories (state, payload) {
+      state.favoriteCategories = payload
     },
     changePhone (state, payload) {
       state.profile.phone = payload
@@ -127,6 +136,15 @@ const profile = {
       axios.get(`${config.host}/api/user/categories_with_user_ads`)
         .then(res => {
           commit('advertCategories', res.data)
+        })
+        .catch(res => {
+
+        })
+    },
+    favoriteCategories ({ commit }) {
+      axios.get(`${config.host}/api/user/categories_with_user_favorite_ads`)
+        .then(res => {
+          commit('favoriteCategories', res.data)
         })
         .catch(res => {
 

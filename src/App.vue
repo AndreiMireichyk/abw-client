@@ -5,13 +5,14 @@
 
     <router-view class="content"/>
 
+    <a-up/>
   </div>
 </template>
 <script>
 import Header from '@/components/Layout/Header'
-
+import AUp from '@/components/components/Up/AUp'
 export default {
-  components: { Header }
+  components: { Header, AUp }
 }
 </script>
 <style lang="scss">

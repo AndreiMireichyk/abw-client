@@ -46,9 +46,10 @@ const routes = [
         }
       },
       {
-        path: 'favorite/:slug?',
-        name: 'user.adverts',
-        component: () => import('@/views/User/Advert/Advert'),
+        path: 'favorites/:slug?',
+        name: 'user.favorites',
+        component: () => import('@/views/User/Favorite/Favorite'),
+        props: (route) => ({ slug: route.params.slug }),
         meta: {
           guards: ['auth']
         }

@@ -30,7 +30,7 @@
       </ul>
 
       <ul class="aside__menu menu">
-        <li class="menu__item" :class="{active:menuShowAdverts}" @click="showAdverts">
+        <li class="menu__item" :class="{active:menuShowAdverts}" @click="showAdverts" v-if="totalAdverts">
           <i class="icon-list"></i>
           <span class="menu__title">Мои объявления</span>
           <span class="menu__badge">{{ totalAdverts }}</span>
@@ -48,27 +48,21 @@
           </router-link>
         </li>
 
-        <li class="menu__item" :class="{active:menuShowFavorite}" @click="showFavorites">
+        <li class="menu__item" :class="{active:menuShowFavorite}" @click="showFavorites" v-if="totalFavorites">
           <i class="icon-bookmark"/>
           <span class="menu__title">Избранное</span>
-          <span class="menu__badge">15</span>
+          <span class="menu__badge">{{totalFavorites}}</span>
           <i class="icon-chevron-right"></i>
         </li>
         <li class="menu__submenu" :class="{open: menuShowFavorite}">
-          <router-link :to="{name: 'user.personal'}" class="menu__item">
+          <router-link :to="{name: 'user.favorites', params:{slug: item.slug}}"
+                       class="menu__item"
+                       v-for="(item, index) in favoriteCategories"
+                       :key="index"
+          >
             <i class="icon-minus"/>
-            <span class="menu__title">Легковые авто</span>
-            <span class="menu__badge">5</span>
-          </router-link>
-          <router-link :to="{name: 'user.security'}" class="menu__item">
-            <i class="icon-minus"/>
-            <span class="menu__title">Легковые запчасти</span>
-            <span class="menu__badge">5</span>
-          </router-link>
-          <router-link :to="{name: 'user.notification'}" class="menu__item">
-            <i class="icon-minus"/>
-            <span class="menu__title">Диски</span>
-            <span class="menu__badge">5</span>
+            <span class="menu__title">{{ item.title }}</span>
+            <span class="menu__badge">{{ item.total }}</span>
           </router-link>
         </li>
 
@@ -177,7 +171,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('profile', ['profile', 'formattedPhone', 'advertCategories', 'totalAdverts']),
+    ...mapGetters('profile', ['profile', 'formattedPhone', 'advertCategories', 'favoriteCategories', 'totalAdverts', 'totalFavorites']),
     avaSrc () {
       // eslint-disable-next-line quotes
       return `background-image: url(${this.$config.host}${this.profile.photo})`
@@ -186,7 +180,8 @@ export default {
   methods: {
     ...mapActions('profile', {
       fetchProfile: 'profile',
-      fetchAdvertCategories: 'advertCategories'
+      fetchAdvertCategories: 'advertCategories',
+      fetchFavoriteCategories: 'favoriteCategories'
     }),
     showAdverts () {
       this.menuShowAdverts = !this.menuShowAdverts
@@ -233,6 +228,7 @@ export default {
 
     this.fetchProfile()
     this.fetchAdvertCategories()
+    this.fetchFavoriteCategories()
   }
 }
 </script>
