@@ -43,7 +43,6 @@
         </div>
         <div class="advert__right">
           <div class="advert__actions">
-
             <div class="advert__action">
               <a-button type="default" size="small">
                 <a-icon type="edit"/>
@@ -51,8 +50,8 @@
             </div>
             <div class="advert__action">
               <a-button type="default" size="small" @click.native="showStat = !showStat">
-                <a-icon type="activity"/>
-                117/12
+                <a-icon type="activity" style="margin-right: 4px"/>
+                {{item.views.detail}}/{{item.views.phone}}
               </a-button>
             </div>
             <div class="advert__action">
@@ -87,7 +86,7 @@
         </div>
       </div>
     </div>
-    <item-stat v-if="showStat"  :item="item" :key="item.id"/>
+    <item-stats v-if="showStat"  :item="item" :key="item.id"/>
   </div>
 </template>
 
@@ -95,7 +94,7 @@
 import CoverViewer from '@/components/Classified/Listing/Item/CoverViewer'
 import AIcon from '@/components/components/Icon/AIcon'
 import AButton from '@/components/components/Button/AButton'
-import ItemStat from '@/components/Classified/Listing/ItemStat'
+import ItemStats from '@/components/Classified/Listing/ItemStats'
 
 export default {
   name: 'Item',
@@ -104,7 +103,7 @@ export default {
     CoverViewer,
     AIcon,
     AButton,
-    ItemStat
+    ItemStats
   },
   data () {
     return {

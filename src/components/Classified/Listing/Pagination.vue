@@ -33,7 +33,6 @@ export default {
   display: flex;
   align-items: center;
   background: rgba(255, 255, 255, .7);
-  padding: 16px;
 
   &__btn {
     font-weight: 500;

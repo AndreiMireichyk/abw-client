@@ -261,7 +261,7 @@ export default {
   &__body {
     background: var(--white-bg);
     flex-grow: 1;
-    padding: 24px;
+    align-self: stretch;
   }
 
   .aside {

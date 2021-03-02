@@ -1,14 +1,21 @@
 <template>
   <div class="page">
     <div class="page__head">
-      <slot name="head">
-        <div class="page__title">
-          <slot name="title"></slot>
-        </div>
+      <div class="page__title">
+        <slot name="title"></slot>
+      </div>
+      <slot name="sort">
+
       </slot>
     </div>
-    <div class="page__body">
+    <div class="page__body" v-if="hasBodySlot">
       <slot name="body"></slot>
+    </div>
+    <div class="page__body full" v-if="hasFullBodySlot">
+      <slot name="fullBody"></slot>
+    </div>
+    <div class="page__pagination" v-if="hasPaginationSlot">
+      <slot name="pagination"></slot>
     </div>
     <div class="page__footer" v-if="hasFooterSlot">
       <slot name="footer"></slot>
@@ -20,8 +27,17 @@
 export default {
   name: 'PageContent',
   computed: {
+    hasBodySlot () {
+      return this.$slots.body
+    },
+    hasFullBodySlot () {
+      return this.$slots.fullBody
+    },
     hasFooterSlot () {
       return this.$slots.footer
+    },
+    hasPaginationSlot () {
+      return this.$slots.pagination
     }
   }
 }
@@ -32,10 +48,22 @@ export default {
   &__head {
     display: flex;
     align-items: center;
-    padding: 0 24px 24px 24px;
-    margin: 0 -24px;
+    padding: 24px;
     border-bottom: 1px solid #EBEDF3;
-    margin-bottom: 24px;
+
+  }
+
+  &__body {
+    padding: 24px;
+    box-sizing: border-box;
+
+    &.full {
+      padding: 0;
+    }
+  }
+
+  &__pagination {
+    padding: 16px;
   }
 
   &__footer {
@@ -43,7 +71,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    margin: 0 -24px -24px -24px;
     border-top: 1px solid #EBEDF3;
     padding: 16px 24px;
 
@@ -54,8 +81,9 @@ export default {
 
   &__title {
     flex-grow: 1;
+    color: var(--font-color);
+    font-weight: 500;
     font-size: 18px;
-    font-weight: bold;
   }
 
   &__divider {

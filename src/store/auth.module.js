@@ -33,7 +33,6 @@ const auth = {
         axios.post(`${config.host}/api/auth`, payload)
 
           .then(response => {
-            console.log('log ok', response)
             commit('token', response.data.token)
             axios.defaults.headers.common.Authorization = `Bearer ${response.data.token}`
             router.push('/user')
