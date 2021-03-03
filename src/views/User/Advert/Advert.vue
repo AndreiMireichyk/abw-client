@@ -14,7 +14,7 @@
       </div>
     </template>
     <template #pagination>
-      <div class="pagination">
+      <div class="pagination" v-if="items.length">
         <pagination :pagination="pagination" @nextPage="nextPage"/>
       </div>
     </template>

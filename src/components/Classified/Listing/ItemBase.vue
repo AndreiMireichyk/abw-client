@@ -2,10 +2,24 @@
   <div class="item">
     <div class="advert">
       <div class="advert__cover">
+        <div class="advert__favorite">
+          <a href="javascript:void(0)" @click="favorite" :class="{active: hasFavorite}" class="advert__favorite-btn"/>
+        </div>
+        <div class="advert__share">
+          <a-dropdown>
+            <a href="javascript:void(0)" class="advert__share-btn"/>
+            <template #list>
+              <div>1</div>
+              <div>2</div>
+              <div>3</div>
+              <div>4</div>
+            </template>
+          </a-dropdown>
+        </div>
         <cover-viewer :images="item.images"/>
       </div>
       <div class="advert__info">
-        <router-link :to="{name: 'ad-detail', params:{slug: slug, id: item.id}}" target="_blank"
+        <router-link :to="`/prodaja/${slug}/${item.properties.car_marka}/${item.properties.car_model}/${item.id}`" target="_blank"
                      class="advert__stretch-link"/>
         <div class="advert__left">
           <div>
@@ -42,24 +56,36 @@
 
         </div>
         <div class="advert__right">
-          <div class="advert__actions">
+
+          <div class="advert__actions" v-if="profile.id === item.user_id">
+
             <div class="advert__action">
-              <a-button type="default" size="small">
+              <a href="javascript:void(0)" class="advert__btn">
                 <a-icon type="edit"/>
-              </a-button>
+              </a>
             </div>
+
             <div class="advert__action">
-              <a-button type="default" size="small" @click.native="showStat = !showStat">
+              <a href="javascript:void(0)" class="advert__btn"  @click.prevent="showStat = !showStat">
                 <a-icon type="activity" style="margin-right: 4px"/>
-                {{item.views.detail}}/{{item.views.phone}}
-              </a-button>
+                {{ item.views.detail }}/{{ item.views.phone }}
+              </a>
             </div>
+
             <div class="advert__action">
-              <a-button type="default" size="small">
-                <a-icon type="trash"/>
-              </a-button>
+              <a-dropdown>
+                <a href="javascript:void(0)" class="advert__btn">
+                  <a-icon type="trash"/>
+                </a>
+                <template #list>
+                  <div>Скрыть</div>
+                  <div>Удалить</div>
+                </template>
+              </a-dropdown>
+
             </div>
           </div>
+
           <div class="advert__at">
             {{ 'created_at' in item ? item.created_at : null }}
           </div>
@@ -86,15 +112,16 @@
         </div>
       </div>
     </div>
-    <item-stats v-if="showStat"  :item="item" :key="item.id"/>
+    <item-stats v-if="showStat" :item="item" :key="item.id"/>
   </div>
 </template>
 
 <script>
 import CoverViewer from '@/components/Classified/Listing/Item/CoverViewer'
 import AIcon from '@/components/components/Icon/AIcon'
-import AButton from '@/components/components/Button/AButton'
 import ItemStats from '@/components/Classified/Listing/ItemStats'
+import ADropdown from '@/components/components/Dropdown/ADropdown'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Item',
@@ -102,17 +129,33 @@ export default {
   components: {
     CoverViewer,
     AIcon,
-    AButton,
-    ItemStats
+    ItemStats,
+    ADropdown
   },
   data () {
     return {
       showStat: false
     }
   },
+  computed: {
+    ...mapGetters('profile', ['favoriteIds', 'profile']),
+    hasFavorite () {
+      return this.favoriteIds.includes(this.item.id)
+    }
+  },
   methods: {
+    ...mapActions('profile', ['toggleFavorite']),
     formatPrice (val) {
       return (new Intl.NumberFormat()).format(val)
+    },
+    favorite () {
+      this.toggleFavorite(this.item.id)
+        .then(r => {
+          this.$message.success(r.data.message)
+        })
+        .catch(e => {
+          if ('message' in e.request.data) this.$message.success(e.request.data.message)
+        })
     }
   }
 }
@@ -120,17 +163,100 @@ export default {
 
 <style scoped lang="scss">
 .advert {
-
   display: flex;
-
   background: rgba(255, 255, 255, .7);
   height: 200px;
   margin-bottom: 5px;
 
   &__cover {
+    position: relative;
     min-width: 30%;
     width: 30%;
     height: 200px;
+  }
+
+  &__favorite {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 3;
+  }
+
+  &__share {
+    position: absolute;
+    top: 10px;
+    left: 40px;
+    z-index: 3;
+  }
+
+  &__favorite-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    background: var(--white-color);
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid var(--light-gray-color);
+    color: var(--font-muted-color);
+    transition: all .3s;
+
+    &:hover, &.active {
+      color: var(--white-color);
+      background: var(--primary-color);
+      border: 1px solid var(--primary-color);
+    }
+
+    &:before {
+      font-family: icomoon, serif;
+      font-weight: bold;
+
+      content: "\e924";
+    }
+  }
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    background: var(--white-color);
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid var(--light-gray-color);
+    color: var(--font-muted-color);
+    transition: all .3s;
+
+    &:hover, &.active {
+      color: var(--white-color);
+      background: var(--primary-color);
+      border: 1px solid var(--primary-color);
+    }
+  }
+
+  &__share-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    background: var(--white-color);
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid var(--light-gray-color);
+    color: var(--font-muted-color);
+    transition: all .3s;
+
+    &:hover {
+      color: var(--white-color);
+      background: var(--primary-color);
+    }
+
+    &:before {
+      font-family: icomoon, serif;
+      font-weight: bold;
+
+      content: "\e9d0";
+    }
   }
 
   &__info {

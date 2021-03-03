@@ -18,20 +18,20 @@
           </a>
         </div>
         <div class="dropdown__list" v-if="showUserMenu">
-          <router-link class="dropdown__item" :to="{name: 'user'}">
+          <router-link class="dropdown__item" :to="{name: 'user'}" v-if="totalAdverts">
             <i class="icon-list"></i>
             <span class="dropdown__title">Объявления</span>
-            <i class="dropdown__badge">12</i>
+            <i class="dropdown__badge">{{ totalAdverts }}</i>
           </router-link>
-          <a class="dropdown__item">
+          <router-link class="dropdown__item" :to="{name: 'user'}" v-if="totalFavorites">
             <i class="icon-bookmark"></i>
             <span class="dropdown__title">Избранное</span>
-            <i class="dropdown__badge">2</i>
-          </a>
+            <i class="dropdown__badge">{{ totalFavorites }}</i>
+          </router-link>
           <a class="dropdown__item">
             <i class="icon-credit-card"></i>
             <span class="dropdown__title">Пополнить</span>
-            <i class="dropdown__ie">{{profile.balance}}</i>
+            <i class="dropdown__ie">{{ profile.balance }}</i>
           </a>
           <router-link :to="{name: 'user.personal'}" class="dropdown__item">
             <i class="icon-settings"></i>
@@ -60,12 +60,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('profile', ['profile'])
+    ...mapGetters('profile', ['profile', 'totalAdverts', 'totalFavorites'])
   },
   methods: {
+    ...mapActions('profile', {
+      fetchProfile: 'profile'
+    }),
     ...mapActions('auth', ['logOut'])
   },
   created () {
+    this.fetchProfile()
+
     document.body.addEventListener('click', () => {
       this.showUserMenu = false
       this.showMessageMenu = false
@@ -153,13 +158,10 @@ export default {
     align-items: center;
     justify-content: center;
 
-    height: 10px;
-    width: 10px;
-
     font-size: 9px;
     font-weight: bold;
     padding: 3px 3px !important;
-    border-radius: 50%;
+    border-radius: 3px;
 
     color: var(--white-color);
     background: var(--red-color);

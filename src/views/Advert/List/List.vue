@@ -13,86 +13,8 @@
         </div>
 
         <div class="page__listing">
+<item-base :item="item" :slug="categorySlug" v-for="(item) in items" :key="item.id"/>
 
-          <div class="advert" v-for="(item) in items" :key="item.id">
-
-            <div class="advert__cover">
-              <cover-viewer :images="item.images"/>
-            </div>
-            <div class="advert__info">
-
-              <router-link :to="{name: 'ad-detail', params:{slug: $route.params.slug, id: item.id}}" target="_blank"
-                           class="advert__stretch-link"></router-link>
-              <div class="advert__left">
-                <div>
-                  <div class="advert__title">
-                    {{ item.properties.car_marka }}
-                    {{ item.properties.car_model }}
-                    {{ item.properties.car_generation }}
-                  </div>
-                  <div class="advert__location">
-                    {{ item.location.country }},
-                    {{ item.location.city }}
-                  </div>
-                </div>
-                <div class="advert__properties">
-                  {{ item.properties.car_engine_volume }}л.,
-                  {{ item.properties.year }}г.,
-                  {{ item.properties.car_engine }},
-                  {{ item.properties.car_transmission }}
-
-                </div>
-                <div class="advert__description">
-                  {{ item.description }}
-                </div>
-                <div class="advert__tags">
-                  <div class="advert__tag success">
-                    VIN +
-                  </div>
-                  <div class="advert__tag warning">
-                    обмен
-                  </div>
-                  <div class="advert__tag danger">
-                    аварийный
-                  </div>
-                </div>
-              </div>
-
-              <div class="advert__right">
-                <div class="advert__at">
-                  {{ item.created_at }}
-
-                </div>
-
-                <div class="advert__pricelist">
-                  <div class="advert__price second">
-                    ≈ {{ formatPrice(item.price.usd) }}
-                    <span class="advert__currency">
-                      usd
-                    </span>
-                  </div>
-                  <div class="advert__price second">
-                    ≈ {{ formatPrice(item.price.eur) }}
-                    <span class="advert__currency">
-                      eur
-                    </span>
-                  </div>
-                  <div class="advert__price second">
-                    ≈ {{ formatPrice(item.price.rub) }}
-                    <span class="advert__currency">
-                      rub
-                    </span>
-                  </div>
-                  <div class="advert__price base">
-                    {{ formatPrice(item.price.byn) }}
-                    <span class="advert__currency">
-                      byn
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
         <div class="page__pagination" v-if="pagination">
           <div class="pagination">
@@ -110,17 +32,17 @@
 </template>
 
 <script>
-import CoverViewer from '@/components/Advert/List/CoverViewer'
 import AdvFilter from '@/components/Advert/List/Filter/Filter'
 import SortControl from '@/components/Advert/List/SortControl'
+import ItemBase from '@/components/Classified/Listing/ItemBase'
 
 export default {
   props: ['categorySlug', 'pathParams'],
   name: 'List',
   components: {
-    CoverViewer,
     AdvFilter,
-    SortControl
+    SortControl,
+    ItemBase
   },
   data () {
     return {
@@ -207,7 +129,6 @@ export default {
   padding: 25px;
   max-width: 1200px;
   margin: 0 auto;
-
   min-height: 80vh;
 
   &__title {
@@ -225,7 +146,6 @@ export default {
 
   &__body {
     border-radius: 8px;
-
     flex-grow: 1;
   }
 

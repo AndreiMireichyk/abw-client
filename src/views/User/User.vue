@@ -141,33 +141,7 @@ export default {
       menuShowFavorite: false,
       menuShowSetting: false,
       menuShowOther: false,
-      menuShowBalance: false,
-      data: [
-        {
-          id: 1,
-          title: 'РБ'
-        },
-        {
-          id: 2,
-          title: 'РФ'
-        },
-        {
-          id: 3,
-          title: 'БУ'
-        },
-        {
-          id: 4,
-          title: 'РБ'
-        },
-        {
-          id: 5,
-          title: 'РБ'
-        },
-        {
-          id: 7,
-          title: 'РБ'
-        }
-      ]
+      menuShowBalance: false
     }
   },
   computed: {
@@ -179,9 +153,7 @@ export default {
   },
   methods: {
     ...mapActions('profile', {
-      fetchProfile: 'profile',
-      fetchAdvertCategories: 'advertCategories',
-      fetchFavoriteCategories: 'favoriteCategories'
+      fetchProfile: 'profile'
     }),
     showAdverts () {
       this.menuShowAdverts = !this.menuShowAdverts
@@ -225,10 +197,6 @@ export default {
     if (this.$route.path.indexOf('/user/favorites') >= 0) this.showFavorites()
     if (this.$route.path.indexOf('/user/balance') >= 0) this.showBalance()
     if (this.$route.path.indexOf('/user/other') >= 0) this.showOther()
-
-    this.fetchProfile()
-    this.fetchAdvertCategories()
-    this.fetchFavoriteCategories()
   }
 }
 </script>
@@ -257,7 +225,6 @@ export default {
   &__body {
     background: var(--white-bg);
     flex-grow: 1;
-    align-self: stretch;
   }
 
   .aside {

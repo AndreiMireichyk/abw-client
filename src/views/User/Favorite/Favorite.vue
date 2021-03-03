@@ -21,6 +21,7 @@
 import PageContent from '@/components/User/Profile/PageContent'
 import ItemBase from '@/components/Classified/Listing/ItemBase'
 import Pagination from '@/components/Classified/Listing/Pagination'
+import { mapGetters } from 'vuex'
 
 export default {
   props: ['slug'],
@@ -44,7 +45,14 @@ export default {
     slug () {
       this.items = []
       this.fetch()
+    },
+    favoriteIds () {
+      this.items = []
+      this.fetch()
     }
+  },
+  computed: {
+    ...mapGetters('profile', ['favoriteIds'])
   },
   methods: {
     nextPage () {
@@ -73,6 +81,7 @@ export default {
 .wrap {
   background: #eff2f3;
 }
+
 .sort {
   margin-right: -12px;
 }

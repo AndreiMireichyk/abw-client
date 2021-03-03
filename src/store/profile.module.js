@@ -24,6 +24,7 @@ const profile = {
         country: null
       }
     },
+    favoriteIds: [],
     favoriteCategories: [],
     advertCategories: []
   },
@@ -37,6 +38,9 @@ const profile = {
     },
     favoriteCategories (state) {
       return state.favoriteCategories
+    },
+    favoriteIds (state) {
+      return state.favoriteIds
     },
     totalAdverts (state) {
       return state.advertCategories.reduce((a, b) => a + b.total, 0)
@@ -87,6 +91,9 @@ const profile = {
     favoriteCategories (state, payload) {
       state.favoriteCategories = payload
     },
+    favoriteIds (state, payload) {
+      state.favoriteIds = payload
+    },
     changePhone (state, payload) {
       state.profile.phone = payload
     },
@@ -105,16 +112,19 @@ const profile = {
     setPhoto (state, payload) {
       state.profile.photo = payload
     },
-    removePhoto (state, index) {
+    removePhoto (state) {
       state.profile.photo = null
     }
   },
 
   actions: {
-    profile ({ commit }) {
+    profile ({ commit, dispatch }) {
       axios.get(`${config.host}/api/user/profile`)
         .then(res => {
           commit('profile', res.data)
+          dispatch('advertCategories')
+          dispatch('favoriteCategories')
+          dispatch('favoriteIds')
         })
         .catch(res => {
 
@@ -149,6 +159,28 @@ const profile = {
         .catch(res => {
 
         })
+    },
+    favoriteIds ({ commit }) {
+      axios.get(`${config.host}/api/user/favorites/ids`)
+        .then(res => {
+          commit('favoriteIds', res.data)
+        })
+        .catch(res => {
+
+        })
+    },
+    toggleFavorite ({ commit, dispatch }, id) {
+      return new Promise((resolve, reject) => {
+        axios.get(`${config.host}/api/user/favorites/toggle/${id}`)
+          .then(response => {
+            dispatch('favoriteCategories')
+            dispatch('favoriteIds')
+            resolve(response)
+          })
+          .catch(response => {
+            reject(response)
+          })
+      })
     }
   }
 }

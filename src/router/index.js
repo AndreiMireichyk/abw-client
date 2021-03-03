@@ -118,10 +118,10 @@ const routes = [
     }
   },
   {
-    path: '/:slug/:location?/prodaja/:id',
+    path: '/prodaja/:slug/:params*/:id',
     name: 'ad-detail',
-    props: (route) => ({ location: route.params.location || 'belarus' }),
-    component: () => import('@/views/Advert/List/List')
+    props: (route) => ({ id: route.params.id }),
+    component: () => import('@/views/Classified/Detail/Detail')
   }
 ]
 
