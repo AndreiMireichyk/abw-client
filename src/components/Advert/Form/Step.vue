@@ -1,5 +1,6 @@
 <template>
   <div class="step">
+<div @click="$emit('onComplete', stepIndex, false)">test</div>
     <ValidationObserver v-slot="{ handleSubmit  }" ref="vee">
       <form @submit.prevent="handleSubmit (validate)">
         <div class="step__item" v-for="attribute in step" :key="attribute.id">
@@ -8,12 +9,13 @@
               v-model="attribute.value"
               :is="getComponent(attribute.type)"
               :attribute="attribute"
+              :stepState="stepState"
               :vee="props"
               @input="autoSwitch"
             />
           </ValidationProvider>
         </div>
-        <div class="step__footer" v-if="step.length-1 && stepIndex == currentStep">
+        <div class="step__footer" v-if="step.length-1">
           <button class="step__btn" type="submit">Далее</button>
         </div>
       </form>
@@ -64,7 +66,11 @@ export default {
           return 'IntegerControl'
       }
     },
-    autoSwitch () {
+    autoSwitch (value) {
+      if (value === null) {
+        this.$emit('onComplete', this.stepIndex, false)
+        return
+      }
       if (this.step.length === 1) {
         this.validate()
       }
@@ -73,10 +79,7 @@ export default {
       setTimeout(() => {
         this.$refs.vee.validate().then(success => {
           this.valid = success
-          this.$emit('state', {
-            index: parseInt(this.stepIndex),
-            valid: success
-          })
+          this.$emit('onComplete', this.stepIndex, true)
         })
       }, 100)
     }

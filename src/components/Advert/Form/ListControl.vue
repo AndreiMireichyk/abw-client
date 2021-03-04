@@ -5,7 +5,7 @@
         <div class="control__title">{{ attribute.label }}</div>
         <div class="control__value" v-if="attribute.value" @click="clearValue">{{ selectedOption.title }}</div>
       </div>
-      <div v-if="!attribute.value">
+      <div v-if="!stepState.complete">
         <ul class="control__list" v-if="filteredOptions.length">
           <li class="control__item" :class="itemClassCol" v-for="option in filteredOptions" :key="option.id">
             <label class="control__label">
@@ -38,7 +38,7 @@
 
 <script>
 export default {
-  props: ['attribute', 'vee'],
+  props: ['attribute', 'vee', 'stepState'],
   name: 'ListInput',
   data () {
     return {

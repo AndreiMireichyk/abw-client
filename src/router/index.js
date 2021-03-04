@@ -104,7 +104,7 @@ const routes = [
   {
     path: '/advert/add/:slug',
     name: 'ad-form',
-    component: () => import('@/views/Advert/Create/Form')
+    component: () => import('@/views/Classified/Create/Create')
   },
   {
     path: '/:slug/prodaja/:params*',
