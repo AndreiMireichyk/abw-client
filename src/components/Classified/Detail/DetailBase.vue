@@ -79,17 +79,72 @@
           <detail-cover :images="data.images"/>
         </div>
       </div>
-      <div class="detail__description description">
+      <div class="detail__description description" v-if="data.description">
         <h2 class="description__title">Комментарий продавца</h2>
-        <div class="description__text" v-html="data.description"> </div>
+        <div class="description__text" v-html="data.description"></div>
       </div>
-      <div class="detail__description description">
-        <h2 class="description__title">Дополнительные параметры</h2>
-        <div class="description__text" v-html="data.description"> </div>
+
+      <div class="detail__extended">
+        <h2 class="detail__extended-title">
+          Комлектация
+        </h2>
+        <div class="detail__extended-item extend" v-if="data.properties.car_multimedia">
+          <h2 class="extend__title">Мультимедия</h2>
+          <div class="extend__list">
+            <div class="extend__item" v-for="(item, index) in data.properties.car_multimedia" :key="index">
+              {{ item }}
+            </div>
+          </div>
+        </div>
+        <div class="detail__extended-item extend" v-if="data.properties.car_comfort">
+          <h2 class="extend__title">Комфорт</h2>
+          <div class="extend__list">
+            <div class="extend__item" v-for="(item, index) in data.properties.car_comfort" :key="index">
+              {{ item }}
+            </div>
+          </div>
+        </div>
+        <div class="detail__extended-item extend" v-if="data.properties.car_safety">
+          <h2 class="extend__title">Безопасность</h2>
+          <div class="extend__list">
+            <div class="extend__item" v-for="(item, index) in data.properties.car_safety" :key="index">
+              {{ item }}
+            </div>
+          </div>
+        </div>
+        <div class="detail__extended-item extend" v-if="data.properties.car_overview">
+          <h2 class="extend__title">Оптика, свет, обзор</h2>
+          <div class="extend__list">
+            <div class="extend__item" v-for="(item, index) in data.properties.car_overview" :key="index">
+              {{ item }}
+            </div>
+          </div>
+        </div>
+        <div class="detail__extended-item extend" v-if="data.properties.car_exterior">
+          <h2 class="extend__title">Элементы экстерьера</h2>
+          <div class="extend__list">
+            <div class="extend__item" v-for="(item, index) in data.properties.car_exterior" :key="index">
+              {{ item }}
+            </div>
+          </div>
+        </div>
+        <div class="detail__extended-item extend" v-if="data.properties.car_interior">
+          <h2 class="extend__title">Салон, интерьер</h2>
+          <div class="extend__list">
+            <div class="extend__item" v-for="(item, index) in data.properties.car_interior" :key="index">
+              {{ item }}
+            </div>
+          </div>
+        </div>
+        <div class="detail__extended-item extend" v-if="data.properties.car_security">
+          <h2 class="extend__title">Защита от угона</h2>
+          <div class="extend__list">
+            <div class="extend__item" v-for="(item, index) in data.properties.car_security" :key="index">
+              {{ item }}
+            </div>
+          </div>
+        </div>
       </div>
-      <pre>
-  {{ data }}
-</pre>
     </div>
   </div>
 </template>
@@ -171,7 +226,29 @@ export default {
     padding: 24px;
   }
 
-  &__actions{
+  &__extended {
+    padding: 0 24px 24px 24px;
+  }
+
+  &__extended-item {
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--light-gray-color);
+
+    &:last-child{
+      margin-bottom: 0;
+      border: none;
+    }
+  }
+
+  &__extended-title {
+    font-size: 24px;
+    font-weight: bold;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--light-gray-color);
+  }
+
+  &__actions {
     margin: 0 -24px -12px -24px;
   }
 
@@ -213,6 +290,38 @@ export default {
     }
   }
 
+  .extend {
+    &__title {
+      font-size: 18px;
+      margin-bottom: 16px;
+      color: var(--font-color);
+    }
+
+    &__list {
+      display: flex;
+      align-items: start;
+      flex-wrap: wrap;
+    }
+
+    &__item {
+      display: flex;
+      width: 33.333%;
+      box-sizing: border-box;
+      padding: 0 16px 16px 0;
+      line-height: 1.15;
+
+      &:before {
+        display: block;
+
+        padding-right: 6px;
+        font-family: icomoon, serif;
+        content: "\e92c";
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+    }
+  }
+
   .actions {
     display: flex;
     align-items: center;
@@ -228,10 +337,11 @@ export default {
       padding: 12px;
     }
 
-    &__call{
+    &__call {
       background: var(--success-color);
     }
-    &__message{
+
+    &__message {
       background: var(--primary-color);
     }
   }

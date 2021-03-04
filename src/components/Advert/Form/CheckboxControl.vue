@@ -8,11 +8,8 @@
     <div>
       <ul class="control__list" v-if="attribute.options.length">
         <li class="control__item" v-for="option in attribute.options" :key="option.id">
-          <input :id="`${attribute.id + option.id}`" v-model="attribute.value" class="control__input" type="checkbox"
-                 :value="option.id">
-          <label class="control__label" :for="`${attribute.id + option.id}`"> {{ option.title }}{{
-              attribute.postfix
-            }} </label>
+          <input :id="`${attribute.id + option.id}`" v-model="attribute.value" class="control__input" type="checkbox" :value="option.id">
+          <label class="control__label" :for="`${attribute.id + option.id}`"> {{ option.title }}{{ attribute.postfix }} </label>
         </li>
       </ul>
 
@@ -45,7 +42,7 @@ export default {
   },
   methods: {
     update () {
-      // this.$emit('input', this.attribute.value)
+      this.$emit('input', this.attribute.value)
     }
   }
 }

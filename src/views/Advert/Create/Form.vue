@@ -258,6 +258,7 @@ export default {
   }
 
   &__body {
+    max-width: 776px;
     border-radius: 8px;
     background: #ffffff;
     flex-grow: 1;
