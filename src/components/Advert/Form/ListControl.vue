@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <div class="control" v-if="attribute.options.length">
       <div class="control__head">
         <div class="control__title">{{ attribute.label }}</div>

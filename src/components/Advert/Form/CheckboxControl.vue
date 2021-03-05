@@ -4,26 +4,26 @@
       <div class="control__title">{{ attribute.label }}</div>
       <div class="control__value" v-if="attribute.value">{{ selectedOptions }}</div>
     </div>
-
-    <div>
+    <div v-if="!stepState.complete">
       <ul class="control__list" v-if="attribute.options.length">
         <li class="control__item" v-for="option in attribute.options" :key="option.id">
-          <input :id="`${attribute.id + option.id}`" v-model="attribute.value" class="control__input" type="checkbox" :value="option.id">
-          <label class="control__label" :for="`${attribute.id + option.id}`"> {{ option.title }}{{ attribute.postfix }} </label>
+          <input :id="`${attribute.id + option.id}`" v-model="attribute.value" class="control__input" type="checkbox"
+                 :value="option.id">
+          <label class="control__label" :for="`${attribute.id + option.id}`"> {{ option.title }}{{
+              attribute.postfix
+            }} </label>
         </li>
       </ul>
-
       <div class="control__footer">
         <a class="control__btn" type="submit" @click="update">Далее</a>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['attribute', 'vee'],
+  props: ['attribute', 'vee', 'stepState'],
   name: 'CheckboxControl',
   data () {
     return {
@@ -37,7 +37,9 @@ export default {
           return this.attribute.value.includes(item.id)
         })
         .map(item => item.title)
-        .join(', ')
+    },
+    selectedTitle () {
+      return `${this.selectedOptions.join(', ')} (${this.selectedOptions.length})`
     }
   },
   methods: {

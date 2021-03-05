@@ -97,14 +97,25 @@ const routes = [
     ]
   },
   {
-    path: '/advert/add',
+    path: '/kategorii-obyavleniy/dobavit',
     name: 'ad-category',
     component: () => import('@/views/Advert/Create/Categories')
   },
   {
-    path: '/advert/add/:slug',
+    path: '/dobavit/obyavleniye/:slug',
     name: 'ad-form',
     component: () => import('@/views/Classified/Create/Create')
+  },
+  {
+    path: '/izmenit/obyavleniye/:slug/:id',
+    name: 'edit-form',
+    props: (route) => {
+      return {
+        id: route.params.id,
+        slug: route.params.slug
+      }
+    },
+    component: () => import('@/views/Classified/Edit/Edit')
   },
   {
     path: '/:slug/prodaja/:params*',

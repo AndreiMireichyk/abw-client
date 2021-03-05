@@ -1,6 +1,6 @@
 <template>
   <div class="step">
-<div @click="$emit('onComplete', stepIndex, false)">test</div>
+    <a class="step__edit" v-if="stepState.complete" @click="$emit('onComplete', stepIndex, false)"></a>
     <ValidationObserver v-slot="{ handleSubmit  }" ref="vee">
       <form @submit.prevent="handleSubmit (validate)">
         <div class="step__item" v-for="attribute in step" :key="attribute.id">
@@ -47,6 +47,19 @@ export default {
     IntegerControl
   },
   name: 'step',
+  watch: {
+    hasValidState () {
+      return this.hasValidState ? this.$emit('onComplete', this.stepIndex, true) : this.$emit('onComplete', this.stepIndex, false)
+    }
+  },
+  computed: {
+    hasValidState () {
+      return !this.step.filter(x => !x.value).length
+    },
+    hasInvalidState () {
+      return this.step.filter(x => !x.value).length
+    }
+  },
   methods: {
     getComponent (type) {
       switch (type) {
@@ -89,8 +102,18 @@ export default {
 
 <style scoped lang="scss">
 .step {
+  position: relative;
   padding: 14px 24px;
   border-bottom: 1px solid #ebebeb;
+
+  &__edit {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
 
   &__footer {
     display: flex;

@@ -227,7 +227,7 @@ export default {
   }
 
   &__extended {
-    padding: 0 24px 24px 24px;
+    padding: 24px;
   }
 
   &__extended-item {

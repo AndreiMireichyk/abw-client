@@ -19,7 +19,8 @@
         <cover-viewer :images="item.images"/>
       </div>
       <div class="advert__info">
-        <router-link :to="`/prodaja/${slug}/${item.properties.car_marka}/${item.properties.car_model}/${item.id}`" target="_blank"
+        <router-link :to="`/prodaja/${slug}/${item.properties.car_marka}/${item.properties.car_model}/${item.id}`"
+                     target="_blank"
                      class="advert__stretch-link"/>
         <div class="advert__left">
           <div>
@@ -60,13 +61,13 @@
           <div class="advert__actions" v-if="profile.id === item.user_id">
 
             <div class="advert__action">
-              <a href="javascript:void(0)" class="advert__btn">
+              <router-link :to="{name : 'edit-form', params:{slug: slug, id: item.id}}" class="advert__btn">
                 <a-icon type="edit"/>
-              </a>
+              </router-link>
             </div>
 
             <div class="advert__action">
-              <a href="javascript:void(0)" class="advert__btn"  @click.prevent="showStat = !showStat">
+              <a href="javascript:void(0)" class="advert__btn" @click.prevent="showStat = !showStat">
                 <a-icon type="activity" style="margin-right: 4px"/>
                 {{ item.views.detail }}/{{ item.views.phone }}
               </a>
