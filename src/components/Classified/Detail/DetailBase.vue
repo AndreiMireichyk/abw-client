@@ -299,7 +299,7 @@ export default {
 
     &__list {
       display: flex;
-      align-items: start;
+      align-items: flex-start;
       flex-wrap: wrap;
     }
 

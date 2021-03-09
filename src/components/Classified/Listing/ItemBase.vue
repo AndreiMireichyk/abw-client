@@ -383,6 +383,7 @@ export default {
     position: relative;
     z-index: 2;
     display: flex;
+    justify-content: flex-end;
   }
 
   &__action {

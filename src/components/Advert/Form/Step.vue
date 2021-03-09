@@ -4,6 +4,7 @@
     <ValidationObserver v-slot="{ handleSubmit  }" ref="vee">
       <form @submit.prevent="handleSubmit (validate)">
         <div class="step__item" v-for="attribute in step" :key="attribute.id">
+
           <ValidationProvider :name="attribute.label" rules="required" v-slot="props">
             <component
               v-model="attribute.value"
@@ -15,7 +16,7 @@
             />
           </ValidationProvider>
         </div>
-        <div class="step__footer" v-if="step.length-1">
+        <div class="step__footer" v-if="step.length-1 && !stepState.complete">
           <button class="step__btn" type="submit">Далее</button>
         </div>
       </form>

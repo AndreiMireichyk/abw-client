@@ -4,7 +4,7 @@
     <div class="control" v-if="attribute.options.length">
       <div class="control__head">
         <div class="control__title">{{ attribute.label }}</div>
-        <div class="control__value" v-if="attribute.value" @click="clearValue">{{ selectedOption.title }}</div>
+        <div class="control__value" v-if="attribute.value" @click="clearValue">{{ selectedOption.title }}{{ attribute.postfix }}</div>
       </div>
       <div v-if="!stepState.complete">
         <ul class="control__list" v-if="filteredOptions.length">

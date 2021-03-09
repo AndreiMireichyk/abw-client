@@ -2,7 +2,7 @@
   <div class="control">
     <div class="control__head">
       <div class="control__title">{{ attribute.label }}</div>
-      <div class="control__value" v-if="attribute.value">{{ selectedOptions }}</div>
+      <div class="control__value" v-if="attribute.value">{{ selectedTitle }}</div>
     </div>
     <div v-if="!stepState.complete">
       <ul class="control__list" v-if="attribute.options.length">
@@ -39,7 +39,7 @@ export default {
         .map(item => item.title)
     },
     selectedTitle () {
-      return `${this.selectedOptions.join(', ')} (${this.selectedOptions.length})`
+      return this.selectedOptions.join(', ')
     }
   },
   methods: {
@@ -65,6 +65,7 @@ export default {
   &__title {
     font-weight: 500;
     font-size: 18px;
+    white-space: nowrap;
 
     &:after {
       content: ":";

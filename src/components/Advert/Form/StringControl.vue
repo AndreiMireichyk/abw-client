@@ -1,7 +1,7 @@
 <template>
   <div class="control">
     <div class="control__title">{{ attribute.label }}:</div>
-    <input class="control__input" type="text" :placeholder="attribute.placeholder" @input="update"
+    <input class="control__input"  v-model="attribute.value" type="text" :placeholder="attribute.placeholder" @input="update"
            :class="{invalid: vee.errors.length}">
   </div>
 </template>

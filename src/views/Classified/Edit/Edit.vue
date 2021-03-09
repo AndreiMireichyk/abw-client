@@ -3,7 +3,7 @@
 
     <div class="page" v-if="form.length">
 
-      <h1 class="page__title">Добавить объявление</h1>
+      <h1 class="page__title">Изменить объявление #{{id}}</h1>
       <div class="page__content">
         <div class="page__body" @click.ctrl.shift="showLog = !showLog">
 
@@ -152,6 +152,7 @@ export default {
     },
     fields () {
       const fields = {}
+
       this.form
         .filter(item => item.value)
         .map(item => {
