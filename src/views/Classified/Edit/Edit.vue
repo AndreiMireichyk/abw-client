@@ -3,7 +3,7 @@
 
     <div class="page" v-if="form.length">
 
-      <h1 class="page__title">Изменить объявление #{{id}}</h1>
+      <h1 class="page__title">Изменить объявление #{{ id }}</h1>
       <div class="page__content">
         <div class="page__body" @click.ctrl.shift="showLog = !showLog">
 
@@ -31,7 +31,7 @@
           </div>
 
           <div v-show="stepsSuccess  && showOther">
-            <a class="page__btn" @click="store">Сохранить</a>
+            <a class="page__btn" @click="store">Изменить</a>
           </div>
         </div>
         <div class="page__aside">
@@ -58,7 +58,7 @@ export default {
   name: 'Edit',
   props: {
     slug: {
-      type: String,
+      type: [String, Number],
       required: true
     },
     id: {
@@ -74,13 +74,9 @@ export default {
   },
   data () {
     return {
-
-      stepsState: [],
-
       form: [],
-      currentStep: 1,
-      stateSteps: [],
-      showOther: false,
+      stepsState: [],
+      showOther: true,
       notUpdate: false,
       showLog: false,
       contacts: {
@@ -172,7 +168,7 @@ export default {
         country: this.contacts.country,
         region: this.contacts.region,
         city: this.contacts.city,
-        phones: this.contacts.phones.map(item => item.value),
+        phones: this.contacts.phones,
         price: this.description.price,
         currency: this.description.currency,
         description: this.description.text
@@ -209,24 +205,39 @@ export default {
       this.$http.get(`${this.$config.host}/api/adverts/${this.slug}/form/${this.id}`)
         .then(r => {
           this.form = r.data
+          this.setDefault()
         })
         .catch(e => {
           this.$message.error(e)
         })
     },
     store () {
-      this.$http.post(`${this.$config.host}/api/adverts/${this.$route.params.slug}/create`, {
+      this.$http.post(`${this.$config.host}/api/adverts/${this.slug}/update/${this.id}`, {
         params: this.parameters
       })
         .then(r => {
           this.$router.push({
             name: 'ad-cat-list',
-            params: { slug: this.$route.params.slug }
+            params: { slug: this.slug }
           })
         })
         .catch(e => {
-          this.$message.error(e)
+          this.$message.error(e.response.data.message)
         })
+    },
+    setDefault () {
+      this.images = this.attributes.images
+
+      this.contacts.country = this.attributes.country
+      this.contacts.region = this.attributes.region
+      this.contacts.city = this.attributes.city
+      this.contacts.phones = this.attributes.phones
+      this.contacts.name = this.attributes.name
+      this.contacts.email = this.attributes.email
+
+      this.description.price = this.attributes.price
+      this.description.currency = this.attributes.currency
+      this.description.text = this.attributes.description
     },
     async reloadOptions (data) {
       this.notUpdate = true

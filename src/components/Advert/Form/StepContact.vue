@@ -88,7 +88,7 @@
                   <div class="phones__item" v-for="(phone, key) in contacts.phones" :key="key">
                     <div class="phones__input">
                       <ValidationProvider rules="required" v-slot="props">
-                        <vue-tel-input v-model="phone.value"
+                        <vue-tel-input v-model="contacts.phones[key]"
                                        v-bind="bindProps"
                                        @validate="validatePhone"
                                        :class="{invalid:props.errors.length }"
@@ -159,7 +159,7 @@ export default {
       this.$emit('next')
     },
     addPhone () {
-      this.contacts.phones.push({ value: null })
+      this.contacts.phones.push('')
     },
     removePhone (index) {
       this.contacts.phones.splice(index, 1)
@@ -187,7 +187,15 @@ export default {
   },
   created () {
     if (!this.contacts.phones.length) this.addPhone()
+
     this.fetchCountries()
+
+    if (this.contacts.country) {
+      this.fetchRegions()
+    }
+    if (this.contacts.region) {
+      this.fetchCities()
+    }
   }
 }
 </script>
