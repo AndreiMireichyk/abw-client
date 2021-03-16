@@ -99,7 +99,7 @@ const routes = [
   {
     path: '/kategorii-obyavleniy/dobavit',
     name: 'ad-category',
-    component: () => import('@/views/Advert/Create/Categories')
+    component: () => import('@/views/Classified/Categories/Categories')
   },
   {
     path: '/dobavit/obyavleniye/:slug',
@@ -120,7 +120,7 @@ const routes = [
   {
     path: '/:slug/prodaja/:params*',
     name: 'ad-cat-list',
-    component: () => import('@/views/Advert/List/List'),
+    component: () => import('@/views/Classified/List/List'),
     props: (route) => {
       return {
         pathParams: route.params.params,

@@ -2,9 +2,11 @@
   <div class="item">
     <div class="advert">
       <div class="advert__cover">
+
         <div class="advert__favorite">
           <a href="javascript:void(0)" @click="favorite" :class="{active: hasFavorite}" class="advert__favorite-btn"/>
         </div>
+
         <div class="advert__share">
           <a-dropdown>
             <a href="javascript:void(0)" class="advert__share-btn"/>
@@ -15,6 +17,9 @@
               <div>4</div>
             </template>
           </a-dropdown>
+        </div>
+        <div class="advert__share">
+          old# {{item.old_id}}
         </div>
         <cover-viewer :images="item.images"/>
       </div>
@@ -88,7 +93,7 @@
           </div>
 
           <div class="advert__at">
-            {{ 'created_at' in item ? item.created_at : null }}
+            {{ 'updated_at' in item ? item.updated_at : null }}
           </div>
           <div class="advert__price-list">
 
@@ -277,6 +282,7 @@ export default {
 
   &__left {
     flex-grow: 1;
+    max-width: 480px;
   }
 
   &__title {

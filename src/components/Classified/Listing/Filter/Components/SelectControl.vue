@@ -16,7 +16,7 @@
     <div class="control__list scrollbar" v-if="showList">
 
       <label class="control__search" @click.stop>
-        <input type="text" v-model="search" placeholder="Поиск...">
+        <input ref="input" type="text" v-model="search" placeholder="Поиск...">
       </label>
 
       <div class="control__item clear" @click="clear">Любая <i class="icon-x"/></div>
@@ -56,6 +56,10 @@ export default {
     },
     showList () {
       this.search = null
+
+      setTimeout(() => {
+        this.$refs.input.focus()
+      }, 10)
     }
   },
   computed: {

@@ -51,10 +51,10 @@
 
 <script>
 
-import StepContact from '@/components/Advert/Form/StepContact'
-import StepDescription from '@/components/Advert/Form/StepDescription'
-import ImageControl from '@/components/Advert/Form/ImageControl'
-import StepSection from '@/components/Advert/Form/Step'
+import StepContact from '@/components/Classified/Form/Components/StepContact'
+import StepDescription from '@/components/Classified/Form/Components/StepDescription'
+import ImageControl from '@/components/Classified/Form/Components/ImageControl'
+import StepSection from '@/components/Classified/Form/Components/Step'
 
 export default {
   name: 'Create',

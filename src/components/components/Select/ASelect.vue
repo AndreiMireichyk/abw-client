@@ -1,6 +1,5 @@
 <template>
   <a-dropdown :class="selectClass" @onToggleList="onToggleList">
-
     <template #default>
       <div class="a-select-affix-wrapper">
         <span class="a-input-prefix" v-if="hasSlotPrefix">

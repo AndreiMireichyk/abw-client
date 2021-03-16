@@ -25,9 +25,9 @@ export default {
     }
   },
   created () {
-    document.body.addEventListener('click', () => {
+    /*    document.body.addEventListener('click', () => {
       this.open = false
-    }, true)
+    }, true) */
   }
 }
 </script>

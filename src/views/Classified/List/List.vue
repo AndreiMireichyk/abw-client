@@ -3,18 +3,17 @@
     <div class="page__content">
       <div class="page__body">
         <div class="page__filters">
-          <adv-filter :key="categorySlug" :categorySlug="categorySlug"/>
+          <filter-base :key="categorySlug" :categorySlug="categorySlug"/>
         </div>
         <div class="page__result" v-if="pagination">
           <div class="page__result-count">Найдено объявлений - {{ pagination.total }}</div>
           <div class="page__sort">
-            <sort-control :sort="sort"/>
+            <sorting :sort="sort"/>
           </div>
         </div>
 
         <div class="page__listing">
-<item-base :item="item" :slug="categorySlug" v-for="(item) in items" :key="item.id"/>
-
+          <item-base :item="item" :slug="categorySlug" v-for="(item) in items" :key="item.id"/>
         </div>
         <div class="page__pagination" v-if="pagination">
           <div class="pagination">
@@ -32,16 +31,16 @@
 </template>
 
 <script>
-import AdvFilter from '@/components/Advert/List/Filter/Filter'
-import SortControl from '@/components/Advert/List/SortControl'
+import FilterBase from '@/components/Classified/Listing/FilterBase'
+import Sorting from '@/components/Classified/Listing/Sorting'
 import ItemBase from '@/components/Classified/Listing/ItemBase'
 
 export default {
   props: ['categorySlug', 'pathParams'],
   name: 'List',
   components: {
-    AdvFilter,
-    SortControl,
+    FilterBase,
+    Sorting,
     ItemBase
   },
   data () {

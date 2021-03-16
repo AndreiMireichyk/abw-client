@@ -26,14 +26,14 @@
 
 <script>
 
-import ListControl from '@/components/Advert/Form/ListControl'
-import SelectControl from '@/components/Advert/Form/SelectControl'
-import SwitchControl from '@/components/Advert/Form/SwitchControl'
-import CheckboxControl from '@/components/Advert/Form/CheckboxControl'
-import InputControl from '@/components/Advert/Form/InputControl'
-import StringControl from '@/components/Advert/Form/StringControl'
-import TextControl from '@/components/Advert/Form/TextControl'
-import IntegerControl from '@/components/Advert/Form/IntegerControl'
+import ListControl from '@/components/Classified/Form/Components/ListControl'
+import SelectControl from '@/components/Classified/Form/Components/SelectControl'
+import SwitchControl from '@/components/Classified/Form/Components/SwitchControl'
+import CheckboxControl from '@/components/Classified/Form/Components/CheckboxControl'
+import InputControl from '@/components/Classified/Form/Components/InputControl'
+import StringControl from '@/components/Classified/Form/Components/StringControl'
+import TextControl from '@/components/Classified/Form/Components/TextControl'
+import IntegerControl from '@/components/Classified/Form/Components/IntegerControl'
 
 export default {
   props: ['stepIndex', 'step', 'stepState', 'currentStep'],

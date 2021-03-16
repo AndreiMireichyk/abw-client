@@ -25,12 +25,16 @@
     <div class="filter__item  col-4" v-if="getByCode('car_generation')">
       <select-control :filter="getByCode('car_generation')" v-model="getByCode('car_generation').value"/>
     </div>
-    <div class="filter__item  col-2" v-if="getByCode('year')">
+<!--    <div class="filter__item  col-2" v-if="getByCode('year')">
       <select-control :filter="getByCode('year')" v-model="getByCode('year').value"/>
+    </div>-->
+    <div class="filter__item  col-2" v-if="getByCode('year')">
+      <select-range-control :filter="getByCode('year')" v-model="getByCode('year').value"/>
     </div>
     <div class="filter__item  col-2" v-if="getByCode('car_engine_volume')">
-      <select-control :filter="getByCode('car_engine_volume')" v-model="getByCode('car_engine_volume').value"/>
+      <select-range-control :filter="getByCode('car_engine_volume')" v-model="getByCode('car_engine_volume').value"/>
     </div>
+
     <div class="filter__item  col-2" v-if="getByCode('car_engine')">
       <select-control :filter="getByCode('car_engine')" v-model="getByCode('car_engine').value"/>
     </div>
@@ -50,14 +54,16 @@
 
 <script>
 
-import SelectControl from '@/components/Advert/List/Filter/Control/SelectControl'
-import SwitchControl from '@/components/Advert/List/Filter/Control/SwitchControl'
+import SelectControl from '@/components/Classified/Listing/Filter/Components/SelectControl'
+import SwitchControl from '@/components/Classified/Listing/Filter/Components/SwitchControl'
+import SelectRangeControl from '@/components/Classified/Listing/Filter/Components/SelectRangeControl'
 
 export default {
-  name: 'CarFilter',
+  name: 'Car',
   props: ['filters', 'showAllFilters'],
   components: {
     SelectControl,
+    SelectRangeControl,
     SwitchControl
   },
   methods: {
