@@ -31,20 +31,30 @@
     <div class="filter__item  col-2" v-if="getByCode('year')">
       <select-range-control :filter="getByCode('year')" v-model="getByCode('year').value"/>
     </div>
-    <div class="filter__item  col-2" v-if="getByCode('car_engine_volume')">
-      <select-range-control :filter="getByCode('car_engine_volume')" v-model="getByCode('car_engine_volume').value"/>
-    </div>
 
+    <div class="filter__item  col-2" v-if="getByCode('price')">
+      <select-range-control :filter="getByCode('price')" reverse="true"  v-model="getByCode('price').value"/>
+    </div>
+    <div class="filter__item  col-2" v-if="getByCode('car_engine_volume')">
+      <select-range-control :filter="getByCode('car_engine_volume')" :reverse="true" v-model="getByCode('car_engine_volume').value"/>
+    </div>
     <div class="filter__item  col-2" v-if="getByCode('car_engine')">
       <select-control :filter="getByCode('car_engine')" v-model="getByCode('car_engine').value"/>
     </div>
     <div class="filter__item  col-2" v-if="getByCode('car_transmission')">
       <select-control :filter="getByCode('car_transmission')" v-model="getByCode('car_transmission').value"/>
     </div>
-    <div class="filter__item  col-4" v-if="getByCode('car_body')">
-      <select-control :filter="getByCode('car_body')" v-model="getByCode('car_body').value"/>
+    <div class="filter__item  col-2" v-if="getByCode('foto')">
+      <select-control :filter="getByCode('foto')" v-model="getByCode('foto').value"/>
     </div>
+    <div class="filter__item  col-2" v-if="getByCode('obmen')">
+      <select-control :filter="getByCode('obmen')" v-model="getByCode('obmen').value"/>
+    </div>
+
     <div class="filter__collapse" v-show="showAllFilters">
+      <div class="filter__item  col-4" v-if="getByCode('car_body')">
+        <select-control :filter="getByCode('car_body')" v-model="getByCode('car_body').value"/>
+      </div>
       <div class="filter__item  col-4" v-if="getByCode('car_drive')">
         <select-control :filter="getByCode('car_drive')" v-model="getByCode('car_drive').value"/>
       </div>

@@ -88,6 +88,8 @@ export default {
               break
             case 'range' :
               string += `/${item.attribute}_${item.value.join(':')}`
+              // если 1 элемент, выбоано только с, добавляем разделитель
+              string += item.value.length === 1 ? ':' : ''
               break
             case 'multiple' :
               string += `/${item.attribute}_${item.value.join(',')}`
@@ -202,6 +204,8 @@ export default {
 
   &__collapse {
     width: 100%;
+    display: flex;
+    justify-content: flex-start;
   }
 
   &__actions {

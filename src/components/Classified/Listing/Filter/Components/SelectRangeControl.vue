@@ -58,7 +58,7 @@
 <script>
 export default {
   name: 'SelectRangeControl',
-  props: ['filter'],
+  props: ['filter', 'reverse'],
   data () {
     return {
       search: null,
@@ -73,9 +73,12 @@ export default {
     },
     showList () {
       this.search = null
-      setTimeout(() => {
-        this.$refs.input.focus()
-      }, 10)
+
+      if (this.showList) {
+        setTimeout(() => {
+          this.$refs.input.focus()
+        }, 10)
+      }
     }
   },
   computed: {
@@ -98,13 +101,18 @@ export default {
             .toLowerCase()
             .indexOf(this.search.toLowerCase()) >= 0)
       }
+
       return this.filter.options
     },
     toFilteredList () {
       if (this.fromValueIndex === -1) return this.filteredList
 
       return this.filteredList.filter((item, index) => {
-        return index <= this.fromValueIndex
+        if (this.reverse) {
+          return index >= this.fromValueIndex
+        } else {
+          return index <= this.fromValueIndex
+        }
       })
     },
     isActive () {

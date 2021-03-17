@@ -57,9 +57,11 @@ export default {
     showList () {
       this.search = null
 
-      setTimeout(() => {
-        this.$refs.input.focus()
-      }, 10)
+      if (this.showList) {
+        setTimeout(() => {
+          this.$refs.input.focus()
+        }, 10)
+      }
     }
   },
   computed: {
