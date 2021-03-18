@@ -4,12 +4,12 @@
     <div class="control__input"
          :class="{open: showList}"
          @click.stop="showList = !showList">
-      <span class="control__value">
+      <div class="control__value">
         {{ selectedValue }}
-      </span>
-      <span class="control__value-count" v-if="selectedValueCount">
+      </div>
+      <div class="control__value-count" v-if="selectedValueCount">
         ({{ selectedValueCount }})
-      </span>
+      </div>
       <i class="icon-chevron-down"/>
     </div>
 
@@ -164,11 +164,12 @@ export default {
 
 <style scoped lang="scss">
 .control {
+  cursor: pointer;
   min-width: 100%;
   border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, .12);
+  border: 1px solid #0000001f;
   position: relative;
-  transition: border-color, background .3s;
+  transition: border .2s, background .3s;
 
   &.active {
     color: var(--font-color);
@@ -190,6 +191,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    overflow: hidden;
 
     padding: 8px 8px;
 

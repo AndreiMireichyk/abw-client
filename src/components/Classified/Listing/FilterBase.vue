@@ -17,9 +17,10 @@
           <a class="filter__btn-clear" href="javascript:void(0)" @click="clearFilters">Сбросить</a>
         </div>
       </div>
-      <router-link :to="resultsUrl" class="filter__btn-results">Показать {{ advCount }} предложений</router-link>
+      <router-link :to="resultsUrl" @click.native="showResults" class="filter__btn-results">Показать {{ advCount }}
+        предложений
+      </router-link>
     </div>
-
   </div>
 </template>
 
@@ -65,7 +66,7 @@ export default {
     },
 
     resultsUrl () {
-      return `/${this.$route.params.slug}/prodaja${this.paramsPath}`
+      return `/${this.categorySlug}/prodaja${this.paramsPath}`
     },
 
     routeParamsPath () {
@@ -99,6 +100,7 @@ export default {
 
       return string
     },
+
     resolvedComponent () {
       switch (this.$route.params.slug) {
         case 'legkovye-avto':
@@ -175,8 +177,12 @@ export default {
         .catch(e => {
           alert('fetch filters err')
         })
-
+      this.$router.push(this.resultsUrl)
       this.notUpdate = false
+    },
+    showResults () {
+      this.showAllFilters = false
+      this.$emit('showResults')
     }
   },
   created () {
@@ -196,6 +202,16 @@ export default {
     margin: 0 -8px;
   }
 
+  &__title {
+    font-weight: bold;
+  }
+
+  &__divider {
+    min-width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, .05);
+    margin-bottom: 12px;
+  }
+
   &__footer {
     display: flex;
     justify-content: space-between;
@@ -203,9 +219,17 @@ export default {
   }
 
   &__collapse {
+    padding-top: 12px;
     width: 100%;
+
     display: flex;
+    flex-wrap: wrap;
+
     justify-content: flex-start;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 12px;
+
   }
 
   &__actions {
@@ -254,7 +278,7 @@ export default {
   &__item {
     box-sizing: border-box;
     padding: 0 8px;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 
     &--save {
       display: flex;
@@ -287,5 +311,9 @@ export default {
     }
   }
 
+  @keyframes slide {
+    from {height: 0;}
+    to {height: 300px;}
+  }
 }
 </style>

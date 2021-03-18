@@ -146,11 +146,12 @@ export default {
 
 <style scoped lang="scss">
 .control {
+  cursor: pointer;
   min-width: 100%;
   border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, .12);
+  border: 1px solid #0000001f;
   position: relative;
-  transition: border, background .3s;
+  transition: border .2s, background .3s;
 
   &.active {
     color: var(--font-color);

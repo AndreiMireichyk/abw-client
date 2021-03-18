@@ -1,30 +1,47 @@
 <template>
   <div class="page" :key="categorySlug">
+
+    <div class="page__title">
+      Объявления о продаже Acura TSX в Беларуси
+    </div>
+
+    <div class="page__breadcrumbs breadcrumbs">
+      <a href="#" class="breadcrumbs__item">Главная</a>
+      <a href="#" class="breadcrumbs__item">Легковые автомобили</a>
+      <a href="#" class="breadcrumbs__item">Audi</a>
+      <a href="#" class="breadcrumbs__item">A6 All road</a>
+    </div>
+
     <div class="page__content">
+
       <div class="page__body">
+
         <div class="page__filters">
-          <filter-base :key="categorySlug" :categorySlug="categorySlug"/>
+          <filter-base :key="categorySlug" :categorySlug="categorySlug" @showResults="showResults"/>
         </div>
-        <div class="page__result" v-if="pagination">
-          <div class="page__result-count">Найдено объявлений - {{ pagination.total }}</div>
-          <div class="page__sort">
-            <sorting :sort="sort"/>
+        <div class="page__wrap" ref="results">
+          <div class="page__result" v-if="pagination">
+            <div class="page__result-count">Найдено объявлений - {{ pagination.total }}</div>
+            <div class="page__sort">
+              <sorting :sort="sort"/>
+            </div>
+          </div>
+
+          <div class="page__listing" >
+            <item-base :item="item" :slug="categorySlug" v-for="(item) in items" :key="item.id"/>
+          </div>
+          <div class="page__pagination" v-if="pagination">
+            <div class="pagination">
+              <a href="javascript:void(0)" class="pagination__btn" v-show="showNextPageBtn"
+                 @click.prevent="nextPage">Показать еще</a>
+              <div class="pagination__total">На странице {{ showItemCount }} объявлений из {{ pagination.total }}</div>
+            </div>
           </div>
         </div>
 
-        <div class="page__listing">
-          <item-base :item="item" :slug="categorySlug" v-for="(item) in items" :key="item.id"/>
-        </div>
-        <div class="page__pagination" v-if="pagination">
-          <div class="pagination">
-            <a href="javascript:void(0)" class="pagination__btn" v-show="showNextPageBtn"
-               @click.prevent="nextPage">Показать еще</a>
-            <div class="pagination__total">На странице {{ showItemCount }} объявлений из {{ pagination.total }}</div>
-          </div>
-        </div>
       </div>
       <div class="page__aside">
-        Реклама + пиерелинковка
+        <widget-news/>
       </div>
     </div>
   </div>
@@ -34,6 +51,7 @@
 import FilterBase from '@/components/Classified/Listing/FilterBase'
 import Sorting from '@/components/Classified/Listing/Sorting'
 import ItemBase from '@/components/Classified/Listing/ItemBase'
+import WidgetNews from '@/components/News/Widget/ClassifiedAside'
 
 export default {
   props: ['categorySlug', 'pathParams'],
@@ -41,7 +59,8 @@ export default {
   components: {
     FilterBase,
     Sorting,
-    ItemBase
+    ItemBase,
+    WidgetNews
   },
   data () {
     return {
@@ -115,6 +134,14 @@ export default {
         .catch(e => {
           alert('fetch err')
         })
+    },
+    showResults () {
+      setTimeout(() => {
+        this.$refs.results.scrollIntoView({
+          block: 'start',
+          behavior: 'smooth'
+        }, 30)
+      })
     }
   },
   created () {
@@ -125,27 +152,37 @@ export default {
 
 <style scoped lang="scss">
 .page {
-  padding: 25px;
+  padding: 14px 25px 25px 25px;
   max-width: 1200px;
   margin: 0 auto;
-  min-height: 80vh;
+  min-height: 100vh;
 
   &__title {
     font-size: 32px;
     font-weight: bold;
     line-height: 1;
-    margin: 0 0 40px 0;
+    margin-bottom: 20px;
+  }
+
+  &__breadcrumbs {
+    margin-bottom: 24px;
   }
 
   &__content {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     justify-content: space-between;
   }
 
   &__body {
     border-radius: 8px;
     flex-grow: 1;
+    max-width: calc(100% - 300px);
+    min-width: calc(100% - 300px);
+  }
+
+  &__wrap {
+    min-height: 100vh;
   }
 
   &__filters {
@@ -161,6 +198,7 @@ export default {
   }
 
   &__listing {
+
   }
 
   &__result {
@@ -179,6 +217,35 @@ export default {
 
   }
 
+}
+
+.breadcrumbs {
+  display: flex;
+
+  &__item {
+    display: flex;
+    text-decoration: none;
+    color: var(--gray-color);
+
+    &:hover {
+      color: var(--primary-color);
+    }
+
+    &:first-child {
+      color: var(--primary-color);
+    }
+
+    &:last-child:after {
+      display: none;
+    }
+
+    &:after {
+      content: "|";
+      display: block;
+      margin: 0 4px;
+      color: rgba(0, 0, 0, 0.12);
+    }
+  }
 }
 
 .advert {

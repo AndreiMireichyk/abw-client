@@ -11,7 +11,7 @@
           <a-dropdown>
             <a href="javascript:void(0)" class="advert__share-btn"/>
             <template #list>
-              <div>1</div>
+              <div>old# {{ item.old_id }}</div>
               <div>2</div>
               <div>3</div>
               <div>4</div>
@@ -19,20 +19,19 @@
           </a-dropdown>
         </div>
         <div class="advert__share">
-          old# {{item.old_id}}
+
         </div>
         <cover-viewer :images="item.images"/>
       </div>
       <div class="advert__info">
-        <router-link :to="`/prodaja/${slug}/${item.properties.car_marka}/${item.properties.car_model}/${item.id}`"
-                     target="_blank"
-                     class="advert__stretch-link"/>
+        <router-link :to="`/prodaja/${slug}/${esProperties.car_marka}/${esProperties.car_model}/${esProperties.car_generation}/${item.id}`"
+                     target="_blank" class="advert__stretch-link"/>
         <div class="advert__left">
           <div>
             <div class="advert__title">
-              {{ item.properties.car_marka }}
-              {{ item.properties.car_model }}
-              {{ item.properties.car_generation }}
+              {{ properties.car_marka }}
+              {{ properties.car_model }}
+              {{ properties.car_generation }}
             </div>
             <div class="advert__location">
               {{ item.location.country }},
@@ -40,23 +39,27 @@
             </div>
           </div>
           <div class="advert__properties">
-            {{ item.properties.car_engine_volume }}л.,
-            {{ item.properties.year }}г.,
-            {{ item.properties.car_engine }},
-            {{ item.properties.car_transmission }}
+            {{ properties.car_run_value / 1000 }} тыс.,
+            {{ properties.car_engine_volume }}л.,
+            {{ properties.year }}г.,
+            {{ properties.car_engine }},
+            {{ properties.car_transmission }}
           </div>
           <div class="advert__description">
             {{ item.description }}
           </div>
           <div class="advert__tags">
-            <div class="advert__tag success">
+            <div class="advert__tag success" v-if="item.vinVerifed">
               VIN +
             </div>
-            <div class="advert__tag warning">
+            <div class="advert__tag primary" v-if="esProperties.car_condition === 'noviy'">
+              новый
+            </div>
+            <div class="advert__tag warning" v-if="item.exchange">
               обмен
             </div>
-            <div class="advert__tag danger">
-              аварийный
+            <div class="advert__tag danger"  v-if="esProperties.car_condition === 's-povrezhdeniyami'">
+              c повреждениями
             </div>
           </div>
 
@@ -145,6 +148,12 @@ export default {
   },
   computed: {
     ...mapGetters('profile', ['favoriteIds', 'profile']),
+    properties () {
+      return this.item.properties
+    },
+    esProperties () {
+      return this.item.esProperties
+    },
     hasFavorite () {
       return this.favoriteIds.includes(this.item.id)
     }
@@ -282,7 +291,7 @@ export default {
 
   &__left {
     flex-grow: 1;
-    max-width: 480px;
+    max-width: 460px;
   }
 
   &__title {
@@ -353,6 +362,7 @@ export default {
   &__tag {
     font-size: 12px;
     text-transform: uppercase;
+    line-height: 1;
     font-weight: 500;
     padding: 3px 5px;
     margin-right: 6px;
@@ -371,6 +381,11 @@ export default {
     &.danger {
       color: var(--red-color);
       border: 1px solid var(--red-color);
+    }
+
+    &.primary {
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
     }
   }
 
