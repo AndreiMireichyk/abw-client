@@ -43,8 +43,13 @@
     <div class="filter__item  col-2" v-if="getByCode('car_engine')">
       <select-control :filter="getByCode('car_engine')" v-model="getByCode('car_engine').value"/>
     </div>
+
     <div class="filter__item  col-2" v-if="getByCode('car_transmission')">
       <select-control :filter="getByCode('car_transmission')" v-model="getByCode('car_transmission').value"/>
+    </div>
+
+    <div class="filter__item  col-2" v-if="getByCode('price')">
+      <select-range-control :filter="getByCode('price')" reverse="true" v-model="getByCode('price').value"/>
     </div>
 
     <div class="filter__collapse" v-show="showAllFilters">
@@ -83,9 +88,9 @@
         <select-control :filter="getByCode('region')" v-model="getByCode('region').value"/>
       </div>
 
-      <div class="filter__item  col-2" v-if="getByCode('city')">
+<!--      <div class="filter__item  col-2" v-if="getByCode('city')">
         <select-control :filter="getByCode('city')" v-model="getByCode('city').value"/>
-      </div>
+      </div>-->
 
       <div class="filter__divider"></div>
 

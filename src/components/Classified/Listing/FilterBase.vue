@@ -1,6 +1,5 @@
 <template>
   <div class="filter" v-if="filters.length">
-
     <component :is="resolvedComponent" :filters="filters" :showAllFilters="showAllFilters"></component>
 
     <div class="filter__footer">
@@ -21,18 +20,25 @@
         предложений
       </router-link>
     </div>
+
+    <div class="filter__used">
+      <filter-used :filters="filters"/>
+    </div>
+
   </div>
 </template>
 
 <script>
 
 import CarFilter from '@/components/Classified/Listing/Filter/Categories/Car'
+import FilterUsed from '@/components/Classified/Listing/Filter/Components/FilterUsed'
 
 export default {
   props: ['categorySlug'],
   name: 'FilterBase',
   components: {
-    CarFilter
+    CarFilter,
+    FilterUsed
   },
   data () {
     return {
@@ -53,6 +59,7 @@ export default {
     }
   },
   computed: {
+
     attributes () {
       const attributes = {}
 
@@ -114,6 +121,7 @@ export default {
     getFilterByCode (code) {
       this.filters.filter(item => item.attribute === code)
     },
+
     update () {
       if (this.notUpdate) return false
 
@@ -163,6 +171,7 @@ export default {
         })
       this.notUpdate = false
     },
+
     allFilters () {
       this.showAllFilters = !this.showAllFilters
     },
@@ -177,8 +186,10 @@ export default {
         .catch(e => {
           alert('fetch filters err')
         })
-      this.$router.push(this.resultsUrl)
+
       this.notUpdate = false
+
+      this.$router.push(this.resultsUrl).catch(() => {})
     },
     showResults () {
       this.showAllFilters = false
@@ -199,7 +210,9 @@ export default {
   &__body {
     display: flex;
     flex-wrap: wrap;
-    margin: 0 -8px;
+    padding: 16px 8px 0 8px;
+    background: rgba(255, 255, 255, .7);
+    box-sizing: border-box;
   }
 
   &__title {
@@ -213,9 +226,12 @@ export default {
   }
 
   &__footer {
+    background: rgba(255, 255, 255, .7);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 16px 16px 16px;
+    margin-bottom: 12px;
   }
 
   &__collapse {
@@ -312,8 +328,13 @@ export default {
   }
 
   @keyframes slide {
-    from {height: 0;}
-    to {height: 300px;}
+    from {
+      height: 0;
+    }
+    to {
+      height: 300px;
+    }
   }
 }
+
 </style>

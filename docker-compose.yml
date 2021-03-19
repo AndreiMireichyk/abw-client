@@ -1,0 +1,10 @@
+version: "3.3"
+services:
+  abw-client-nginx:
+    build:
+      context: ./
+      dockerfile: .docker/nginx/Dockerfile
+    volumes:
+      - .docker/nginx/log:/var/log/nginx
+    ports:
+      - "9999:80"

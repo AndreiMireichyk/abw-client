@@ -20,6 +20,7 @@
           <filter-base :key="categorySlug" :categorySlug="categorySlug" @showResults="showResults"/>
         </div>
         <div class="page__wrap" ref="results">
+
           <div class="page__result" v-if="pagination">
             <div class="page__result-count">Найдено объявлений - {{ pagination.total }}</div>
             <div class="page__sort">
@@ -186,8 +187,7 @@ export default {
   }
 
   &__filters {
-    padding: 16px;
-    background: rgba(255, 255, 255, .7);
+
     margin-bottom: 12px;
   }
 
