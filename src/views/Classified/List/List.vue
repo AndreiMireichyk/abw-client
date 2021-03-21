@@ -2,7 +2,7 @@
   <div class="page" :key="categorySlug">
 
     <div class="page__title">
-      Объявления о продаже Acura TSX в Беларуси
+      {{h1}}
     </div>
 
     <div class="page__breadcrumbs breadcrumbs">
@@ -28,7 +28,7 @@
             </div>
           </div>
 
-          <div class="page__listing" >
+          <div class="page__listing">
             <item-base :item="item" :slug="categorySlug" v-for="(item) in items" :key="item.id"/>
           </div>
           <div class="page__pagination" v-if="pagination">
@@ -68,6 +68,13 @@ export default {
       category: null,
       sortValue: null,
       items: [],
+      h1: null,
+      content: null,
+      meta: {
+        title: null,
+        description: null,
+        keywords: null
+      },
       sort: {
         value: null,
         items: []
@@ -105,10 +112,12 @@ export default {
     pathParams () {
       this.items = []
       this.fetch()
+      this.fetchSeo()
     },
     categorySlug () {
       this.items = []
       this.fetch()
+      this.fetchSeo()
     },
     'sort.value' () {
       this.items = []
@@ -121,6 +130,19 @@ export default {
     },
     nextPage () {
       this.fetch(this.pagination.page + 1)
+    },
+    fetchSeo () {
+      this.$http.get(`${this.$config.host}/api/adverts/${this.$route.params.slug}/seo${this.routeParamsPath}`)
+        .then(r => {
+          this.h1 = r.data.h1
+          this.content = r.data.content
+          this.meta.title = r.data.meta.title
+          this.meta.description = r.data.meta.description
+          this.meta.keywords = r.data.meta.keywords
+        })
+        .catch(e => {
+          alert('fetch err')
+        })
     },
     fetch (page) {
       page = page || 1
@@ -147,6 +169,7 @@ export default {
   },
   created () {
     this.fetch()
+    this.fetchSeo()
   }
 }
 </script>
