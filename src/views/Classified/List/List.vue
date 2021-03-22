@@ -38,6 +38,8 @@
               <div class="pagination__total">На странице {{ showItemCount }} объявлений из {{ pagination.total }}</div>
             </div>
           </div>
+
+          <div class="page__description" v-html="content"></div>
         </div>
 
       </div>
@@ -139,6 +141,7 @@ export default {
           this.meta.title = r.data.meta.title
           this.meta.description = r.data.meta.description
           this.meta.keywords = r.data.meta.keywords
+          document.title = r.data.meta.title
         })
         .catch(e => {
           alert('fetch err')
@@ -240,6 +243,15 @@ export default {
 
   }
 
+  &__pagination{
+    margin-bottom: 24px;
+  }
+  &__description{
+    color: var(--font-muted-color);
+    line-height: 1.3;
+    padding:12px ;
+    background: var(--white-bg);
+  }
 }
 
 .breadcrumbs {
