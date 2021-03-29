@@ -93,6 +93,14 @@ const routes = [
         meta: {
           guards: ['auth']
         }
+      },
+      {
+        path: 'import',
+        name: 'user.import',
+        component: () => import('@/views/User/Balance/History'),
+        meta: {
+          guards: ['auth']
+        }
       }
     ]
   },

@@ -176,7 +176,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .advert {
   display: flex;
   background: rgba(255, 255, 255, .7);

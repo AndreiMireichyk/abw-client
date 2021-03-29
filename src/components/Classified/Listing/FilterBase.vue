@@ -1,6 +1,7 @@
 <template>
   <div class="filter" v-if="filters.length">
-    <component :is="resolvedComponent" :filters="filters" :showAllFilters="showAllFilters"></component>
+
+    <component :is="template" :filters="filters" :showAllFilters="showAllFilters"></component>
 
     <div class="filter__footer">
       <div class="filter__actions">
@@ -30,20 +31,27 @@
 
 <script>
 
-import CarFilter from '@/components/Classified/Listing/Filter/Categories/Car'
+import Car from '@/components/Classified/Listing/Filter/Categories/Car'
+import CarPart from '@/components/Classified/Listing/Filter/Categories/CarPart'
+import Truck from '@/components/Classified/Listing/Filter/Categories/Truck'
+import TruckPart from '@/components/Classified/Listing/Filter/Categories/TruckPart'
 import FilterUsed from '@/components/Classified/Listing/Filter/Components/FilterUsed'
 
 export default {
   props: ['categorySlug'],
   name: 'FilterBase',
   components: {
-    CarFilter,
+    Car,
+    CarPart,
+    Truck,
+    TruckPart,
     FilterUsed
   },
   data () {
     return {
       url: null,
       filters: [],
+      template: null,
       notUpdate: false,
       showAllFilters: false,
       advCount: 0
@@ -163,6 +171,7 @@ export default {
 
       await this.$http.get(`${this.$config.host}/api/adverts/${this.$route.params.slug}/filters${this.routeParamsPath}`)
         .then(r => {
+          this.template = r.data.template
           this.filters = r.data.filters
           this.advCount = r.data.advCount
         })

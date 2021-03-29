@@ -19,6 +19,7 @@
         <div class="page__filters">
           <filter-base :key="categorySlug" :categorySlug="categorySlug" @showResults="showResults"/>
         </div>
+
         <div class="page__wrap" ref="results">
 
           <div class="page__result" v-if="pagination">

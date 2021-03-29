@@ -21,3 +21,6 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+src/components/Classified/Listing/Item/Components/
+src/components/User/Profile/Balance/
+src/views/News/

@@ -104,21 +104,17 @@
 
         <li class="menu__item" :class="{active:menuShowOther}" @click="showOther">
           <i class="icon-archive"/>
-          <span class="menu__title">Импорт / Экспорт</span>
+          <span class="menu__title">Импорт / Экспорт {{menuShowOther}}</span>
           <i class="icon-chevron-right"></i>
         </li>
-        <li class="menu__submenu" v-if="menuShowOther">
-          <router-link :to="{name: 'user.personal'}" class="menu__item">
-            <i class="icon-user"/>
-            <span class="menu__title">Персональные данные</span>
+        <li class="menu__submenu" :class="{open: menuShowOther}">
+          <router-link :to="{name: 'user.notification'}" class="menu__item">
+            <i class="icon-folder-minus"/>
+            <span class="menu__title">Экспорт</span>
           </router-link>
           <router-link :to="{name: 'user.security'}" class="menu__item">
-            <i class="icon-shield"/>
-            <span class="menu__title">Безопасность</span>
-          </router-link>
-          <router-link :to="{name: 'user.notification'}" class="menu__item">
-            <i class="icon-bell"/>
-            <span class="menu__title">Уведомления</span>
+            <i class="icon-file-plus"/>
+            <span class="menu__title">Импорт</span>
           </router-link>
         </li>
       </ul>
@@ -140,7 +136,7 @@ export default {
       menuShowAdverts: false,
       menuShowFavorite: false,
       menuShowSetting: false,
-      menuShowOther: false,
+      menuShowOther: true,
       menuShowBalance: false
     }
   },
