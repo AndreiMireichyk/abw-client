@@ -104,15 +104,15 @@
 
         <li class="menu__item" :class="{active:menuShowOther}" @click="showOther">
           <i class="icon-archive"/>
-          <span class="menu__title">Импорт / Экспорт {{menuShowOther}}</span>
+          <span class="menu__title">Импорт / Экспорт</span>
           <i class="icon-chevron-right"></i>
         </li>
         <li class="menu__submenu" :class="{open: menuShowOther}">
-          <router-link :to="{name: 'user.notification'}" class="menu__item">
+          <router-link :to="{name: 'user.export'}" class="menu__item">
             <i class="icon-folder-minus"/>
             <span class="menu__title">Экспорт</span>
           </router-link>
-          <router-link :to="{name: 'user.security'}" class="menu__item">
+          <router-link :to="{name: 'user.import'}" class="menu__item">
             <i class="icon-file-plus"/>
             <span class="menu__title">Импорт</span>
           </router-link>

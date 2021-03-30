@@ -97,7 +97,15 @@ const routes = [
       {
         path: 'import',
         name: 'user.import',
-        component: () => import('@/views/User/Balance/History'),
+        component: () => import('@/views/User/Import/Import'),
+        meta: {
+          guards: ['auth']
+        }
+      },
+      {
+        path: 'export',
+        name: 'user.export',
+        component: () => import('@/views/User/Export/Export'),
         meta: {
           guards: ['auth']
         }
