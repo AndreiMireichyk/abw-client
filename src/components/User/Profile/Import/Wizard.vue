@@ -1,11 +1,6 @@
 <template>
   <div class="wizard">
-    <!--    <div class="wizard__header">
-          <div class="wizard__title">
-            {{title}}
-          </div>
 
-        </div>-->
     <a href="javascript:void(0)" @click.prevent="$emit('onClose')" class="wizard__close">
       <a-icon type="x"/>
     </a>
@@ -51,36 +46,38 @@
         </li>
       </ul>
 
-      <div class="file__upload upload" v-if="showUploader">
+      <div class="file__upload" v-if="showUploader">
         <div class="upload">
-          <a-upload/>
-        </div>
-        <div class="file__actions">
-          <a-button>Далее</a-button>
+          <import-upload @onComplete="uploadComplete"/>
         </div>
       </div>
 
-      <div class="file__schedule schedule" v-if="showSchedule">
+      <div class="file__schedule" v-if="showSchedule">
+        {{url}}{{time}}
         <div class="schedule">
-          <a-input/>
-          <a-input/>
-          <pre>
-            Ссылка по расписанию
-            1. Ссылка
-            2. Время
-          </pre>
+          <div class="schedule__url">
+            <a-input v-model="url" placeholder="https://...">
+              <template #prefix>
+                <a-icon type="external-link"/>
+              </template>
+            </a-input>
+          </div>
+          <div class="schedule__time">
+            <a-input type="time" v-model="time">
+
+            </a-input>
+          </div>
         </div>
         <div class="file__actions">
           <a-button>Далее</a-button>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import AUpload from '@/components/components/Upload/AUpload'
+import ImportUpload from '@/components/components/Upload/ImportUpload'
 import AInput from '@/components/components/Input/AInput'
 import AIcon from '@/components/components/Icon/AIcon'
 import AButton from '@/components/components/Button/AButton'
@@ -93,10 +90,12 @@ export default {
     AIcon,
     AButton,
     AInput,
-    AUpload
+    ImportUpload
   },
   data () {
     return {
+      url: null,
+      time: null,
       showUploader: true,
       showSchedule: false,
       selectedCategory: null,
@@ -104,16 +103,7 @@ export default {
       groups: []
     }
   },
-  computed: {
-    // eslint-disable-next-line vue/return-in-computed-property
-    title () {
-      if (this.selectedCategory === null) {
-        return 'Выберите категорию'
-      } else if (this.selectedCategory) {
-        return 'Загрузите файл или ссылку'
-      }
-    }
-  },
+  computed: {},
   methods: {
     choiceGroup (group) {
       this.selectedGroup = group
@@ -125,6 +115,10 @@ export default {
     openSchedule () {
       this.showUploader = false
       this.showSchedule = true
+    },
+    uploadComplete (path) {
+      alert(path)
+      // Установка полей - запрос предпросмотра
     },
     fetchCategories () {
       this.$http.get(`${this.$config.host}/api/adverts/categories`)
@@ -279,5 +273,22 @@ export default {
     justify-content: flex-end;
   }
 
+}
+
+.upload {
+  display: flex;
+  justify-content: center;
+}
+
+.schedule {
+  display: flex;
+  justify-content: center;
+
+  &__url{
+    min-width: 300px;
+    margin-right: 16px;
+
+    input{}
+  }
 }
 </style>

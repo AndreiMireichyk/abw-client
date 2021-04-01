@@ -88,6 +88,8 @@ export default {
           return 'number'
         case 'email':
           return 'email'
+        case 'time':
+          return 'time'
         default :
           return 'text'
       }
@@ -110,6 +112,9 @@ export default {
         default:
           return ''
       }
+    },
+    hasTypeTime () {
+      return this.type === 'time'
     },
     hasTypePassword () {
       return this.type === 'password'
