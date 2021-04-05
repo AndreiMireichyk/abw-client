@@ -1,13 +1,12 @@
 <template>
-<div>
-  <router-view/>
-</div>
+  <div>
+    Предпосмтр
+  </div>
 </template>
 
 <script>
-
 export default {
-  name: 'Import'
+  name: 'Preview'
 }
 </script>
 

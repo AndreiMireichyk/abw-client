@@ -1,5 +1,5 @@
 <template>
-  <router-link :to='to' :class="linkClass">
+  <router-link :to='to' :class="linkClass" exact-active-class="active">
     <slot></slot>
   </router-link>
 </template>
@@ -70,8 +70,12 @@ export default {
   text-shadow: 0 -1px 0 rgb(0 0 0 / 12%);
   user-select: none;
 
-  &:hover {
+  &:hover{
     color: var(--font-color);
+  }
+
+  &.active {
+    color: var(--primary-color);
   }
 
   &-default {

@@ -112,7 +112,7 @@
             <i class="icon-folder-minus"/>
             <span class="menu__title">Экспорт</span>
           </router-link>
-          <router-link :to="{name: 'user.import'}" class="menu__item">
+          <router-link :to="{name: 'user.import.history'}" class="menu__item">
             <i class="icon-file-plus"/>
             <span class="menu__title">Импорт</span>
           </router-link>

@@ -100,7 +100,35 @@ const routes = [
         component: () => import('@/views/User/Import/Import'),
         meta: {
           guards: ['auth']
-        }
+        },
+        children: [
+
+          {
+            name: 'user.import.category',
+            path: 'category',
+            component: () => import('@/views/User/Import/Category')
+          },
+          {
+            name: 'user.import.file',
+            path: 'file',
+            component: () => import('@/views/User/Import/File')
+          },
+          {
+            name: 'user.import.schedule',
+            path: 'schedule',
+            component: () => import('@/views/User/Import/Schedule')
+          },
+          {
+            name: 'user.import.preview',
+            path: 'preview',
+            component: () => import('@/views/User/Import/Preview')
+          },
+          {
+            name: 'user.import.history',
+            path: '',
+            component: () => import('@/views/User/Import/History')
+          }
+        ]
       },
       {
         path: 'export',

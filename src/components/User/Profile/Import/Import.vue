@@ -11,7 +11,7 @@
             <a-link @click.native="openSchedule" type="default" :active="showSchedule">Расписание</a-link>
           </li>
         </ul>
-        <a-button size="xs" @click.native="openWizard">Добавить</a-button>
+
       </div>
       <div class="import__body">
         <history v-if="showHistory"/>
@@ -26,16 +26,14 @@
 import Schedule from '@/components/User/Profile/Import/Schedule'
 import History from '@/components/User/Profile/Import/History'
 import Wizard from '@/components/User/Profile/Import/Wizard'
-import AButton from '@/components/components/Button/AButton'
+
 import ALink from '@/components/components/Link/ALink'
 
 export default {
   name: 'Import',
   components: {
 
-    AButton,
     ALink,
-
     History,
     Wizard,
     Schedule
@@ -93,6 +91,11 @@ export default {
       margin: 0 8px;
       border-right: 1px solid rgba(0, 0, 0, 0.18);
     }
+  }
+
+  &__add{
+    display: flex;
+    align-items: center;
   }
 }
 </style>
