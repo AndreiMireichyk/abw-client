@@ -170,6 +170,7 @@ export default {
     padding: 8px 12px;
     color: var(--gray-color);
     cursor: pointer;
+    white-space: nowrap;
 
     &:hover, &.active {
       background: var(--primary-color);

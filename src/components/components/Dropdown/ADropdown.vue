@@ -45,7 +45,7 @@ export default {
   }
 
   &-list {
-    width: 100%;
+    min-width: 100%;
     min-width: 150px;
     background: var(--white-color);
     box-shadow: 0 8px 20px rgb(0 0 0 / 16%);

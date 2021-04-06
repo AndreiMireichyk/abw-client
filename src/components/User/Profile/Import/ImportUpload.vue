@@ -4,11 +4,9 @@
     <div class="file__title">
       {{ category.title }}
     </div>
-
     <div class="file__description">
       Выберите удобный метод импорта, загрузите файл или укажите ссылку.
     </div>
-    {{ type }}
     <ul class="file__nav">
       <li class="file__nav-item">
         <a-link type="default" :to="{name: 'user.import.file'}">файл</a-link>
@@ -23,8 +21,7 @@
         <div class="uploader__progress" :style="{width: progress+'%'}"/>
         <a-icon class="uploader__icon loader" type="loader" :spin="true" v-if="progress"/>
         <a-icon class="uploader__icon" type="upload" v-else/>
-        <input class="uploader__input" type="file" ref="file" @change="fileChanged"
-               accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+        <input class="uploader__input" type="file" ref="file" @change="fileChanged" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
         <p class="uploader__description">Перетащите файл или выберите</p>
       </div>
     </div>
@@ -48,16 +45,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('advImport', ['category', 'type'])
+    ...mapGetters('advImport', ['category', 'file'])
   },
   methods: {
-    ...mapMutations('advImport', { setType: 'type' }),
-    complete (response) {
-      this.progress = 0
-      this.$refs.file.value = null
-      this.$message.success(response.message)
-      this.$emit('onComplete', response.path)
-    },
+    ...mapMutations('advImport', {
+      setType: 'type',
+      setData: 'data',
+      setFile: 'file',
+      setColumn: 'column',
+      setStartAt: 'startAt',
+      setUrl: 'url'
+    }),
     failure (response) {
       this.progress = 0
       this.$refs.file.value = null
@@ -77,10 +75,29 @@ export default {
           this.progress = Math.ceil((progressEvent.loaded / progressEvent.total) * 100)
         }
       }).then(r => {
-        this.complete(r.data)
+        this.setFile(r.data.path)
+        this.fetchPreview()
       }).catch(e => {
         this.failure(e.response.data)
       })
+    },
+    fetchPreview () {
+      const data = new URLSearchParams()
+      data.append('form[path]', this.file)
+      data.append('form[category]', this.category.id)
+
+      this.$http.post(`${this.$config.host}/api/classified/import/preview`, data)
+        .then(r => {
+          this.setColumn(r.data.columns)
+          this.setData(r.data.data)
+          this.setFile(this.startAt)
+          this.setUrl(this.url)
+
+          this.$router.push({ name: 'user.import.preview' })
+        })
+        .catch(e => {
+          this.$message.error(e.response.data.message)
+        })
     }
   },
   mounted () {
@@ -90,6 +107,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 .file {
   margin: auto auto;
   padding-top: 24px;

@@ -76,7 +76,9 @@ body {
 
 .scrollbar::-webkit-scrollbar {
   width: 5px;
+  height: 5px;
   background-color: #F5F5F5;
+  cursor: pointer;
 }
 body::-webkit-scrollbar {
   display: none;

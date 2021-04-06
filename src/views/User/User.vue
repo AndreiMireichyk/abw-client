@@ -51,7 +51,7 @@
         <li class="menu__item" :class="{active:menuShowFavorite}" @click="showFavorites" v-if="totalFavorites">
           <i class="icon-bookmark"/>
           <span class="menu__title">Избранное</span>
-          <span class="menu__badge">{{totalFavorites}}</span>
+          <span class="menu__badge">{{ totalFavorites }}</span>
           <i class="icon-chevron-right"></i>
         </li>
         <li class="menu__submenu" :class="{open: menuShowFavorite}">
@@ -219,6 +219,7 @@ export default {
   }
 
   &__body {
+    max-width: calc(100% - 300px);
     background: var(--white-bg);
     flex-grow: 1;
   }

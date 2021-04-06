@@ -98,10 +98,13 @@ export default {
       return this.showPassword ? 'text' : 'password'
     },
     inputClass () {
-      return `a-input ${this.inputSizeClass} ${this.inputAlignClass}`
+      return `a-input ${this.inputSizeClass} ${this.inputAlignClass} ${this.inputTimeClass}`
     },
     inputAlignClass () {
       return `text-${this.align}`
+    },
+    inputTimeClass () {
+      return this.hasTypeTime ? 'a-input-time' : ''
     },
     inputSizeClass () {
       switch (this.size) {
@@ -199,6 +202,10 @@ export default {
   &-lg {
     padding: 10px 14px;
     border-radius: var(--input-lg-radius);
+  }
+
+  &-time{
+    max-height: 32px;
   }
 }
 </style>
