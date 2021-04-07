@@ -4,7 +4,7 @@
       Импорт объявлений
     </template>
     <template #sort>
-      <a-link class="import__add" type="primary" :to="{name: 'user.import.category'}">
+      <a-link class="add-btn" type="primary" :to="{name: 'user.import.category'}">
         <a-icon type="plus"/>
         Добавить
       </a-link>
@@ -32,6 +32,9 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.add-btn{
+  display: flex;
+  align-items: center;
+}
 </style>

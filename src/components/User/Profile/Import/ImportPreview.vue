@@ -5,6 +5,10 @@
         <div class="preview__title">
           Выберите значения
         </div>
+        <div>
+          {{ file }}
+          {{ headline }}
+        </div>
         <a href="javascript:void(0)" class="preview__screen">
           <a-icon type="minimize" @click.native="fullscreen = false" v-if="fullscreen"/>
           <a-icon type="maximize" @click.native="fullscreen = true" v-else/>
@@ -12,9 +16,9 @@
       </div>
       <div class="preview__body">
         <div class="preview__controls">
-          <div class="preview__control" v-for="i in columnCnt" :key="i">
+          <div class="preview__control" v-for="(i, key) in headline" :key="key">
             <a-select :data="column" choice-title="title" choice-value="code" placeholder="Выберите"
-                      v-model="headline[i]"/>
+                      v-model="headline[key]"/>
           </div>
         </div>
         <div class="preview__table">
@@ -26,13 +30,14 @@
         </div>
       </div>
       <div class="preview__footer">
-        <a-button>Сохранить</a-button>
+        <a-button :loading="loading" @click.native="save">Сохранить</a-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+
 import { mapGetters } from 'vuex'
 import ASelect from '@/components/components/Select/ASelect'
 import AIcon from '@/components/components/Icon/AIcon'
@@ -47,6 +52,7 @@ export default {
   },
   data () {
     return {
+      loading: false,
       fullscreen: false,
       headline: []
     }
@@ -57,7 +63,57 @@ export default {
       return this.data[0].length
     }
   },
-  methods: {}
+  methods: {
+    prepareHeadlineSelectors () {
+      for (let i = 0; i < this.columnCnt; i++) {
+        this.headline[i] = null
+      }
+    },
+    save () {
+      if (this.type === 'upload') this.createImport()
+      if (this.type === 'schedule') this.createSchedule()
+    },
+    createImport () {
+      this.loading = true
+      const data = new URLSearchParams()
+      data.append('form[path]', this.file)
+      data.append('form[category]', this.category.id)
+      data.append('form[headline]', this.headline)
+
+      this.$http.post(`${this.$config.host}/api/classified/import/create`, data)
+        .then(r => {
+          this.loading = false
+          this.$message.success(r.data.message)
+          this.$router.push({ name: 'user.import.history' })
+        })
+        .catch(e => {
+          this.loading = false
+          this.$message.error(e.response.data.message)
+        })
+    },
+    createSchedule () {
+      this.loading = true
+      const data = new URLSearchParams()
+      data.append('form[url]', this.url)
+      data.append('form[startAt]', this.startAt)
+      data.append('form[category]', this.category.id)
+      data.append('form[headline]', this.headline)
+
+      this.$http.post(`${this.$config.host}/api/classified/import_schedule/create`, data)
+        .then(r => {
+          this.loading = false
+          this.$message.success(r.data.message)
+          this.$router.push({ name: 'user.import.history' })
+        })
+        .catch(e => {
+          this.loading = false
+          this.$message.error(e.response.data.message)
+        })
+    }
+  },
+  created () {
+    this.prepareHeadlineSelectors()
+  }
 }
 </script>
 

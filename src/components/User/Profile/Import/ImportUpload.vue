@@ -90,9 +90,6 @@ export default {
         .then(r => {
           this.setColumn(r.data.columns)
           this.setData(r.data.data)
-          this.setFile(this.startAt)
-          this.setUrl(this.url)
-
           this.$router.push({ name: 'user.import.preview' })
         })
         .catch(e => {
