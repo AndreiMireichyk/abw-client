@@ -35,10 +35,13 @@ export default {
     ...mapGetters('advImport', ['category', 'type', 'data', 'column', 'url', 'startAt', 'file'])
   },
   created () {
-    /*    if (this.category === null) this.$router.push({ name: 'user.import.history' })
+    if (this.category === null) this.$router.push({ name: 'user.import.history' })
     if (this.type === null) this.$router.push({ name: 'user.import.history' })
+    if (this.type === 'upload' && this.file === null) this.$router.push({ name: 'user.import.history' })
+    if (this.type === 'schedule' && this.url === null) this.$router.push({ name: 'user.import.history' })
+    if (this.type === 'schedule' && this.startAt === null) this.$router.push({ name: 'user.import.history' })
     if (!this.data.length) this.$router.push({ name: 'user.import.history' })
-    if (!this.column.length) this.$router.push({ name: 'user.import.history' }) */
+    if (!this.column.length) this.$router.push({ name: 'user.import.history' })
   }
 }
 </script>

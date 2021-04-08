@@ -56,7 +56,7 @@ export default {
   data () {
     return {
       loading: false,
-      url: 'http://epart.by/motorexport/abw.csv',
+      url: null,
       startAt: '12:00'
     }
   },
@@ -100,6 +100,7 @@ export default {
 
 <style scoped lang="scss">
 .schedule {
+  min-height: 50vh;
   margin: auto auto;
   padding-top: 24px;
 

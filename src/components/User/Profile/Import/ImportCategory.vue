@@ -71,8 +71,9 @@ export default {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-
+min-height: 50vh;
   margin: -24px;
+  padding-bottom: 24px;
 
   &__groups {
     width: 300px;

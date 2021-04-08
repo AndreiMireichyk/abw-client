@@ -5,10 +5,6 @@
         <div class="preview__title">
           Выберите значения
         </div>
-        <div>
-          {{ file }}
-          {{ headline }}
-        </div>
         <a href="javascript:void(0)" class="preview__screen">
           <a-icon type="minimize" @click.native="fullscreen = false" v-if="fullscreen"/>
           <a-icon type="maximize" @click.native="fullscreen = true" v-else/>
@@ -103,7 +99,7 @@ export default {
         .then(r => {
           this.loading = false
           this.$message.success(r.data.message)
-          this.$router.push({ name: 'user.import.history' })
+          this.$router.push({ name: 'user.import.history.schedule' })
         })
         .catch(e => {
           this.loading = false

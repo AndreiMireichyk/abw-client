@@ -106,6 +106,7 @@ export default {
 <style scoped lang="scss">
 
 .file {
+  min-height: 50vh;
   margin: auto auto;
   padding-top: 24px;
 
