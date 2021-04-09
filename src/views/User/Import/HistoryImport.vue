@@ -65,6 +65,10 @@ const columns = [
     title: 'Статус'
   },
   {
+    key: 'createdAt',
+    title: 'Дата'
+  },
+  {
     key: 'actions',
     title: ''
   }
