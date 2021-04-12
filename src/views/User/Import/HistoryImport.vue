@@ -7,6 +7,16 @@
       <template #path="{row}">
         <a class="url" :href="row.path">Файл</a>
       </template>
+      <template #category="{row}">
+        <div class="no-wrap">
+          {{row.category}}
+        </div>
+      </template>
+      <template #createdAt="{row}">
+        <div class="no-wrap">
+          {{row.createdAt}}
+        </div>
+      </template>
       <template #status="{row}">
         <div class="status">
           <div class="status status-O" v-if="row.status === 0">В очереди</div>
@@ -25,7 +35,8 @@
         </div>
       </template>
       <template #actions="{row, index}">
-        <a class="remove" @click.prevent="remove(index, row.id)" href="javascript:void(0)">Удалить</a>
+        <a class="remove" @click.prevent="remove(index, row.id)" href="javascript:void(0)" v-if="row.status !== 1">Удалить</a>
+        <a class="remove-muted" href="javascript:void(0)" v-else>Удалить</a>
       </template>
     </a-table>
   </div>
@@ -127,10 +138,19 @@ export default {
   text-decoration: none;
   color: var(--primary-color);
 }
-
+.no-wrap{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 .remove {
   text-decoration: none;
   color: var(--red-color);
+}
+
+.remove-muted {
+  cursor: not-allowed;
+  text-decoration: none;
+  color: var(--font-muted-color);
 }
 
 .status {
